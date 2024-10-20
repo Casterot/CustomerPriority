@@ -3,13 +3,13 @@
 <html lang="en">
 <head>
     <title>Home</title>
-    <div th:insert="fragments/header :: header"></div>
+    <div th:insert="~{fragments/header :: header}"></div>
 </head>
 <body>
     <div class="wrapper">
-        <aside th:replace="fragments/sidebar :: sidebar"></aside>
+        <aside th:replace="~{fragments/sidebar :: sidebar}"></aside>
         <div class="main">
-            <nav th:insert="fragments/nav :: nav"></nav>
+            <nav th:insert="~{fragments/nav :: nav}"></nav>
             <main class="content px-3 py-4">
                 <div class="container-fluid">
                     <div class="mb-3">
@@ -119,10 +119,10 @@
                     </div>
                 </div>
             </main>
-            <footer th:insert="fragments/footer :: footer"></footer>
+            <footer th:insert="~{fragments/footer :: footer}"></footer>
 
         </div>
     </div>
-    <div th:insert="fragments/script :: script"></div>
+    <div th:insert="~{fragments/script :: script}"></div>
 </body>
 </html>

@@ -3,13 +3,13 @@
 <html lang="en">
 <head>
     <title>Campañas</title>
-    <div th:insert="fragments/header :: header"></div>
+    <div th:insert="~{fragments/header :: header}"></div>
 </head>
 <body>
     <div class="wrapper">
-        <aside th:replace="fragments/sidebar :: sidebar"></aside>
+        <aside th:replace="~{fragments/sidebar :: sidebar}"></aside>
         <div class="main">
-          <nav th:insert="fragments/nav :: nav"></nav>
+          <nav th:insert="~{fragments/nav :: nav}"></nav>
           <main class="content px-3 py-4">
                 <div class="container-fluid">
                     <div class="mb-3">
@@ -35,20 +35,46 @@
                                       <td th:text="${campana.gestion}"></td>
                                       <td th:text="${campana.estado}"></td>
                                       <td>
-                                        <a th:href="@{/campana/editar/{id}(id=${campana.id})}">Editar</a>
-                                        <a th:href="@{/campana/eliminar/{id}(id=${campana.id})}">Eliminar</a>
+                                        <a href="/index" class="btn btn-warning">
+                                          <i class="bi bi-pencil-square"></i>
+                                        </a>
+                                        <a href="#">
+                                          <button type="button" class="btn btn-danger">
+                                            <i class="bi bi-trash3"></i>
+                                          </button>
+                                        </a>
+                                      <!--  <a th:href="@{/campana/editar/{id}(id=${campana.id})}">Editar</a>
+                                        <a th:href="@{/campana/eliminar/{id}(id=${campana.id})}">Eliminar</a> -->
                                       </td>
                                     </tr>
                                   </tbody>
                               </table>
+                              <!--Paginacion-->
+                              <nav aria-label="Page navigation example">
+                                <nav aria-label="...">
+                                  <ul class="pagination justify-content-end">
+                                    <li class="page-item disabled">
+                                      <span class="page-link">Anterior</span>
+                                    </li>
+                                    <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                    <li class="page-item active" aria-current="page">
+                                      <span class="page-link">2</span>
+                                    </li>
+                                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                    <li class="page-item">
+                                      <a class="page-link" href="#">Siguiente</a>
+                                    </li>
+                                  </ul>
+                                </nav>
+
                             </div>
                         </div>
                     </div>
                 </div>
           </main>
-          <footer th:insert="fragments/footer :: footer"></footer>
+          <footer th:insert="~{fragments/footer :: footer}"></footer>
         </div>
     </div>
-    <div th:insert="fragments/script :: script"></div>
+    <div th:insert="~{fragments/script :: script}"></div>
 </body>
 </html>
