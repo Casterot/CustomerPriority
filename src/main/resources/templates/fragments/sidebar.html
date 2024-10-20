@@ -1,0 +1,110 @@
+<aside th:fragment="sidebar" id="sidebar" class="expand">
+    <div class="d-flex">
+        <button id="toggle-btn" type="button">
+            <i class="bi bi-grid"></i>
+        </button>
+        <div class="sidebar-logo text-center">
+            <a href="#">Customer Priority</a>
+            <!-- <img src="/src/main/resources/static/images/CustomerPriority.png" width="185" height="70"> -->
+        </div>
+    </div>
+    <ul class="sidebar-nav">
+        <li class="sidebar-item">
+            <a href="#" class="sidebar-link has-dropdown collapsed" data-bs-toggle="collapse" data-bs-target="#mant" 
+                aria-expanded="false" aria-controls="mant">
+                <i class="bi bi-database-fill-gear"></i>
+                <span>Mantenimiento</span>
+            </a>
+            <ul id="mant" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+                <li class="sidebar-item">
+                    <a href="/campana" class="sidebar-link">Campañas</a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link">Cargos</a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link">Condición</a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link">Horarios</a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link">Roles</a>
+                </li>
+            </ul>
+        </li>
+        <li class="sidebar-item">
+            <a href="#" class="sidebar-link">
+                <i class="bi bi-person"></i>
+                <span>Profile</span>
+            </a>
+        </li>
+
+        <li class="sidebar-item">
+            <a href="#" class="sidebar-link">
+                <i class="bi bi-list-task"></i>
+                <span>Task</span>
+            </a>
+        </li>
+        <li class="sidebar-item">
+            <a href="#" class="sidebar-link has-dropdown collapsed" data-bs-toggle="collapse" data-bs-target="#auth" 
+                aria-expanded="false" aria-controls="auth">
+                <i class="bi bi-shield-check"></i>
+                <span>Auth</span>
+            </a>
+            <ul id="auth" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link">Login</a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link">Register</a>
+                </li>
+            </ul>
+        </li>
+        <li class="sidebar-item">
+            <a href="#" class="sidebar-link has-dropdown collapsed" data-bs-toggle="collapse" data-bs-target="#multi" 
+            aria-expanded="false" aria-controls="multi">
+                <i class="bi bi-columns"></i>
+                <span>Multi Level</span>
+            </a>
+            <ul id="multi" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link  collapsed" data-bs-toggle="collapse" data-bs-target="#multi-two" aria-expanded="false" aria-controls="multi-two">
+                        Two Links
+                    </a>
+                    <ul id="multi-two" class="sidebar-dropdown list-unstyled collapse">
+                        <li class="sidebar-item">
+                            <a href="#" class="sidebar-link">Link 1</a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a href="#" class="sidebar-link">Link 2</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </li>
+        <li class="sidebar-item">
+            <a href="#" class="sidebar-link">
+                <i class="bi bi-bell"></i>
+                <span>Notification</span>
+            </a>
+        </li>
+        <li class="sidebar-item">
+            <a href="#" class="sidebar-link">
+                <i class="bi bi-gear"></i>
+                <span>Setting</span>
+            </a>
+        </li>
+    </ul>
+    <div class="sidebar-footer">
+        
+
+        <a href="#" class="sidebar-link" onclick="document.getElementById('logout-form').submit();">
+            <i class="bi bi-box-arrow-left"></i>
+            <span>Cerrar sesión</span>
+        </a>
+        <form id="logout-form" action="/logout" method="post" style="display: none;">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+        </form>
+    </div>
+</aside>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Inicio de Sesión</title>
+</head>
+<body>
+
+
+    <div class="container" id="container">
+	
+        <div class="form-container sign-in-container">
+            <form th:action="@{/login}" method="post">
+                <h1>Iniciar sesion - Prueba</h1>
+                <br>
+                <input type="text" placeholder="Usuario" name="username"/>
+                <input type="password" placeholder="Contraseña" name="password"/>
+                <br>
+                <div>
+                    <button type="submit">Iniciar Sesión</button>
+                </div>
+            </form>
+        </div>
+        <div class="overlay-container">
+            <div class="overlay">
+                <div class="overlay-panel overlay-left">
+    
+                </div>
+                
+            </div>
+        </div>
+    </div>
+
+
+</body>
+</html>
