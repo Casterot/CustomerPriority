@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import com.customerpriority.sig.model.Campana;
 import com.customerpriority.sig.repository.CampanaRepository;
 
+import jakarta.persistence.EntityNotFoundException;
+
 @Service
 public class CampanaService {
 
@@ -17,24 +19,22 @@ public class CampanaService {
     private CampanaRepository campanaRepository;
 
     public List<Campana> listarTodasLasCampanas(){
-        List<Campana> campana = campanaRepository.findAll();
-        System.out.println(campana);
-        return campana;
+        return campanaRepository.findAll();
     }
 
     public Page<Campana> listarCampanasPaginadas(int page, int size){
         return campanaRepository.findAll(PageRequest.of(page, size));
     }
 
-    public Optional<Campana> buscarCampanaPorId(int id){
-        return campanaRepository.findById(id);
+    public Campana obtenerCampanaPorId(int id) {
+        return campanaRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Campaña no encontrada"));
     }
 
-    public void guardar(Campana campana){
+    public void guardarCampana(Campana campana){
         campanaRepository.save(campana);
     }
 
-    public void eliminar(int id){
+    public void eliminarCampana(int id){
         campanaRepository.deleteById(id);
     }
 
