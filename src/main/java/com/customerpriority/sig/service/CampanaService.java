@@ -6,7 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import org.springframework.data.domain.Pageable;
 import com.customerpriority.sig.model.Campana;
 import com.customerpriority.sig.repository.CampanaRepository;
 
@@ -22,8 +22,8 @@ public class CampanaService {
         return campanaRepository.findAll();
     }
 
-    public Page<Campana> listarCampanasPaginadas(int page, int size){
-        return campanaRepository.findAll(PageRequest.of(page, size));
+    public Page<Campana> listarCampanasPaginadas(Pageable pageable){
+        return campanaRepository.findAll(pageable);
     }
 
     public Campana obtenerCampanaPorId(int id) {

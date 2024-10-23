@@ -1,10 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"></html>
 <html lang="en">
-<head>
-    <title>Home</title>
-    <div th:insert="~{fragments/header :: header}"></div>
-</head>
+    <head th:insert="~{fragments/header :: header('Inicio')}"></head>
 <body>
     <div class="wrapper">
         <aside th:replace="~{fragments/sidebar :: sidebar}"></aside>

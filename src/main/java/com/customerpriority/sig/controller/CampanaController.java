@@ -1,6 +1,7 @@
 package com.customerpriority.sig.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -8,12 +9,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.customerpriority.sig.model.Campana;
 import com.customerpriority.sig.service.CampanaService;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -28,8 +33,16 @@ public class CampanaController {
     private CampanaService campanaService;
 
     @GetMapping
-    public String listarCampanas(Model model){
-        model.addAttribute("campanas", campanaService.listarTodasLasCampanas());
+    public String listarCampanas(Model model, @RequestParam(defaultValue = "0") int page){
+        int pageSize = 10; // Número de elementos por página
+
+        // Crear el objeto Pageable
+        Pageable pageable = PageRequest.of(page, pageSize);
+        
+        // Obtener el Page de Campanas
+        Page<Campana> campanaPage = campanaService.listarCampanasPaginadas(pageable);
+
+        model.addAttribute("campanaPage", campanaPage);
         return "campanas/listar";
     }
 
