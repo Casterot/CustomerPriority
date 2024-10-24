@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
+<head th:insert="~{fragments/header :: header('Formulario Cargo')}"></head>
+<body>
+    <div class="wrapper">
+        <main class="content px-3 py-4">
+            <div class="container-fluid">
+                <div class="row d-flex justify-content-center align-items-center">
+                    <div class="col-md-6 col-lg-5">
+                        <div class="mb-3">
+                            <a href="/cargos" class="btn btn-secondary">Volver</a>
+                        </div>
+                        <form th:action="@{/cargos}" th:object="${cargo}" method="post" class="border p-4 rounded shadow-sm">
+                            <input type="hidden" th:field="*{idcargo}"/>
+    
+                            <div class="mb-3">
+                                <label for="nombreCargo" class="form-label">Nombre</label>
+                                <input type="text" class="form-control" id="nombreCargo" th:field="*{nombreCargo}" placeholder="Nombre del cargo" required />
+                            </div>
+    
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-primary btn-lg">Guardar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <footer th:insert="~{fragments/footer :: footer}"></footer>
+    <div th:insert="~{fragments/script :: script}"></div>
+</body>
+</html>

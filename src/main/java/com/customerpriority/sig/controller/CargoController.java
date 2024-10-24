@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.customerpriority.sig.model.Campana;
-import com.customerpriority.sig.service.CampanaService;
+import com.customerpriority.sig.model.Cargo;
+import com.customerpriority.sig.service.CargoService;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
@@ -25,14 +25,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 
 @Controller
-@RequestMapping("/campanas")
-public class CampanaController {
+@RequestMapping("/cargos")
+public class CargoController {
     
     @Autowired
-    private CampanaService campanaService;
+    private CargoService cargoService;
 
     @GetMapping
-    public String listarCampanas(
+    public String listarCargos(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(required = false) String search,
             Model model){
@@ -43,39 +43,38 @@ public class CampanaController {
         Pageable pageable = PageRequest.of(page, pageSize);
         
         // Obtener el Page de Campanas
-        Page<Campana> campanaPage;
+        Page<Cargo> cargoPage;
 
         if (search != null && !search.isEmpty()) {
             // Ejecutar búsqueda en los campos segmento, nombreCampana y gestion
-            campanaPage = campanaService.buscarCampanasPorKeyword(search, pageable);
+            cargoPage = cargoService.buscarCargosPorKeyword(search, pageable);
         } else {
             // Listar todas las campañas paginadas
-            campanaPage = campanaService.listarCampanasPaginadas(pageable);
+            cargoPage = cargoService.listarCargosPaginados(pageable);
         }
 
-        model.addAttribute("campanaPage", campanaPage);
+        model.addAttribute("cargoPage", cargoPage);
         model.addAttribute("search", search); // Mantener el valor de búsqueda en el campo
-        return "campanas/listar";
+        return "cargos/listar";
     }
 
     @GetMapping("/nuevo")
     public String mostrarFormularioDeRegistro(Model model) {
-        Campana campana = new Campana();
-        campana.setEstado(1); // Esto asegurará que el estado por defecto sea 1
-        model.addAttribute("campana", campana);
-        return "campanas/formulario";
+        Cargo cargo = new Cargo();
+        model.addAttribute("cargo", cargo);
+        return "cargos/formulario";
     }
 
     @PostMapping
-    public String guardarCampana(@ModelAttribute("campana") @Valid Campana campana, BindingResult result, Model model) {
+    public String guardarCargo(@ModelAttribute("cargo") @Valid Cargo cargo, BindingResult result, Model model) {
         if (result.hasErrors()) {
             // Si hay errores, volvemos al formulario
-            return "campanas/formulario";
+            return "cargos/formulario";
         }
         
         // Si no hay errores, guardamos la campaña
-        campanaService.guardarCampana(campana);
-        return "redirect:/campanas";
+        cargoService.guardarCargo(cargo);
+        return "redirect:/cargos";
     }    
 
     
@@ -83,18 +82,18 @@ public class CampanaController {
     @GetMapping("/editar/{id}")
     public String mostrarFormularioDeEdicion(@PathVariable int id, Model model) {
     try {
-        Campana campana = campanaService.obtenerCampanaPorId(id);
-        model.addAttribute("campana", campana);
-        return "campanas/formulario";
+        Cargo cargo = cargoService.obtenerCargoPorId(id);
+        model.addAttribute("cargo", cargo);
+        return "cargos/formulario";
     } catch (EntityNotFoundException e) {
         // Manejar el caso donde no se encuentre la campaña
-        return "redirect:/campanas?error=notfound";
+        return "redirect:/cargos?error=notfound";
     }
     }
     
     @GetMapping("/eliminar/{id}")
     public String eliminarCampana(@PathVariable int id) {
-        campanaService.eliminarCampana(id);
-        return "redirect:/campanas";
+        cargoService.eliminarCargo(id);
+        return "redirect:/cargos";
     }
 }

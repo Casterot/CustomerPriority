@@ -6,10 +6,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class PasswordEncryptorRunner implements CommandLineRunner{
 
-    private final UsuarioService usuarioService;
-
     public PasswordEncryptorRunner(UsuarioService usuarioService) {
-        this.usuarioService = usuarioService;
     }
 
     @Override

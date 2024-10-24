@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-  <head th:insert="~{fragments/header :: header('Campañas')}"></head>
+  <head th:insert="~{fragments/header :: header('Cargos')}"></head>
   <body>
     <div class="wrapper">
       <aside th:replace="~{fragments/sidebar :: sidebar}"></aside>
@@ -11,14 +11,14 @@
             <div class="mb-3">
               <div class="row d-flex justify-content-center align-items-center">
                 <div class="col-11">
-                  <h4 class="fw-bold fs-4 mb-3">Listado de campañas</h4>
+                  <h4 class="fw-bold fs-4 mb-3">Listado de cargos</h4>
 
                   <div class="row">
                     <div class="col-md-8">
                 
-                      <form class="mb-3" th:action="@{/campanas}" method="get">
+                      <form class="mb-3" th:action="@{/cargos}" method="get">
                         <div class="input-group">
-                          <input type="text" name="search" th:value="${search}" class="form-control" placeholder="Buscar por segmento, nombre o gestión" aria-label="Buscar">
+                          <input type="text" name="search" th:value="${search}" class="form-control" placeholder="Buscar por cargo" aria-label="Buscar">
                           <button class="btn btn-secondary" type="submit">
                             <i class="bi bi-search"></i> Buscar
                           </button>
@@ -26,7 +26,7 @@
                       </form>
                     </div>
                     <div class="col-md-4 text-end">
-                      <a href="/campanas/nuevo" class="btn btn-primary">
+                      <a href="/cargos/nuevo" class="btn btn-primary">
                         <i class="bi bi-plus-square me-2"></i>Agregar
                       </a>
                     </div>
@@ -36,29 +36,23 @@
                     <thead>
                       <tr class="highlight">
                         <th scope="col">Id</th>
-                        <th scope="col">Segmento</th>
-                        <th scope="col">Campaña</th>
-                        <th scope="col">Tipo de gestion</th>
-                        <th scope="col">Estado</th>
+                        <th scope="col">Cargo</th>
                         <th scope="col">Acciones</th>
                       </tr>
                     </thead>
                     <tbody>
-                      <tr th:each="campana : ${campanaPage.content}">
-                        <td th:text="${campana.idCampana}"></td>
-                        <td th:text="${campana.segmento}"></td>
-                        <td th:text="${campana.nombreCampana}"></td>
-                        <td th:text="${campana.gestion}"></td>
-                        <td th:text="${campana.estado}"></td>
+                      <tr th:each="cargo : ${cargoPage.content}">
+                        <td th:text="${cargo.idcargo}"></td>
+                        <td th:text="${cargo.nombreCargo}"></td>
                         <td>
                           <a
-                            th:href="@{/campanas/editar/{id}(id=${campana.idCampana})}"
+                            th:href="@{/cargos/editar/{id}(id=${cargo.idcargo})}"
                             class="btn btn-warning"
                           >
                             <i class="bi bi-pencil-square"></i>
                           </a>
                           <a
-                            th:href="@{/campanas/eliminar/{id}(id=${campana.idCampana})}"
+                            th:href="@{/cargos/eliminar/{id}(id=${cargo.idcargo})}"
                             class="btn btn-danger"
                           >
                             <i class="bi bi-trash"></i>
@@ -75,34 +69,34 @@
                       <!-- Botón de página anterior -->
                       <li
                         class="page-item"
-                        th:classappend="${campanaPage.hasPrevious()} ? '' : 'disabled'"
+                        th:classappend="${cargoPage.hasPrevious()} ? '' : 'disabled'"
                       >
                         <a
                           class="page-link"
-                          th:href="@{/campanas(page=${campanaPage.number - 1})}"
+                          th:href="@{/cargos(page=${cargoPage.number - 1})}"
                           >Anterior</a
                         >
                       </li>
                       <!-- Páginas intermedias -->
                       <li
                         class="page-item"
-                        th:each="i : ${#numbers.sequence(0, campanaPage.totalPages - 1)}"
-                        th:classappend="${i == campanaPage.number} ? 'active' : ''"
+                        th:each="i : ${#numbers.sequence(0, cargoPage.totalPages - 1)}"
+                        th:classappend="${i == cargoPage.number} ? 'active' : ''"
                       >
                         <a
                           class="page-link"
-                          th:href="@{/campanas(page=${i})}"
+                          th:href="@{/cargos(page=${i})}"
                           th:text="${i + 1}"
                         ></a>
                       </li>
                       <!-- Botón de página siguiente -->
                       <li
                         class="page-item"
-                        th:classappend="${campanaPage.hasNext()} ? '' : 'disabled'"
+                        th:classappend="${cargoPage.hasNext()} ? '' : 'disabled'"
                       >
                         <a
                           class="page-link"
-                          th:href="@{/campanas(page=${campanaPage.number + 1})}"
+                          th:href="@{/cargos(page=${cargoPage.number + 1})}"
                           >Siguiente</a
                         >
                       </li>
