@@ -75,7 +75,7 @@ public class ExcelExportService {
 
 
     public ByteArrayInputStream exportarHorariosAExcel(List<Horario> horarios) throws IOException {
-        String[] columnas = {"ID", "Horario"};
+        String[] columnas = {"ID", "Horario","Turno", "Condición"};
 
         // Crear un nuevo workbook y hoja
         try (Workbook workbook = new XSSFWorkbook(); ByteArrayOutputStream out = new ByteArrayOutputStream()) {
@@ -94,6 +94,8 @@ public class ExcelExportService {
                 Row row = sheet.createRow(rowIdx++);
                 row.createCell(0).setCellValue(horario.getIdHorario());
                 row.createCell(1).setCellValue(horario.getNombreHorario());
+                row.createCell(2).setCellValue(horario.getTurno().getNombreTurno());
+                row.createCell(3).setCellValue(horario.getCondicion().getNombreCondicion());
             }
 
             workbook.write(out);

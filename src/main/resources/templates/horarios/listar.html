@@ -54,8 +54,8 @@
                       <tr th:each="horario : ${horarioPage.content}">
                         <td th:text="${horario.idHorario}"></td>
                         <td th:text="${horario.nombreHorario}"></td>
-                        <td th:text="${horario.turno}"></td>
-                        <td th:text="${horario.condicion}"></td>
+                        <td th:text="${horario.turno.nombreTurno}"></td>
+                        <td th:text="${horario.condicion.nombreCondicion}"></td>
                         <td>
                           <a th:href="@{/horarios/editar/{id}(id=${horario.idHorario})}" class="btn btn-warning">
                             <i class="bi bi-pencil-square"></i>

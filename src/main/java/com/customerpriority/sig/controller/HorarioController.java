@@ -15,8 +15,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.customerpriority.sig.model.Condicion;
 import com.customerpriority.sig.model.Horario;
+import com.customerpriority.sig.model.Turno;
 import com.customerpriority.sig.service.HorarioService;
+import com.customerpriority.sig.service.TurnoService;
+import com.customerpriority.sig.service.CondicionService;
 import com.customerpriority.sig.service.ExcelExportService;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -37,6 +41,12 @@ public class HorarioController {
     
     @Autowired
     private HorarioService horarioService;
+
+    @Autowired
+    private TurnoService turnoService;
+
+    @Autowired
+    private CondicionService condicionService;
 
     @Autowired
     private ExcelExportService excelExportService;
@@ -68,6 +78,8 @@ public class HorarioController {
     public String mostrarFormularioDeRegistro(Model model) {
         Horario horario = new Horario();
         model.addAttribute("horario", horario);
+        model.addAttribute("turnos", turnoService.listarTodosLosTurnos());
+        model.addAttribute("condiciones", condicionService.listarTodasLasCondiciones());
         return "horarios/formulario";
     }
 
@@ -75,6 +87,7 @@ public class HorarioController {
     public String guardarHorario(@ModelAttribute("horario") @Valid Horario horario, BindingResult result, Model model) {
         if (result.hasErrors()) {
             // Si hay errores, volvemos al formulario
+            cargarTurnosYCondiciones(model);
             return "horarios/formulario";
         }
         
@@ -90,6 +103,8 @@ public class HorarioController {
     try {
         Horario horario = horarioService.obtenerHorarioPorId(id);
         model.addAttribute("horario", horario);
+        model.addAttribute("turnos", turnoService.listarTodosLosTurnos());
+        model.addAttribute("condiciones", condicionService.listarTodasLasCondiciones());
         return "horarios/formulario";
     } catch (EntityNotFoundException e) {
         // Manejar el caso donde no se encuentre la campaña
@@ -143,4 +158,11 @@ public class HorarioController {
                 .body(bais.readAllBytes());
     }
 
+    // Método auxiliar para cargar Turnos y Condiciones
+    private void cargarTurnosYCondiciones(Model model) {
+        List<Turno> turnos = turnoService.listarTodosLosTurnos();
+        List<Condicion> condiciones = condicionService.listarTodasLasCondiciones();
+        model.addAttribute("turnos", turnos);
+        model.addAttribute("condiciones", condiciones);
+    }
 }

@@ -30,12 +30,16 @@
             
                                     <div class="mb-3">
                                         <label for="turno" class="form-label">Turno</label>
-                                        <input type="text" class="form-control" id="turno" th:field="*{turno}" placeholder="Turno" required />
+                                        <select th:field="*{turno}" class="form-select" required>
+                                            <option th:each="turno : ${turnos}" th:value="${turno.idTurno}" th:text="${turno.nombreTurno}"></option>
+                                        </select>
                                     </div>
 
                                     <div class="mb-3">
                                         <label for="condicion" class="form-label">Condicion</label>
-                                        <input type="text" class="form-control" id="condicion" th:field="*{condicion}" placeholder="Condición" required />
+                                        <select th:field="*{condicion}" class="form-select" required>
+                                            <option th:each="condicion : ${condiciones}" th:value="${condicion.idCondicion}" th:text="${condicion.nombreCondicion}"></option>
+                                        </select>
                                     </div>
             
                                     <div class="d-grid">
