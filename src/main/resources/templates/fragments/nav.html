@@ -7,13 +7,21 @@
                 </a>
                 <div class="dropdown-menu dropdown-menu-end rounded">
                     <a href="#" class="dropdown-item">
-                        <i class="bi bi-alarm"></i>
-                        <span>Analytics</span>
+                        <i class="bi bi-person"></i>
+                        <span>Mi perfil</span>
                     </a>
                     <a href="#" class="dropdown-item">
                         <i class="bi bi-sliders2"></i>
                         <span>Setting</span>
                     </a>
+                    <hr class="dropdown-divider">
+                    <a href="#" class="dropdown-item" onclick="document.getElementById('logout-form').submit();">
+                        <i class="bi bi-box-arrow-left"></i>
+                        <span>Cerrar sesión</span>
+                    </a>
+                    <form id="logout-form" action="/logout" method="post" style="display: none;">
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                    </form>
                 </div>
             </li>
         </ul>

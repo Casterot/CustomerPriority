@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.customerpriority.sig.model.Cargo;
-import com.customerpriority.sig.service.CargoService;
+import com.customerpriority.sig.model.Horario;
+import com.customerpriority.sig.service.HorarioService;
 import com.customerpriority.sig.service.ExcelExportService;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -32,17 +32,17 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 
 @Controller
-@RequestMapping("/cargos")
-public class CargoController {
+@RequestMapping("/horarios")
+public class HorarioController {
     
     @Autowired
-    private CargoService cargoService;
+    private HorarioService horarioService;
 
     @Autowired
     private ExcelExportService excelExportService;
 
     @GetMapping
-    public String listarCargos(Model model,
+    public String listarHorarios(Model model,
                                 @RequestParam(defaultValue = "0") int page,
                                 @RequestParam(value = "search", required = false) String keyword){
 
@@ -52,82 +52,95 @@ public class CargoController {
         Pageable pageable = PageRequest.of(page, pageSize);
         
         // Obtener el Page de Campanas
-        Page<Cargo> cargoPage;
-
+        Page<Horario> horarioPage;
         if (keyword != null && !keyword.isEmpty()) {
-            cargoPage = cargoService.buscarCargosPorKeyword(keyword, pageable);
+            horarioPage = horarioService.buscarHorariosPorKeyword(keyword, pageable);
         } else {
-            cargoPage = cargoService.listarCargosPaginados(pageable);
+            horarioPage = horarioService.listarHorariosPaginados(pageable);
         }
 
-
-        model.addAttribute("cargoPage", cargoPage);
+        model.addAttribute("horarioPage", horarioPage);
         model.addAttribute("search", keyword); // Mantener el valor de búsqueda en el campo
-        return "cargos/listar";
+        return "horarios/listar";
     }
 
     @GetMapping("/nuevo")
     public String mostrarFormularioDeRegistro(Model model) {
-        Cargo cargo = new Cargo();
-        model.addAttribute("cargo", cargo);
-        return "cargos/formulario";
+        Horario horario = new Horario();
+        model.addAttribute("horario", horario);
+        return "horarios/formulario";
     }
 
     @PostMapping
-    public String guardarCargo(@ModelAttribute("cargo") @Valid Cargo cargo, BindingResult result, Model model) {
+    public String guardarHorario(@ModelAttribute("horario") @Valid Horario horario, BindingResult result, Model model) {
         if (result.hasErrors()) {
             // Si hay errores, volvemos al formulario
-            return "cargos/formulario";
+            return "horarios/formulario";
         }
         
         // Si no hay errores, guardamos la campaña
-        cargoService.guardarCargo(cargo);
-        return "redirect:/cargos";
-    }    
+        horarioService.guardarHorario(horario);
+        return "redirect:/horarios";
+    }
 
     
     
     @GetMapping("/editar/{id}")
     public String mostrarFormularioDeEdicion(@PathVariable int id, Model model) {
     try {
-        Cargo cargo = cargoService.obtenerCargoPorId(id);
-        model.addAttribute("cargo", cargo);
-        return "cargos/formulario";
+        Horario horario = horarioService.obtenerHorarioPorId(id);
+        model.addAttribute("horario", horario);
+        return "horarios/formulario";
     } catch (EntityNotFoundException e) {
         // Manejar el caso donde no se encuentre la campaña
-        return "redirect:/cargos?error=notfound";
+        return "redirect:/horarios?error=notfound";
     }
     }
     
     @GetMapping("/eliminar/{id}")
-    public String eliminarCampana(@PathVariable int id) {
-        cargoService.eliminarCargo(id);
-        return "redirect:/cargos";
+    public String eliminarHorario(@PathVariable int id) {
+        horarioService.eliminarHorario(id);
+        return "redirect:/horarios";
+    }
+
+    @GetMapping("/exportar")
+    public ResponseEntity<byte[]> exportarCampanasAExcel() throws IOException {
+        List<Horario> horarios = horarioService.listarTodosLoshorarios();
+        ByteArrayInputStream bais = excelExportService.exportarHorariosAExcel(horarios);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Disposition", "attachment; filename=campanas.xlsx");
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .contentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
+                .body(bais.readAllBytes());
     }
 
 
     @GetMapping("/exportar-excel")
-    public ResponseEntity<byte[]> exportarCargosAExcel(
+    public ResponseEntity<byte[]> exportarHorariosAExcel(
             @RequestParam(value = "keyword", required = false) String keyword) throws IOException {
         
-        List<Cargo> cargos;
+        List<Horario> horarios;
     
         if (keyword != null && !keyword.isEmpty()) {
             // Exportar solo las campañas filtradas por el keyword
-            cargos = cargoService.buscarCargosPorKeyword(keyword, Pageable.unpaged()).getContent();
+            horarios = horarioService.buscarHorariosPorKeyword(keyword, Pageable.unpaged()).getContent();
         } else {
             // Exportar todas las campañas
-            cargos = cargoService.listarTodosLosCargos();
+            horarios = horarioService.listarTodosLoshorarios();
         }
     
-        ByteArrayInputStream bais = excelExportService.exportarCargosAExcel(cargos);
+        ByteArrayInputStream bais = excelExportService.exportarHorariosAExcel(horarios);
     
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Disposition", "attachment; filename=cargos.xlsx");
+        headers.add("Content-Disposition", "attachment; filename=horarios.xlsx");
     
         return ResponseEntity.ok()
                 .headers(headers)
                 .contentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
                 .body(bais.readAllBytes());
     }
+
 }

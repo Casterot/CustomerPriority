@@ -1,5 +1,9 @@
 package com.customerpriority.sig.controller;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
@@ -13,12 +17,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.customerpriority.sig.model.Campana;
 import com.customerpriority.sig.service.CampanaService;
+import com.customerpriority.sig.service.ExcelExportService;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 
 
@@ -31,11 +38,13 @@ public class CampanaController {
     @Autowired
     private CampanaService campanaService;
 
+    @Autowired
+    private ExcelExportService excelExportService;
+
     @GetMapping
-    public String listarCampanas(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(required = false) String search,
-            Model model){
+    public String listarCampanas(Model model,
+                                @RequestParam(defaultValue = "0") int page,
+                                @RequestParam(value = "search", required = false) String keyword){
 
         int pageSize = 10; // Número de elementos por página
 
@@ -44,17 +53,14 @@ public class CampanaController {
         
         // Obtener el Page de Campanas
         Page<Campana> campanaPage;
-
-        if (search != null && !search.isEmpty()) {
-            // Ejecutar búsqueda en los campos segmento, nombreCampana y gestion
-            campanaPage = campanaService.buscarCampanasPorKeyword(search, pageable);
+        if (keyword != null && !keyword.isEmpty()) {
+            campanaPage = campanaService.buscarCampanasPorKeyword(keyword, pageable);
         } else {
-            // Listar todas las campañas paginadas
             campanaPage = campanaService.listarCampanasPaginadas(pageable);
         }
 
         model.addAttribute("campanaPage", campanaPage);
-        model.addAttribute("search", search); // Mantener el valor de búsqueda en el campo
+        model.addAttribute("search", keyword); // Mantener el valor de búsqueda en el campo
         return "campanas/listar";
     }
 
@@ -97,4 +103,45 @@ public class CampanaController {
         campanaService.eliminarCampana(id);
         return "redirect:/campanas";
     }
+
+    @GetMapping("/exportar")
+    public ResponseEntity<byte[]> exportarCampanasAExcel() throws IOException {
+        List<Campana> campanas = campanaService.listarTodasLasCampanas();
+        ByteArrayInputStream bais = excelExportService.exportarCampanasAExcel(campanas);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Disposition", "attachment; filename=campanas.xlsx");
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .contentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
+                .body(bais.readAllBytes());
+    }
+
+
+    @GetMapping("/exportar-excel")
+    public ResponseEntity<byte[]> exportarCampanasAExcel(
+            @RequestParam(value = "keyword", required = false) String keyword) throws IOException {
+        
+        List<Campana> campanas;
+    
+        if (keyword != null && !keyword.isEmpty()) {
+            // Exportar solo las campañas filtradas por el keyword
+            campanas = campanaService.buscarCampanasPorKeyword(keyword, Pageable.unpaged()).getContent();
+        } else {
+            // Exportar todas las campañas
+            campanas = campanaService.listarTodasLasCampanas();
+        }
+    
+        ByteArrayInputStream bais = excelExportService.exportarCampanasAExcel(campanas);
+    
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Disposition", "attachment; filename=campanas.xlsx");
+    
+        return ResponseEntity.ok()
+                .headers(headers)
+                .contentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
+                .body(bais.readAllBytes());
+    }
+
 }

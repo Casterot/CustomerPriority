@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
-<head th:insert="~{fragments/header :: header('Formulario Cargos')}"></head>
+<head th:insert="~{fragments/header :: header('Formulario Horarios')}"></head>
 
 <body>
     <div class="wrapper">
@@ -16,16 +16,26 @@
                                 <div
                                     class="d-flex flex-column flex-md-row justify-content-between align-items-center p-4 mb-3 border bg-light rounded">
                                     <div class="d-flex gap-2 ms-md-auto">
-                                        <a href="/cargos" class="btn btn-secondary">Volver</a>
+                                        <a href="/horarios" class="btn btn-secondary">Volver</a>
                                     </div>
                                 </div>
                                 
-                                <form th:action="@{/cargos}" th:object="${cargo}" method="post" class="border p-4 rounded shadow-sm">
-                                    <input type="hidden" th:field="*{idcargo}"/>
+                                <form th:action="@{/horarios}" th:object="${horario}" method="post" class="border p-4 rounded shadow-sm">
+                                    <input type="hidden" th:field="*{idHorario}"/>
             
                                     <div class="mb-3">
-                                        <label for="nombreCargo" class="form-label">Cargo</label>
-                                        <input type="text" class="form-control" id="nombreCargo" th:field="*{nombreCargo}" placeholder="Nombre del cargo" required />
+                                        <label for="nombreHorario" class="form-label">Horario</label>
+                                        <input type="text" class="form-control" id="nombreHorario" th:field="*{nombreHorario}" placeholder="Horario" required />
+                                    </div>
+            
+                                    <div class="mb-3">
+                                        <label for="turno" class="form-label">Turno</label>
+                                        <input type="text" class="form-control" id="turno" th:field="*{turno}" placeholder="Turno" required />
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="condicion" class="form-label">Condicion</label>
+                                        <input type="text" class="form-control" id="condicion" th:field="*{condicion}" placeholder="Condición" required />
                                     </div>
             
                                     <div class="d-grid">

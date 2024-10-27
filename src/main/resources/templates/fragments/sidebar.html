@@ -4,7 +4,7 @@
             <i class="bi bi-grid"></i>
         </button>
         <div class="sidebar-logo text-center">
-            <a href="#">Customer Priority</a>
+            <a href="/index">Customer Priority</a>
             <!-- <img src="/src/main/resources/static/images/CustomerPriority.png" width="185" height="70"> -->
         </div>
     </div>
@@ -20,7 +20,7 @@
                     <a href="/campanas" class="sidebar-link">Campañas</a>
                 </li>
                 <li class="sidebar-item">
-                    <a href="#" class="sidebar-link">Cargos</a>
+                    <a href="/cargos" class="sidebar-link">Cargos</a>
                 </li>
                 <li class="sidebar-item">
                     <a href="#" class="sidebar-link">Condición</a>
@@ -97,14 +97,6 @@
         </li>
     </ul>
     <div class="sidebar-footer">
-        
 
-        <a href="#" class="sidebar-link" onclick="document.getElementById('logout-form').submit();">
-            <i class="bi bi-box-arrow-left"></i>
-            <span>Cerrar sesión</span>
-        </a>
-        <form id="logout-form" action="/logout" method="post" style="display: none;">
-            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-        </form>
     </div>
 </aside>
