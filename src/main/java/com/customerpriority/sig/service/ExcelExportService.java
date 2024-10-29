@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import com.customerpriority.sig.model.Campana;
 import com.customerpriority.sig.model.Cargo;
 import com.customerpriority.sig.model.Horario;
+import com.customerpriority.sig.model.Rol;
 
 @Service
 public class ExcelExportService {
@@ -96,6 +97,33 @@ public class ExcelExportService {
                 row.createCell(1).setCellValue(horario.getNombreHorario());
                 row.createCell(2).setCellValue(horario.getTurno().getNombreTurno());
                 row.createCell(3).setCellValue(horario.getCondicion().getNombreCondicion());
+            }
+
+            workbook.write(out);
+            return new ByteArrayInputStream(out.toByteArray());
+        }
+    }
+
+    public ByteArrayInputStream exportarRolesAExcel(List<Rol> roles) throws IOException {
+        String[] columnas = {"ID", "Rol"};
+
+        // Crear un nuevo workbook y hoja
+        try (Workbook workbook = new XSSFWorkbook(); ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+            Sheet sheet = workbook.createSheet("Roles");
+
+            // Crear fila de encabezados
+            Row headerRow = sheet.createRow(0);
+            for (int i = 0; i < columnas.length; i++) {
+                Cell cell = headerRow.createCell(i);
+                cell.setCellValue(columnas[i]);
+            }
+
+            // Poblar las filas con los datos de las campañas
+            int rowIdx = 1;
+            for (Rol rol : roles) {
+                Row row = sheet.createRow(rowIdx++);
+                row.createCell(0).setCellValue(rol.getIdRol());
+                row.createCell(1).setCellValue(rol.getNombreRol());
             }
 
             workbook.write(out);

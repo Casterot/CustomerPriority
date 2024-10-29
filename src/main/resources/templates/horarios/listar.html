@@ -38,55 +38,61 @@
                     </form>
                   </div>
                 </div>
-
-                <div class="table-responsive">
-                  <table class="table table-striped">
-                    <thead>
-                      <tr class="highlight">
-                        <th scope="col">Id</th>
-                        <th scope="col">Horario</th>
-                        <th scope="col">Turno</th>
-                        <th scope="col">Condición</th>
-                        <th scope="col">Acciones</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr th:each="horario : ${horarioPage.content}">
-                        <td th:text="${horario.idHorario}"></td>
-                        <td th:text="${horario.nombreHorario}"></td>
-                        <td th:text="${horario.turno.nombreTurno}"></td>
-                        <td th:text="${horario.condicion.nombreCondicion}"></td>
-                        <td>
-                          <a th:href="@{/horarios/editar/{id}(id=${horario.idHorario})}" class="btn btn-warning">
-                            <i class="bi bi-pencil-square"></i>
-                          </a>
-                          <a th:href="@{/horarios/eliminar/{id}(id=${horario.idHorario})}" class="btn btn-danger">
-                            <i class="bi bi-trash"></i>
-                          </a>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
+                <div th:if="${horarioPage.totalElements == 0}" class="alert alert-info mt-3">
+                  No se encontraron horarios con el nombre "<span th:text="${search}"></span>".
                 </div>
+                
+                <div th:if="${horarioPage.totalElements > 0}">
+                  <div class="table-responsive">
+                    <table class="table table-striped">
+                      <thead>
+                        <tr class="highlight">
+                          <th scope="col">Id</th>
+                          <th scope="col">Horario</th>
+                          <th scope="col">Turno</th>
+                          <th scope="col">Condición</th>
+                          <th scope="col">Acciones</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr th:each="horario : ${horarioPage.content}">
+                          <td th:text="${horario.idHorario}"></td>
+                          <td th:text="${horario.nombreHorario}"></td>
+                          <td th:text="${horario.turno.nombreTurno}"></td>
+                          <td th:text="${horario.condicion.nombreCondicion}"></td>
+                          <td>
+                            <a th:href="@{/horarios/editar/{id}(id=${horario.idHorario})}" class="btn btn-warning">
+                              <i class="bi bi-pencil-square"></i>
+                            </a>
+                            <a th:href="@{/horarios/eliminar/{id}(id=${horario.idHorario})}" class="btn btn-danger"
+                                onclick="return confirm('¿Estás seguro de que deseas eliminar este horario?');">
+                              <i class="bi bi-trash"></i>
+                            </a>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
 
-                <!-- Paginación -->
-                <nav aria-label="Page navigation example" class="mt-3">
-                  <ul class="pagination justify-content-end">
-                    <!-- Botón de página anterior -->
-                    <li class="page-item" th:classappend="${horarioPage.hasPrevious()} ? '' : 'disabled'">
-                      <a class="page-link" th:href="@{/horarios(page=${horarioPage.number - 1})}">Anterior</a>
-                    </li>
-                    <!-- Páginas intermedias -->
-                    <li class="page-item" th:each="i : ${#numbers.sequence(0, horarioPage.totalPages - 1)}"
-                      th:classappend="${i == horarioPage.number} ? 'active' : ''">
-                      <a class="page-link" th:href="@{/horarios(page=${i})}" th:text="${i + 1}"></a>
-                    </li>
-                    <!-- Botón de página siguiente -->
-                    <li class="page-item" th:classappend="${horarioPage.hasNext()} ? '' : 'disabled'">
-                      <a class="page-link" th:href="@{/horarios(page=${horarioPage.number + 1})}">Siguiente</a>
-                    </li>
-                  </ul>
-                </nav>
+                  <!-- Paginación -->
+                  <nav aria-label="Page navigation example" class="mt-3">
+                    <ul class="pagination justify-content-end">
+                      <!-- Botón de página anterior -->
+                      <li class="page-item" th:classappend="${horarioPage.hasPrevious()} ? '' : 'disabled'">
+                        <a class="page-link" th:href="@{/horarios(page=${horarioPage.number - 1})}">Anterior</a>
+                      </li>
+                      <!-- Páginas intermedias -->
+                      <li class="page-item" th:each="i : ${#numbers.sequence(0, horarioPage.totalPages - 1)}"
+                        th:classappend="${i == horarioPage.number} ? 'active' : ''">
+                        <a class="page-link" th:href="@{/horarios(page=${i})}" th:text="${i + 1}"></a>
+                      </li>
+                      <!-- Botón de página siguiente -->
+                      <li class="page-item" th:classappend="${horarioPage.hasNext()} ? '' : 'disabled'">
+                        <a class="page-link" th:href="@{/horarios(page=${horarioPage.number + 1})}">Siguiente</a>
+                      </li>
+                    </ul>
+                  </nav>
+                </div>
               </div>
             </div>
           </div>

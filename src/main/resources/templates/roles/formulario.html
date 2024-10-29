@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:insert="~{fragments/header :: header('Formulario Roles')}"></head>
+
+<body>
+    <div class="wrapper">
+        <aside th:replace="~{fragments/sidebar :: sidebar}"></aside>
+        <div class="main">
+            <nav th:insert="~{fragments/nav :: nav}"></nav>
+            <main class="content px-3 py-4">
+                <div class="container-fluid">
+                    <div class="mb-3">
+                        <div class="row justify-content-center">
+                            <div class="col-7 col-md-6">
+                                <div
+                                    class="d-flex flex-column flex-md-row justify-content-between align-items-center p-4 mb-3 border bg-light rounded">
+                                    <div class="d-flex gap-2 ms-md-auto">
+                                        <a href="/roles" class="btn btn-secondary">Volver</a>
+                                    </div>
+                                </div>
+                                
+                                <form th:action="@{/roles}" th:object="${rol}" method="post" class="border p-4 rounded shadow-sm">
+                                    <input type="hidden" th:field="*{idRol}"/>
+            
+                                    <div class="mb-3">
+                                        <label for="nombreRol" class="form-label">Rol</label>
+                                        <input type="text" class="form-control" id="nombreRol" th:field="*{nombreRol}" placeholder="Nombre del rol" required />
+                                    </div>
+            
+                                    <div class="d-grid">
+                                        <button type="submit" class="btn btn-primary btn-md">Guardar</button>
+                                    </div>
+                                </form>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+            <footer th:insert="~{fragments/footer :: footer}"></footer>
+        </div>
+    </div>
+    <div th:insert="~{fragments/script :: script}"></div>
+</body>
+
+</html>

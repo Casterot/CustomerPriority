@@ -38,51 +38,57 @@
                     </form>
                   </div>
                 </div>
-
-                <div class="table-responsive">
-                  <table class="table table-striped">
-                    <thead>
-                      <tr class="highlight">
-                        <th scope="col">Id</th>
-                        <th scope="col">Cargo</th>
-                        <th scope="col">Acciones</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr th:each="cargo : ${cargoPage.content}">
-                        <td th:text="${cargo.idcargo}"></td>
-                        <td th:text="${cargo.nombreCargo}"></td>
-                        <td>
-                          <a th:href="@{/cargos/editar/{id}(id=${cargo.idcargo})}" class="btn btn-warning">
-                            <i class="bi bi-pencil-square"></i>
-                          </a>
-                          <a th:href="@{/cargos/eliminar/{id}(id=${cargo.idcargo})}" class="btn btn-danger">
-                            <i class="bi bi-trash"></i>
-                          </a>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
+                <div th:if="${cargoPage.totalElements == 0}" class="alert alert-info mt-3">
+                  No se encontraron cargos con el nombre "<span th:text="${search}"></span>".
                 </div>
+                
+                <div th:if="${cargoPage.totalElements > 0}">
+                  <div class="table-responsive">
+                    <table class="table table-striped">
+                      <thead>
+                        <tr class="highlight">
+                          <th scope="col">Id</th>
+                          <th scope="col">Cargo</th>
+                          <th scope="col">Acciones</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr th:each="cargo : ${cargoPage.content}">
+                          <td th:text="${cargo.idcargo}"></td>
+                          <td th:text="${cargo.nombreCargo}"></td>
+                          <td>
+                            <a th:href="@{/cargos/editar/{id}(id=${cargo.idcargo})}" class="btn btn-warning">
+                              <i class="bi bi-pencil-square"></i>
+                            </a>
+                            <a th:href="@{/cargos/eliminar/{id}(id=${cargo.idcargo})}" class="btn btn-danger"
+                                onclick="return confirm('¿Estás seguro de que deseas eliminar este cargo?');">
+                              <i class="bi bi-trash"></i>
+                            </a>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
 
-                <!-- Paginación -->
-                <nav aria-label="Page navigation example" class="mt-3">
-                  <ul class="pagination justify-content-end">
-                    <!-- Botón de página anterior -->
-                    <li class="page-item" th:classappend="${cargoPage.hasPrevious()} ? '' : 'disabled'">
-                      <a class="page-link" th:href="@{/cargos(page=${cargoPage.number - 1})}">Anterior</a>
-                    </li>
-                    <!-- Páginas intermedias -->
-                    <li class="page-item" th:each="i : ${#numbers.sequence(0, cargoPage.totalPages - 1)}"
-                      th:classappend="${i == cargoPage.number} ? 'active' : ''">
-                      <a class="page-link" th:href="@{/cargos(page=${i})}" th:text="${i + 1}"></a>
-                    </li>
-                    <!-- Botón de página siguiente -->
-                    <li class="page-item" th:classappend="${cargoPage.hasNext()} ? '' : 'disabled'">
-                      <a class="page-link" th:href="@{/cargos(page=${cargoPage.number + 1})}">Siguiente</a>
-                    </li>
-                  </ul>
-                </nav>
+                  <!-- Paginación -->
+                  <nav aria-label="Page navigation example" class="mt-3">
+                    <ul class="pagination justify-content-end">
+                      <!-- Botón de página anterior -->
+                      <li class="page-item" th:classappend="${cargoPage.hasPrevious()} ? '' : 'disabled'">
+                        <a class="page-link" th:href="@{/cargos(page=${cargoPage.number - 1})}">Anterior</a>
+                      </li>
+                      <!-- Páginas intermedias -->
+                      <li class="page-item" th:each="i : ${#numbers.sequence(0, cargoPage.totalPages - 1)}"
+                        th:classappend="${i == cargoPage.number} ? 'active' : ''">
+                        <a class="page-link" th:href="@{/cargos(page=${i})}" th:text="${i + 1}"></a>
+                      </li>
+                      <!-- Botón de página siguiente -->
+                      <li class="page-item" th:classappend="${cargoPage.hasNext()} ? '' : 'disabled'">
+                        <a class="page-link" th:href="@{/cargos(page=${cargoPage.number + 1})}">Siguiente</a>
+                      </li>
+                    </ul>
+                  </nav>
+                </div>
               </div>
             </div>
           </div>
