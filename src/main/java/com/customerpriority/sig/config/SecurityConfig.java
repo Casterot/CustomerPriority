@@ -10,14 +10,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
-import com.customerpriority.sig.service.UserDetailsServiceImpl;
-
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-
-    public SecurityConfig(UserDetailsServiceImpl userDetailsService) {
-    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -28,33 +23,29 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .authorizeHttpRequests(authz -> authz
-                .requestMatchers("/login", "/css/**", "/js/**", "/images/**").permitAll()  // Permitir acceso sin autenticación
-                .anyRequest().authenticated() // Cualquier otra solicitud requiere autenticación
+                .requestMatchers("/login", "/css/**", "/js/**", "/images/**").permitAll()
+                .anyRequest().authenticated()
             )
             .formLogin(form -> form
-                .loginPage("/login") // Página de inicio de sesión personalizada
-                .defaultSuccessUrl("/index", true)  // Página después del inicio de sesión exitoso
-                .failureUrl("/login?error=true") // URL para manejar errores
+                .loginPage("/login")
+                .defaultSuccessUrl("/index", true)
+                .failureUrl("/login?error=true")
                 .permitAll()
             )
             .logout(logout -> logout
-
-                .logoutUrl("/logout") // Configurar la URL de cierre de sesión
-                .logoutSuccessUrl("/login?logout=true") // Redirigir después de cerrar sesión
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/login?logout=true")
                 .invalidateHttpSession(true)
-                .clearAuthentication(true) // Invalidar la sesión del usuario
-                .deleteCookies("JSESSIONID") // Borrar las cookies de sesión
+                .clearAuthentication(true)
+                .deleteCookies("JSESSIONID")
                 .permitAll()
             );
-            
 
         return http.build();
     }
 
     @Bean
     public AuthenticationManager authManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
-        // Devuelve el AuthenticationManager configurado
         return authenticationConfiguration.getAuthenticationManager();
     }
-
 }

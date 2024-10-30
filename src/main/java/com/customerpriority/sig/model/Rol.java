@@ -13,6 +13,7 @@ public class Rol {
     @Column(name = "nombre_rol", length = 50, nullable = false)
     private String nombreRol;
 
+    // Getters y setters
     public int getIdRol() {
         return idRol;
     }
@@ -28,6 +29,4 @@ public class Rol {
     public void setNombreRol(String nombreRol) {
         this.nombreRol = nombreRol;
     }
-
-    
 }
