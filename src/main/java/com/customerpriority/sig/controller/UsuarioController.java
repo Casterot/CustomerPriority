@@ -25,7 +25,7 @@ public class UsuarioController {
     @GetMapping
     public String listarUsuarios(Model model) {
         model.addAttribute("usuarios", usuarioService.findAll());
-        return "usuarios"; // Nombre de la vista para mostrar la lista
+        return "usuarios/listar"; // Nombre de la vista para mostrar la lista
     }
 
     @GetMapping("/nuevo")

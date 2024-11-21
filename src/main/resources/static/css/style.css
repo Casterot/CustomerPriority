@@ -53,22 +53,17 @@ body {
     background-color: transparent;
     cursor: pointer;
     border: 0;
-    padding: 1rem 1.5rem;
-}
-
-#toggle-btn i {
-    font-size: 1.5rem;
-    color: #FFF;
+    padding: 0.73rem 0 1rem 1rem;
 }
 
 .sidebar-logo {
     margin: auto 0;
+    padding: 0 0 0 0.3rem;
 }
 
-.sidebar-logo a {
-    color: #FFF;
-    font-size: 1.15rem;
-    font-weight: 600;
+.sidebar-tittle{
+    padding: 1.5rem 0 1rem 0;
+    border-bottom: 1px solid #b8b8b8;
 }
 
 #sidebar:not(.expand) .sidebar-logo,
@@ -78,7 +73,7 @@ body {
 
 #sidebar.expand .sidebar-logo,
 #sidebar.expand a.sidebar-link span {
-    animation: fadeIn .25s ease;
+    animation: fadeIn 1s ease;
 }
 
 @keyframes fadeIn {
@@ -132,7 +127,6 @@ a.sidebar-link:hover {
 
 #sidebar:not(.expand) .sidebar-item:hover .has-dropdown+.sidebar-dropdown {
     display: block;
-    max-height: 15em;
     width: 100%;
     opacity: 1;
 }

@@ -11,7 +11,7 @@ public class TipoDocumentoService {
     @Autowired
     private TipoDocumentoRepository tipoDocumentoRepository;
 
-    public List<TipoDocumento> listarTodasLasJornadas(){
+    public List<TipoDocumento> listarTodosLosDocumentos(){
         return tipoDocumentoRepository.findAll();
     }
 

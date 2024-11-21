@@ -33,9 +33,8 @@ public class RRHHCuentas {
     private String emitePropioRecibo;
 
     @ManyToOne
-    @JoinColumn(name = "id_banco")
+    @JoinColumn(name = "id_banco", nullable = false)
     private RRHHBanco banco;
-
 
     public int getIdCuenta() {
         return idCuenta;
@@ -109,5 +108,4 @@ public class RRHHCuentas {
         this.banco = banco;
     }
 
-    
 }

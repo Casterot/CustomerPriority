@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:insert="~{fragments/header :: header('Trabajadores')}"></head>
+
+<body>
+  <div class="wrapper">
+    <aside th:replace="~{fragments/sidebar :: sidebar}"></aside>
+    <div class="main">
+      <nav th:insert="~{fragments/nav :: nav}"></nav>
+      <main class="content px-3 py-4">
+        <div class="container-fluid">
+          <div class="mb-3">
+            <div class="row justify-content-center">
+              <div class="col-12 col-md-11">
+                <div class="d-flex flex-column flex-md-row justify-content-between align-items-center p-4 mb-3 border bg-light rounded">
+                  <h4 class="fw-bold fs-4 mb-3 mb-md-0 text-center">Listado de trabajadores</h4>
+                  <div class="d-flex gap-2 ms-md-auto">
+                    <a href="/trabajadores/nuevo" class="btn btn-primary">
+                      <i class="bi bi-plus-circle me-2"></i>Agregar
+                    </a>
+                    <a th:href="@{/trabajadores/exportar-excel(keyword=${search})}" class="btn btn-success">
+                      <i class="bi bi-file-earmark-spreadsheet me-2"></i>Exportar
+                    </a>
+                  </div>
+                </div>
+                
+                <div class="d-flex flex-column flex-md-row justify-content-between align-items-center p-4 mb-3 border bg-light rounded">
+                  <div class="col-12 col-md-8">
+                    <form th:action="@{/trabajadores}" method="get">
+                      <div class="input-group">
+                        <input type="text" name="search" th:value="${search}" class="form-control"
+                          placeholder="Buscar" aria-label="Buscar">
+                        <button class="btn btn-secondary" type="submit">
+                          <i class="bi bi-search"></i> Buscar
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+
+                <div th:if="${trabajadorPage.totalElements == 0}" class="alert alert-info mt-3">
+                  No se encontraron trabajadores con el nombre "<span th:text="${search}"></span>".
+                </div>
+                
+                <div th:if="${trabajadorPage.totalElements > 0}">
+                  <div class="table-responsive">
+                    <table class="table table-striped">
+                      <thead>
+                        <tr class="highlight">
+                          <th scope="col">Id</th>
+                          <th scope="col">Centro</th>
+                          <th scope="col">Campaña</th>
+                          <th scope="col">Segmento</th>
+                          <th scope="col">Tipo Gestión</th>
+                          <th scope="col">Jefe directo</th>
+                          <th scope="col">Tipo de documento</th>
+                          <th scope="col">Documento</th>
+                          <th scope="col">Apellido paterno</th>
+                          <th scope="col">Apellido materno</th>
+                          <th scope="col">Nombres</th>
+                          <th scope="col">Condicion</th>
+                          <th scope="col">Cargo</th>
+                          <th scope="col">Modalidad</th>
+                          <th scope="col">Horario</th>
+                          <th scope="col">Turno</th>
+                          <th scope="col">Género</th>
+                          <th scope="col">Fecha de nacimiento</th>
+                          <th scope="col">Teléfono</th>
+                          <th scope="col">Correo</th>
+                          <th scope="col">Dirección</th>
+                          <th scope="col">Distrito</th>
+                          <th scope="col">Provincia</th>
+                          <th scope="col">Departamento</th>
+                          <th scope="col">Jornada</th>
+                          <th scope="col">Acciones</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr th:each="trabajador : ${trabajadorPage.content}">
+                          <td th:text="${trabajador.idTrabajador}"></td>
+                          <td th:text="${trabajador.centro != null ? trabajador.centro.nombreCentro : 'Sin centro'}"></td>
+                          <td th:text="${trabajador.segmento != null ? trabajador.segmento.campana.nombreCampana : 'Sin campaña'}"></td>
+                          <td th:text="${trabajador.segmento != null ? trabajador.segmento.nombreSegmento : 'Sin segmento'}"></td>
+                          <td th:text="${trabajador.segmento != null ? trabajador.segmento.tipoGestion.nombreGestion : 'Sin gestion'}"></td>
+                          <td th:text="${trabajador.jefeDirecto != null ? trabajador.jefeDirecto.nombreCompleto : 'Sin jefe'}"></td>
+                          <td th:text="${trabajador.tipoDocumento != null ? trabajador.tipoDocumento.nombreTipoDocumento : 'Sin tipo de documento'}"></td>
+                          <td th:text="${trabajador.documento}"></td>
+                          <td th:text="${trabajador.apellidoPaterno}"></td>
+                          <td th:text="${trabajador.apellidoMaterno}"></td>
+                          <td th:text="${trabajador.nombreCompleto}"></td>
+                          <td th:text="${trabajador.horario != null ? trabajador.horario.condicion.nombreCondicion : 'Sin condición'}"></td>
+                          <td th:text="${trabajador.cargo != null ? trabajador.cargo.nombreCargo : 'Sin cargo'}"></td>
+                          <td th:text="${trabajador.modalidad != null ? trabajador.modalidad.nombreModalidad : 'Sin modalidad'}"></td>
+                          <td th:text="${trabajador.horario != null ? trabajador.horario.nombreHorario : 'Sin horario'}"></td>
+                          <td th:text="${trabajador.horario != null ? trabajador.horario.turno.nombreTurno : 'Sin turno'}"></td>
+                          <td th:text="${trabajador.genero != null ? trabajador.genero.nombreGenero : 'Sin género'}"></td>
+                          <td th:text="${trabajador.fechaNacimiento != null ? trabajador.fechaNacimiento : 'Sin fecha de nacimiento'}"></td>
+                          <td th:text="${trabajador.telefono != null ? trabajador.telefono : 'Sin teléfono'}"></td>
+                          <td th:text="${trabajador.correo != null ? trabajador.correo : 'Sin correo'}"></td>
+                          <td th:text="${trabajador.direccion != null ? trabajador.direccion : 'Sin dirección'}"></td>
+                          <td th:text="${trabajador.distrito != null ? trabajador.distrito.distrito : 'Sin distrito'}"></td>
+                          <td th:text="${trabajador.distrito != null ? trabajador.distrito.provincia.provincia : 'Sin provincia'}"></td>
+                          <td th:text="${trabajador.distrito != null ? trabajador.distrito.provincia.departamento.departamento : 'Sin departamento'}"></td>
+                          <td th:text="${trabajador.jornada != null ? trabajador.jornada.nombreJornada : 'Sin jornada'}"></td>
+                          <td>
+                            <a th:href="@{/trabajadores/editar/{id}(id=${trabajador.idTrabajador})}" class="btn btn-warning">
+                              <i class="bi bi-pencil-square"></i>
+                            </a>
+                            <a th:href="@{/trabajadores/eliminar/{id}(id=${trabajador.idTrabajador})}" class="btn btn-danger"
+                                onclick="return confirm('¿Estás seguro de que deseas eliminar este trabajador?');">
+                              <i class="bi bi-trash"></i>
+                            </a>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                
+                  <!-- Paginación -->
+                  <nav aria-label="Page navigation example" class="mt-3">
+                    <ul class="pagination justify-content-end">
+                      <!-- Botón de página anterior -->
+                      <li class="page-item" th:classappend="${trabajadorPage.hasPrevious()} ? '' : 'disabled'">
+                        <a class="page-link" th:href="@{/trabajadores(page=${trabajadorPage.number - 1}, search=${search})}">Anterior</a>
+                      </li>
+                      <!-- Páginas intermedias -->
+                      <li class="page-item" th:each="i : ${#numbers.sequence(0, trabajadorPage.totalPages - 1)}"
+                        th:classappend="${i == trabajadorPage.number} ? 'active' : ''">
+                        <a class="page-link" th:href="@{/trabajadores(page=${i}, search=${search})}" th:text="${i + 1}"></a>
+                      </li>
+                      <!-- Botón de página siguiente -->
+                      <li class="page-item" th:classappend="${trabajadorPage.hasNext()} ? '' : 'disabled'">
+                        <a class="page-link" th:href="@{/trabajadores(page=${trabajadorPage.number + 1}, search=${search})}">Siguiente</a>
+                      </li>
+                    </ul>
+                  </nav>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+      <footer th:insert="~{fragments/footer :: footer}"></footer>
+    </div>
+  </div>
+  <div th:insert="~{fragments/script :: script}"></div>
+</body>
+
+</html>

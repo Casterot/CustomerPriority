@@ -1,10 +1,10 @@
-<aside th:fragment="sidebar" id="sidebar" class="expand">
-    <div class="d-flex">
+<aside th:fragment="sidebar" id="sidebar" class=""> <!--Agregar clase expand para que inice con el sidebar expandido-->
+    <div class="d-flex sidebar-tittle">
         <button id="toggle-btn" type="button">
-            <i class="bi bi-grid"></i>
+            <img th:src="@{/images/Logo.png}" width="35" height="38">
         </button>
         <div class="sidebar-logo text-center">
-            <a href="/index">Customer Priority</a>
+            <img th:src="@{/images/Nombre.png}" width="175" height="55">
             <!-- <img src="/src/main/resources/static/images/CustomerPriority.png" width="185" height="70"> -->
         </div>
     </div>
@@ -13,11 +13,14 @@
             <a href="#" class="sidebar-link has-dropdown collapsed" data-bs-toggle="collapse" data-bs-target="#mant" 
                 aria-expanded="false" aria-controls="mant">
                 <i class="bi bi-database-fill-gear"></i>
-                <span>Mantenimiento</span>
+                <span>Administrador</span>
             </a>
             <ul id="mant" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
                 <li class="sidebar-item">
-                    <a href="/campanas" class="sidebar-link">Campañas</a>
+                    <a href="#" class="sidebar-link">Campañas</a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="/segmentos" class="sidebar-link">Segmentos</a>
                 </li>
                 <li class="sidebar-item">
                     <a href="/cargos" class="sidebar-link">Cargos</a>
@@ -27,6 +30,9 @@
                 </li>
                 <li class="sidebar-item">
                     <a href="/roles" class="sidebar-link">Roles</a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="/trabajadores" class="sidebar-link">Nómina</a>
                 </li>
                 <li class="sidebar-item">
                     <a href="#" class="sidebar-link">Usuarios</a>

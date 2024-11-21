@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
-<head th:insert="~{fragments/header :: header('Formulario Campañas')}"></head>
+<head th:insert="~{fragments/header :: header('Formulario Segmentos')}"></head>
 
 <body>
     <div class="wrapper">
@@ -16,28 +16,29 @@
                                 <div
                                     class="d-flex flex-column flex-md-row justify-content-between align-items-center p-4 mb-3 border bg-light rounded">
                                     <div class="d-flex gap-2 ms-md-auto">
-                                        <a href="/campanas" class="btn btn-secondary">Volver</a>
+                                        <a href="/segmentos" class="btn btn-secondary">Volver</a>
                                     </div>
                                 </div>
                                 
-                                <form th:action="@{/campanas}" th:object="${campana}" method="post" class="border p-4 rounded shadow-sm">
-                                    <input type="hidden" th:field="*{idCampana}"/>
+                                <form th:action="@{/segmentos}" th:object="${segmento}" method="post" class="border p-4 rounded shadow-sm">
+                                    <input type="hidden" th:field="*{idSegmento}"/>
             
                                     <div class="mb-3">
-                                        <label for="segmento" class="form-label">Segmento</label>
-                                        <input type="text" class="form-control" id="segmento" th:field="*{segmento}" placeholder="Segmento" required />
+                                        <label for="nombreSegmento" class="form-label">Segmento</label>
+                                        <input type="text" class="form-control" id="nombreSegmento" th:field="*{nombreSegmento}" placeholder="Segmento" required />
                                     </div>
             
                                     <div class="mb-3">
-                                        <label for="nombreCampana" class="form-label">Nombre</label>
-                                        <input type="text" class="form-control" id="nombreCampana" th:field="*{nombreCampana}" placeholder="Nombre de la Campaña" required />
+                                        <label for="campana" class="form-label">Campaña</label>
+                                        <select th:field="*{campana}" class="form-select" required>
+                                            <option th:each="campana : ${campanas}" th:value="${campana.idCampana}" th:text="${campana.nombreCampana}"></option>
+                                        </select>
                                     </div>
-            
+                                
                                     <div class="mb-3">
-                                        <label for="gestion" class="form-label">Gestión</label>
-                                        <select class="form-select" id="gestion" th:field="*{gestion}" aria-label="Tipo de gestión">
-                                            <option value="Inbound">Inbound</option>
-                                            <option value="Outbound">Outbound</option>
+                                        <label for="tipoGestion" class="form-label">Tipo de gestión</label>
+                                        <select th:field="*{tipoGestion}" class="form-select" required>
+                                            <option th:each="tipoGestion : ${tipoGestion}" th:value="${tipoGestion.idGestion}" th:text="${tipoGestion.nombreGestion}"></option>
                                         </select>
                                     </div>
             

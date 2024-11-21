@@ -2,6 +2,7 @@ package com.customerpriority.sig.model;
 
 import jakarta.persistence.*;
 import java.sql.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "trabajadores")
@@ -9,6 +10,7 @@ public class Trabajador {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_trabajador")
     private int idTrabajador;
 
     @Column(name = "documento", length = 15, nullable = false)
@@ -40,16 +42,25 @@ public class Trabajador {
     private Distrito distrito;
 
     @ManyToOne
+    @JoinColumn(name = "id_genero")
+    private Genero genero;    
+    
+    @ManyToOne
     @JoinColumn(name = "id_tipo_documento")
     private TipoDocumento tipoDocumento;
 
     @ManyToOne
-    @JoinColumn(name = "id_genero")
-    private Genero genero;
+    @JoinColumn(name = "id_segmento")
+    private Segmento segmento;
 
+    // Relación autorreferencial: cada trabajador puede tener un jefe directo
     @ManyToOne
-    @JoinColumn(name = "id_campana")
-    private Campana campana;
+    @JoinColumn(name = "id_jefe_directo", referencedColumnName = "id_trabajador")
+    private Trabajador jefeDirecto;
+
+    // Relación inversa: un trabajador puede ser jefe de varios trabajadores
+    @OneToMany(mappedBy = "jefeDirecto")
+    private List<Trabajador> subordinados;
 
     @ManyToOne
     @JoinColumn(name = "id_horario")
@@ -67,6 +78,9 @@ public class Trabajador {
     @JoinColumn(name = "id_jornada")
     private Jornada jornada;
 
+    @ManyToOne
+    @JoinColumn(name = "id_cargo")
+    private Cargo cargo;
 
     public int getIdTrabajador() {
         return idTrabajador;
@@ -148,14 +162,6 @@ public class Trabajador {
         this.distrito = distrito;
     }
 
-    public TipoDocumento getTipoDocumento() {
-        return tipoDocumento;
-    }
-
-    public void setTipoDocumento(TipoDocumento tipoDocumento) {
-        this.tipoDocumento = tipoDocumento;
-    }
-
     public Genero getGenero() {
         return genero;
     }
@@ -164,12 +170,36 @@ public class Trabajador {
         this.genero = genero;
     }
 
-    public Campana getCampana() {
-        return campana;
+    public TipoDocumento getTipoDocumento() {
+        return tipoDocumento;
     }
 
-    public void setCampana(Campana campana) {
-        this.campana = campana;
+    public void setTipoDocumento(TipoDocumento tipoDocumento) {
+        this.tipoDocumento = tipoDocumento;
+    }
+
+    public Segmento getSegmento() {
+        return segmento;
+    }
+
+    public void setCampana(Segmento segmento) {
+        this.segmento = segmento;
+    }
+
+    public Trabajador getJefeDirecto() {
+        return jefeDirecto;
+    }
+
+    public void setJefeDirecto(Trabajador jefeDirecto) {
+        this.jefeDirecto = jefeDirecto;
+    }
+
+    public List<Trabajador> getSubordinados() {
+        return subordinados;
+    }
+
+    public void setSubordinados(List<Trabajador> subordinados) {
+        this.subordinados = subordinados;
     }
 
     public Horario getHorario() {
@@ -202,6 +232,14 @@ public class Trabajador {
 
     public void setJornada(Jornada jornada) {
         this.jornada = jornada;
+    }
+
+    public Cargo getCargo() {
+        return cargo;
+    }
+
+    public void setCargo(Cargo cargo) {
+        this.cargo = cargo;
     }
 
 }

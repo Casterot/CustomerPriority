@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:insert="~{fragments/header :: header('Formulario Trabajadores')}"></head>
+
+<body>
+    <div class="wrapper">
+        <aside th:replace="~{fragments/sidebar :: sidebar}"></aside>
+        <div class="main">
+            <nav th:insert="~{fragments/nav :: nav}"></nav>
+            <main class="content px-3 py-4">
+                <div class="container-fluid">
+                    <div class="mb-3">
+                        <div class="row justify-content-center">
+                            <div class="col-10 col-md-8">
+                                <div
+                                    class="d-flex flex-column flex-md-row justify-content-between align-items-center p-4 mb-3 border bg-light rounded">
+                                    <div class="d-flex gap-2 ms-md-auto">
+                                        <a href="/trabajadores" class="btn btn-secondary">Volver</a>
+                                    </div>
+                                </div>
+                                
+                                <!-- Formulario para agregar un trabajador -->
+                                
+                                <form th:action="@{/trabajadores}" th:object="${trabajador}" method="post" class="border p-4 rounded shadow-sm">
+                                    <input type="hidden" th:field="*{idTrabajador}"/>
+                                    
+                                    <div class="row row-cols-sm-auto align-items-center">
+                                        <div class="col-md-5 mb-3">
+                                            <label for="tipoDocumento" class="form-label">Tipo de Documento</label>
+                                            <select th:field="*{tipoDocumento}" id="tipoDocumento" class="form-select">
+                                                <option value="" disabled selected>Seleccione un tipo de documento</option>
+                                                <option th:each="tipoDocumento : ${tipoDocumento}" 
+                                                        th:value="${tipoDocumento.idTipoDocumento}" 
+                                                        th:text="${tipoDocumento.nombreTipoDocumento}">
+                                                </option>
+                                            </select>
+                                        </div>
+                                        
+                                        <div class="col-md-7 mb-3">
+                                            <label for="documento" class="form-label">Documento</label>
+                                            <input type="text" class="form-control" id="documento" th:field="*{documento}" placeholder="Documento" required />
+                                        </div>
+
+                                    </div>
+
+                                    <div class="row row-cols-sm-auto align-items-center">
+                                        <div class="col-md-6 mb-3">
+                                            <label for="apellidoPaterno" class="form-label">Apellido Paterno</label>
+                                            <input type="text" class="form-control" id="apellidoPaterno" th:field="*{apellidoPaterno}" placeholder="Apellido paterno" required />
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="apellidoMaterno" class="form-label">Apellido Materno</label>
+                                            <input type="text" class="form-control" id="apellidoMaterno" th:field="*{apellidoMaterno}" placeholder="Apellido materno" required />
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="nombreCompleto" class="form-label">Nombres</label>
+                                        <input type="text" class="form-control" id="nombreCompleto" th:field="*{nombreCompleto}" placeholder="Nombre completo" required />
+                                    </div>
+                                    
+                                    <div class="row row-cols-sm-auto align-items-center">
+                                        <div class="col-md-6 mb-3">
+                                            <label for="fechaNacimiento" class="form-label">Fecha de Nacimiento</label>
+                                            <input type="date" class="form-control" id="fechaNacimiento" th:field="*{fechaNacimiento}" required />
+                                        </div>
+                                        
+                                        <div class="col-md-6 mb-3">
+                                            <label for="genero" class="form-label">Género</label>
+                                            <select th:field="*{genero}" id="genero" class="form-select">
+                                                <option value="" disabled selected>Seleccione un tipo de documento</option>
+                                                <option th:each="genero : ${genero}" 
+                                                        th:value="${genero.idGenero}" 
+                                                        th:text="${genero.nombreGenero}">
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="row row-cols-sm-auto align-items-center">
+                                        <div class="col-md-6 mb-3">
+                                            <label for="telefono" class="form-label">Teléfono</label>
+                                            <input type="text" class="form-control" id="telefono" th:field="*{telefono}" placeholder="Teléfono" required />
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="correo" class="form-label">Correo</label>
+                                            <input type="email" class="form-control" id="correo" th:field="*{correo}" placeholder="Correo electónico" required />
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="direccion" class="form-label">Dirección</label>
+                                        <input type="text" class="form-control" id="direccion" th:field="*{direccion}" placeholder="Dirección" required />
+                                    </div>
+
+                                    <div class="row row-cols-sm-auto align-items-center">
+                                        <div class="col-md-3 mb-3">
+                                            <label for="departamento" class="form-label">Departamento:</label>
+                                            <select id="departamento" name="departamento" class="form-select">
+                                                <option value="" disabled selected>Seleccione un Departamento</option>
+                                                <!-- Lista inicial de departamentos -->
+                                                <option th:each="departamento : ${departamentos}"
+                                                        th:value="${departamento.idDepartamento}"
+                                                        th:text="${departamento.departamento}">
+                                                </option>
+                                            </select>
+                                        </div>
+                                        
+                                        <div class="col-md-3 mb-3">
+                                            <label for="provincia" class="form-label">Provincia:</label>
+                                            <select id="provincia" name="provincia" class="form-select" disabled>
+                                                <option value="">Seleccione una provincia</option>
+                                            </select>
+                                        </div>
+    
+                                        <div class="col-md-6 mb-3">
+                                            <label for="distrito" class="form-label">Distrito:</label>
+                                            <select id="distrito" name="distrito" class="form-select" disabled>
+                                                <option value="">Seleccione un distrito</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-md-5 mb-3">
+                                        <label for="segmento" class="form-label">Elegir Segmento</label>
+                                        <select th:field="*{segmento}" id="segmento" class="form-select">
+                                            <option value="" disabled selected>Seleccione una Campaña</option>
+                                            <option th:each="segmento : ${segmento}" 
+                                                    th:value="${segmento.idSegmento}" 
+                                                    th:text="${segmento.nombreSegmento}">
+                                            </option>
+                                        </select>
+                                    </div>
+
+
+                                    <!-- Botones de enviar y cancelar -->
+                                    <div class="d-flex justify-content-between">
+                                        <button type="submit" class="btn btn-primary">Guardar</button>
+                                        <a href="/trabajadores" class="btn btn-secondary">Cancelar</a>
+                                    </div>
+                                </form>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+            <footer th:insert="~{fragments/footer :: footer}"></footer>
+        </div>
+    </div>
+    <div th:insert="~{fragments/script :: script}"></div>
+</body>
+
+</html>
