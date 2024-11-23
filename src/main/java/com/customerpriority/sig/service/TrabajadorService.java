@@ -31,7 +31,10 @@ public class TrabajadorService {
         return trabajadorRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Trabajador no encontrado"));
     }
 
-    public void guardarTrabajador(Trabajador trabajador){
+    public void guardarTrabajador(Trabajador trabajador) {
+        if (trabajador.getJefeDirecto() != null && trabajador.getJefeDirecto().getIdTrabajador() == trabajador.getIdTrabajador()) {
+            throw new IllegalArgumentException("Un trabajador no puede ser su propio jefe directo");
+        }
         trabajadorRepository.save(trabajador);
     }
 

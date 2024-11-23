@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.customerpriority.sig.model.Segmento;
 import com.customerpriority.sig.model.Cargo;
+import com.customerpriority.sig.model.Centro;
 import com.customerpriority.sig.model.Horario;
 import com.customerpriority.sig.model.Rol;
 import com.customerpriority.sig.model.Trabajador;
@@ -225,6 +226,33 @@ public class ExcelExportService {
                 Row row = sheet.createRow(rowIdx++);
                 row.createCell(0).setCellValue(campana.getIdCampana());
                 row.createCell(1).setCellValue(campana.getNombreCampana());
+            }
+
+            workbook.write(out);
+            return new ByteArrayInputStream(out.toByteArray());
+        }
+    }
+
+    public ByteArrayInputStream exportarCentrosAExcel(List<Centro> centros) throws IOException {
+        String[] columnas = {"ID", "Centro"};
+
+        // Crear un nuevo workbook y hoja
+        try (Workbook workbook = new XSSFWorkbook(); ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+            Sheet sheet = workbook.createSheet("Centros");
+
+            // Crear fila de encabezados
+            Row headerRow = sheet.createRow(0);
+            for (int i = 0; i < columnas.length; i++) {
+                Cell cell = headerRow.createCell(i);
+                cell.setCellValue(columnas[i]);
+            }
+
+            // Poblar las filas con los datos de las campañas
+            int rowIdx = 1;
+            for (Centro centro : centros) {
+                Row row = sheet.createRow(rowIdx++);
+                row.createCell(0).setCellValue(centro.getIdCentro());
+                row.createCell(1).setCellValue(centro.getNombreCentro());
             }
 
             workbook.write(out);

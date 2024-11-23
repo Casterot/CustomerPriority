@@ -151,6 +151,63 @@
                                         </select>
                                     </div>
 
+                                    <div class="col-md-6 mb-3">
+                                        <label for="centro" class="form-label">Centro</label>
+                                        <select th:field="*{centro}" id="centro" class="form-select">
+                                            <option value="" disabled selected>Seleccione un centro</option>
+                                            <option th:each="centro : ${centro}" 
+                                                    th:value="${centro.idCentro}" 
+                                                    th:text="${centro.nombreCentro}">
+                                            </option>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-md-6 mb-3">
+                                        <label for="cargo" class="form-label">Cargo</label>
+                                        <select th:field="*{cargo}" id="cargo" class="form-select">
+                                            <option value="" disabled selected>Seleccione un cargo</option>
+                                            <option th:each="cargo : ${cargos}" 
+                                                    th:value="${cargo.idcargo}" 
+                                                    th:text="${cargo.nombreCargo}">
+                                            </option>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-md-6 mb-3">
+                                        <label for="jornada" class="form-label">Jornada</label>
+                                        <select th:field="*{jornada}" id="jornada" class="form-select">
+                                            <option value="" disabled selected>Seleccione una jornada</option>
+                                            <option th:each="jornada : ${jornada}" 
+                                                    th:value="${jornada.idJornada}" 
+                                                    th:text="${jornada.nombreJornada}">
+                                            </option>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-md-6 mb-3">
+                                        <label for="modalidad" class="form-label">Modalidad</label>
+                                        <select th:field="*{modalidad}" id="modalidad" class="form-select">
+                                            <option value="" disabled selected>Seleccione una modalidad</option>
+                                            <option th:each="modalidad : ${modalidad}" 
+                                                    th:value="${modalidad.idModalidad}" 
+                                                    th:text="${modalidad.nombreModalidad}">
+                                            </option>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-md-5 mb-3">
+                                        <label for="jefeDirecto" class="form-label">Jefe Directo:</label>
+                                        <select th:field="*{jefeDirecto}" id="jefeDirecto" class="form-select">
+                                            <option value="" th:text="'Sin jefe directo'" th:if="${trabajador.jefeDirecto == null}"></option>
+                                            <option value="" th:text="'Sin jefe directo'" th:if="${trabajador.jefeDirecto != null}"></option>
+                                            <option th:each="t : ${trabajadores}"
+                                                    th:value="${t.idTrabajador}"
+                                                    th:text="${t.apellidoPaterno} + ' ' + ${t.apellidoMaterno} + ', ' + ${t.nombreCompleto}"
+                                                    th:selected="${t.idTrabajador} == ${trabajador.jefeDirecto?.idTrabajador}">
+                                            </option>
+                                        </select>
+                                    </div>
+
 
                                     <!-- Botones de enviar y cancelar -->
                                     <div class="d-flex justify-content-between">

@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -19,11 +20,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.customerpriority.sig.model.Trabajador;
 import com.customerpriority.sig.service.TrabajadorService;
 import com.customerpriority.sig.service.SegmentoService;
+import com.customerpriority.sig.service.CargoService;
+import com.customerpriority.sig.service.CentroService;
 import com.customerpriority.sig.service.CondicionService;
 import com.customerpriority.sig.service.DepartamentoService;
 import com.customerpriority.sig.service.DistritoService;
 import com.customerpriority.sig.service.ExcelExportService;
 import com.customerpriority.sig.service.GeneroService;
+import com.customerpriority.sig.service.JornadaService;
+import com.customerpriority.sig.service.ModalidadService;
 import com.customerpriority.sig.service.ProvinciaService;
 import com.customerpriority.sig.service.TipoDocumentoService;
 
@@ -68,6 +73,18 @@ public class TrabajadorController {
     @Autowired
     private DistritoService distritoService;
 
+    @Autowired
+    private CentroService centroService;
+
+    @Autowired
+    private CargoService cargoService;
+
+    @Autowired
+    private JornadaService jornadaService;
+
+    @Autowired
+    private ModalidadService modalidadService;
+
     @GetMapping
     public String listarTrabajadores(Model model,
                                 @RequestParam(defaultValue = "0") int page,
@@ -103,6 +120,11 @@ public class TrabajadorController {
         // Inicialmente no hay provincias ni distritos porque es un nuevo registro
         model.addAttribute("provincias", Collections.emptyList());
         model.addAttribute("distritos", Collections.emptyList());
+        model.addAttribute("centro", centroService.listarTodosLosCentros()); // Obtén los tipos desde el servicio
+        model.addAttribute("cargos", cargoService.listarTodosLosCargos());
+        model.addAttribute("jornada", jornadaService.listarTodasLasJornadas());
+        model.addAttribute("modalidad", modalidadService.listarTodasLasModalidades());
+        model.addAttribute("trabajadores", trabajadorService.listarTodosLosTrabajadores());
         return "trabajadores/formulario";
     }
 
@@ -133,6 +155,13 @@ public class TrabajadorController {
         model.addAttribute("departamentos", departamentoService.listarTodosLosDepartamentos());
         model.addAttribute("provincias", provinciaService.listarProvinciasPorDepartamento(trabajador.getDistrito().getProvincia().getDepartamento().getIdDepartamento()));
         model.addAttribute("distritos", distritoService.listarDistritosPorProvincia(trabajador.getDistrito().getProvincia().getIdProvincia()));
+        model.addAttribute("centro", centroService.listarTodosLosCentros());
+        model.addAttribute("cargos", cargoService.listarTodosLosCargos());
+        model.addAttribute("jornada", jornadaService.listarTodasLasJornadas());
+        model.addAttribute("modalidad", modalidadService.listarTodasLasModalidades());
+        // Cargar todos los trabajadores para seleccionar el jefe directo, excluyendo el mismo trabajador
+        List<Trabajador> trabajadores = trabajadorService.listarTodosLosTrabajadores().stream() .filter(t -> t.getIdTrabajador() != id) .collect(Collectors.toList());
+        model.addAttribute("trabajadores", trabajadores);
         return "trabajadores/formulario";
     } catch (EntityNotFoundException e) {
         // Manejar el caso donde no se encuentre el trabajador
