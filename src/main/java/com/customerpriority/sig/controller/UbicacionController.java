@@ -1,6 +1,9 @@
 package com.customerpriority.sig.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -28,17 +31,29 @@ public class UbicacionController {
         return ubicacionService.obtenerDepartamentos();
     }
 
-    // Obtener provincias según el departamento
     @GetMapping("/provincias/{idDepartamento}")
     @ResponseBody
-    public List<Provincia> obtenerProvinciasPorDepartamento(@PathVariable int idDepartamento) {
-        return ubicacionService.obtenerProvinciasPorDepartamento(idDepartamento);
+    public List<Map<String, String>> obtenerProvinciasPorDepartamento(@PathVariable int idDepartamento) {
+        List<Provincia> provincias = ubicacionService.obtenerProvinciasPorDepartamento(idDepartamento);
+        return provincias.stream().map(provincia -> {
+            Map<String, String> map = new HashMap<>();
+            map.put("id", String.valueOf(provincia.getIdProvincia()));
+            map.put("name", provincia.getProvincia());
+            return map;
+        }).collect(Collectors.toList());
     }
-
-    // Obtener distritos según la provincia
+    
     @GetMapping("/distritos/{idProvincia}")
     @ResponseBody
-    public List<Distrito> obtenerDistritosPorProvincia(@PathVariable int idProvincia) {
-        return ubicacionService.obtenerDistritosPorProvincia(idProvincia);
+    public List<Map<String, String>> obtenerDistritosPorProvincia(@PathVariable int idProvincia) {
+        List<Distrito> distritos = ubicacionService.obtenerDistritosPorProvincia(idProvincia);
+        return distritos.stream().map(distrito -> {
+            Map<String, String> map = new HashMap<>();
+            map.put("id", String.valueOf(distrito.getIdDistrito()));
+            map.put("name", distrito.getDistrito());
+            return map;
+        }).collect(Collectors.toList());
     }
+    
+
 }

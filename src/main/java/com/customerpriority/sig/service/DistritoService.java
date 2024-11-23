@@ -16,4 +16,8 @@ public class DistritoService {
         return distritoRepository.findAll();
     }
 
+    public List<Distrito> listarDistritosPorProvincia(int idProvincia) {
+        return distritoRepository.findByProvinciaIdProvincia(idProvincia);
+    }
+
 }

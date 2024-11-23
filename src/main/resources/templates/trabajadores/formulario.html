@@ -95,29 +95,47 @@
                                     </div>
 
                                     <div class="row row-cols-sm-auto align-items-center">
+                                        
+                                        <!--Lista de departamentos-->
                                         <div class="col-md-3 mb-3">
                                             <label for="departamento" class="form-label">Departamento:</label>
-                                            <select id="departamento" name="departamento" class="form-select">
-                                                <option value="" disabled selected>Seleccione un Departamento</option>
-                                                <!-- Lista inicial de departamentos -->
-                                                <option th:each="departamento : ${departamentos}"
-                                                        th:value="${departamento.idDepartamento}"
-                                                        th:text="${departamento.departamento}">
-                                                </option>
+                                            <select id="departamento" name="departamento" class="form-control" th:value="${trabajador.distrito?.provincia?.departamento?.idDepartamento}">
+                                                <option value="">Selecciona un departamento</option>
+                                                <th:block th:each="departamento : ${departamentos}">
+                                                    <option th:value="${departamento.idDepartamento}" th:text="${departamento.departamento}" th:selected="${departamento.idDepartamento} == ${trabajador.distrito?.provincia?.departamento?.idDepartamento}">
+
+                                                    </option>
+                                                </th:block>
                                             </select>
                                         </div>
                                         
+                                        <!--Lista de provincias-->
                                         <div class="col-md-3 mb-3">
                                             <label for="provincia" class="form-label">Provincia:</label>
-                                            <select id="provincia" name="provincia" class="form-select" disabled>
-                                                <option value="">Seleccione una provincia</option>
+                                            <select id="provincia" name="provincia" class="form-control" th:value="${trabajador.distrito?.provincia?.idProvincia}">
+                                                <option value="">Selecciona una provincia</option>
+                                                <th:block th:if="${provincias != null}">
+                                                    <th:block th:each="provincia : ${provincias}">
+                                                        <option th:value="${provincia.idProvincia}" th:text="${provincia.provincia}" th:selected="${provincia.idProvincia} == ${trabajador.distrito?.provincia?.idProvincia}">
+
+                                                        </option>
+                                                    </th:block>
+                                                </th:block>
                                             </select>
                                         </div>
-    
+                                        
+                                        <!--Lista de distritos-->
                                         <div class="col-md-6 mb-3">
                                             <label for="distrito" class="form-label">Distrito:</label>
-                                            <select id="distrito" name="distrito" class="form-select" disabled>
-                                                <option value="">Seleccione un distrito</option>
+                                            <select id="distrito" name="distrito" class="form-control" th:value="${trabajador.distrito?.idDistrito}">
+                                                <option value="">Selecciona un distrito</option>
+                                                <th:block th:if="${distritos != null}">
+                                                    <th:block th:each="distrito : ${distritos}">
+                                                        <option th:value="${distrito.idDistrito}" th:text="${distrito.distrito}" th:selected="${distrito.idDistrito} == ${trabajador.distrito?.idDistrito}">
+
+                                                        </option>
+                                                    </th:block>
+                                                </th:block>
                                             </select>
                                         </div>
                                     </div>

@@ -204,4 +204,31 @@ public class ExcelExportService {
             return new ByteArrayInputStream(out.toByteArray());
         }
     }
+
+    public ByteArrayInputStream exportarCampanasAExcel(List<Campana> campanas) throws IOException {
+        String[] columnas = {"ID", "Campana"};
+
+        // Crear un nuevo workbook y hoja
+        try (Workbook workbook = new XSSFWorkbook(); ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+            Sheet sheet = workbook.createSheet("Campanas");
+
+            // Crear fila de encabezados
+            Row headerRow = sheet.createRow(0);
+            for (int i = 0; i < columnas.length; i++) {
+                Cell cell = headerRow.createCell(i);
+                cell.setCellValue(columnas[i]);
+            }
+
+            // Poblar las filas con los datos de las campañas
+            int rowIdx = 1;
+            for (Campana campana : campanas) {
+                Row row = sheet.createRow(rowIdx++);
+                row.createCell(0).setCellValue(campana.getIdCampana());
+                row.createCell(1).setCellValue(campana.getNombreCampana());
+            }
+
+            workbook.write(out);
+            return new ByteArrayInputStream(out.toByteArray());
+        }
+    }
 }

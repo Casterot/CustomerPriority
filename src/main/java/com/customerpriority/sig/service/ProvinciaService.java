@@ -16,4 +16,8 @@ public class ProvinciaService {
         return provinciaRepository.findAll();
     }
 
+    public List<Provincia> listarProvinciasPorDepartamento(int idDepartamento) {
+        return provinciaRepository.findByDepartamentoIdDepartamento(idDepartamento);
+    }
+
 }

@@ -2,6 +2,7 @@ package com.customerpriority.sig.controller;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,15 +16,15 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.customerpriority.sig.model.Departamento;
 import com.customerpriority.sig.model.Trabajador;
 import com.customerpriority.sig.service.TrabajadorService;
-import com.customerpriority.sig.service.UbicacionService;
 import com.customerpriority.sig.service.SegmentoService;
 import com.customerpriority.sig.service.CondicionService;
 import com.customerpriority.sig.service.DepartamentoService;
+import com.customerpriority.sig.service.DistritoService;
 import com.customerpriority.sig.service.ExcelExportService;
 import com.customerpriority.sig.service.GeneroService;
+import com.customerpriority.sig.service.ProvinciaService;
 import com.customerpriority.sig.service.TipoDocumentoService;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -53,9 +54,6 @@ public class TrabajadorController {
     private ExcelExportService excelExportService;
 
     @Autowired
-    private UbicacionService ubicacionService;
-
-    @Autowired
     private CondicionService condicionService;
     
     @Autowired
@@ -63,6 +61,12 @@ public class TrabajadorController {
 
     @Autowired
     private DepartamentoService departamentoService;
+
+    @Autowired
+    private ProvinciaService provinciaService;
+
+    @Autowired
+    private DistritoService distritoService;
 
     @GetMapping
     public String listarTrabajadores(Model model,
@@ -95,9 +99,10 @@ public class TrabajadorController {
         model.addAttribute("segmento", segmentoService.listarTodosLosSegmentos()); // Obtén los tipos desde el servicio
         model.addAttribute("condiciones", condicionService.listarTodasLasCondiciones()); // Obtén los tipos desde el servicio
         model.addAttribute("genero", generoService.listarTodosLosGeneros()); // Obtén los tipos desde el servicio
-        
-        List<Departamento> departamentos = ubicacionService.obtenerDepartamentos();
-        model.addAttribute("departamentos", departamentos);
+        model.addAttribute("departamentos", departamentoService.listarTodosLosDepartamentos());
+        // Inicialmente no hay provincias ni distritos porque es un nuevo registro
+        model.addAttribute("provincias", Collections.emptyList());
+        model.addAttribute("distritos", Collections.emptyList());
         return "trabajadores/formulario";
     }
 
@@ -111,7 +116,7 @@ public class TrabajadorController {
         // Si no hay errores, guardamos el trabajador
         trabajadorService.guardarTrabajador(trabajador);
         return "redirect:/trabajadores";
-    }    
+    }   
 
     
     
@@ -123,8 +128,11 @@ public class TrabajadorController {
         model.addAttribute("tipoDocumento", tipoDocumentoService.listarTodosLosDocumentos()); // Obtén los tipos desde el servicio
         model.addAttribute("segmento", segmentoService.listarTodosLosSegmentos()); // Obtén los tipos desde el servicio
         model.addAttribute("condiciones", condicionService.listarTodasLasCondiciones());
-        model.addAttribute("ubicacionDepartamento", ubicacionService.obtenerDepartamentos());
+        model.addAttribute("genero", generoService.listarTodosLosGeneros());
+        //model.addAttribute("departamentos", ubicacionService.obtenerDepartamentos());
         model.addAttribute("departamentos", departamentoService.listarTodosLosDepartamentos());
+        model.addAttribute("provincias", provinciaService.listarProvinciasPorDepartamento(trabajador.getDistrito().getProvincia().getDepartamento().getIdDepartamento()));
+        model.addAttribute("distritos", distritoService.listarDistritosPorProvincia(trabajador.getDistrito().getProvincia().getIdProvincia()));
         return "trabajadores/formulario";
     } catch (EntityNotFoundException e) {
         // Manejar el caso donde no se encuentre el trabajador
