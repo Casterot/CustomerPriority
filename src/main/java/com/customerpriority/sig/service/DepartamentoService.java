@@ -20,6 +20,6 @@ public class DepartamentoService {
 
     public Departamento obtenerDepartamentoPorId(int id) {
     return departamentoRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Departamento no encontrado"));
-}
+    }
 
 }

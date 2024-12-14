@@ -30,7 +30,7 @@ public class CampanaService {
     }
 
     public Campana obtenerCampanaPorId(int id) {
-        return campanaRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Cargo no encontrado"));
+        return campanaRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Campana no encontrado"));
     }
 
     public void guardarCampana(Campana campana){

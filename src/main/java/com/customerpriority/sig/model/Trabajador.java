@@ -182,7 +182,7 @@ public class Trabajador {
         return segmento;
     }
 
-    public void setCampana(Segmento segmento) {
+    public void setSegmento(Segmento segmento) {
         this.segmento = segmento;
     }
 

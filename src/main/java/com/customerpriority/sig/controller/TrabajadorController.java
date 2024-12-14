@@ -2,8 +2,11 @@ package com.customerpriority.sig.controller;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,9 +20,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.customerpriority.sig.model.Campana;
+import com.customerpriority.sig.model.Cargo;
+import com.customerpriority.sig.model.Jornada;
+import com.customerpriority.sig.model.TipoGestion;
 import com.customerpriority.sig.model.Trabajador;
 import com.customerpriority.sig.service.TrabajadorService;
 import com.customerpriority.sig.service.SegmentoService;
+import com.customerpriority.sig.service.CampanaService;
 import com.customerpriority.sig.service.CargoService;
 import com.customerpriority.sig.service.CentroService;
 import com.customerpriority.sig.service.CondicionService;
@@ -31,6 +39,7 @@ import com.customerpriority.sig.service.JornadaService;
 import com.customerpriority.sig.service.ModalidadService;
 import com.customerpriority.sig.service.ProvinciaService;
 import com.customerpriority.sig.service.TipoDocumentoService;
+import com.customerpriority.sig.service.TipoGestionService;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
@@ -41,11 +50,10 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 
-
 @Controller
 @RequestMapping("/trabajadores")
 public class TrabajadorController {
-    
+
     @Autowired
     private TrabajadorService trabajadorService;
 
@@ -60,7 +68,7 @@ public class TrabajadorController {
 
     @Autowired
     private CondicionService condicionService;
-    
+
     @Autowired
     private GeneroService generoService;
 
@@ -85,16 +93,22 @@ public class TrabajadorController {
     @Autowired
     private ModalidadService modalidadService;
 
+    @Autowired
+    private CampanaService campanaService;
+
+    @Autowired
+    private TipoGestionService tipoGestionService;
+
     @GetMapping
     public String listarTrabajadores(Model model,
-                                @RequestParam(defaultValue = "0") int page,
-                                @RequestParam(value = "search", required = false) String keyword){
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(value = "search", required = false) String keyword) {
 
         int pageSize = 10; // Número de elementos por página
 
         // Crear el objeto Pageable
         Pageable pageable = PageRequest.of(page, pageSize);
-        
+
         // Obtener el Page de Campanas
         Page<Trabajador> trabajadorPage;
         if (keyword != null && !keyword.isEmpty()) {
@@ -111,68 +125,122 @@ public class TrabajadorController {
     @GetMapping("/nuevo")
     public String mostrarFormularioDeRegistro(Model model) {
         Trabajador trabajador = new Trabajador();
+        Jornada jornadaPorDefecto = jornadaService.obtenerJornadaPorId(2);
+        trabajador.setJornada(jornadaPorDefecto);
+
         model.addAttribute("trabajador", trabajador);
-        model.addAttribute("tipoDocumento", tipoDocumentoService.listarTodosLosDocumentos()); // Obtén los tipos desde el servicio
-        model.addAttribute("segmento", segmentoService.listarTodosLosSegmentos()); // Obtén los tipos desde el servicio
-        model.addAttribute("condiciones", condicionService.listarTodasLasCondiciones()); // Obtén los tipos desde el servicio
-        model.addAttribute("genero", generoService.listarTodosLosGeneros()); // Obtén los tipos desde el servicio
-        model.addAttribute("departamentos", departamentoService.listarTodosLosDepartamentos());
-        // Inicialmente no hay provincias ni distritos porque es un nuevo registro
-        model.addAttribute("provincias", Collections.emptyList());
-        model.addAttribute("distritos", Collections.emptyList());
-        model.addAttribute("centro", centroService.listarTodosLosCentros()); // Obtén los tipos desde el servicio
-        model.addAttribute("cargos", cargoService.listarTodosLosCargos());
-        model.addAttribute("jornada", jornadaService.listarTodasLasJornadas());
-        model.addAttribute("modalidad", modalidadService.listarTodasLasModalidades());
-        model.addAttribute("trabajadores", trabajadorService.listarTodosLosTrabajadores());
+        cargarDatosComunes(model, null, trabajador);
         return "trabajadores/formulario";
     }
 
     @PostMapping
-    public String guardarTrabajador(@ModelAttribute("trabajador") @Valid Trabajador trabajador, BindingResult result, Model model) {
+    public String guardarTrabajador(@ModelAttribute("trabajador") @Valid Trabajador trabajador, BindingResult result,
+            Model model) {
         if (result.hasErrors()) {
-            // Si hay errores, volvemos al formulario
+            cargarDatosComunes(model, trabajador, trabajador);
             return "trabajadores/formulario";
         }
-        
-        // Si no hay errores, guardamos el trabajador
-        trabajadorService.guardarTrabajador(trabajador);
-        return "redirect:/trabajadores";
-    }   
 
-    
-    
+        try {
+            trabajadorService.guardarTrabajador(trabajador);
+        } catch (IllegalArgumentException e) {
+            result.rejectValue("correo", "error.trabajador", e.getMessage());
+            cargarDatosComunes(model, trabajador, trabajador);
+            return "trabajadores/formulario";
+        }
+
+        return "redirect:/trabajadores";
+    }
+
     @GetMapping("/editar/{id}")
     public String mostrarFormularioDeEdicion(@PathVariable int id, Model model) {
-    try {
-        Trabajador trabajador = trabajadorService.obtenerTrabajadorPorId(id);
-        model.addAttribute("trabajador", trabajador);
-        model.addAttribute("tipoDocumento", tipoDocumentoService.listarTodosLosDocumentos()); // Obtén los tipos desde el servicio
-        model.addAttribute("segmento", segmentoService.listarTodosLosSegmentos()); // Obtén los tipos desde el servicio
-        model.addAttribute("condiciones", condicionService.listarTodasLasCondiciones());
-        model.addAttribute("genero", generoService.listarTodosLosGeneros());
-        //model.addAttribute("departamentos", ubicacionService.obtenerDepartamentos());
-        model.addAttribute("departamentos", departamentoService.listarTodosLosDepartamentos());
-        model.addAttribute("provincias", provinciaService.listarProvinciasPorDepartamento(trabajador.getDistrito().getProvincia().getDepartamento().getIdDepartamento()));
-        model.addAttribute("distritos", distritoService.listarDistritosPorProvincia(trabajador.getDistrito().getProvincia().getIdProvincia()));
-        model.addAttribute("centro", centroService.listarTodosLosCentros());
-        model.addAttribute("cargos", cargoService.listarTodosLosCargos());
-        model.addAttribute("jornada", jornadaService.listarTodasLasJornadas());
-        model.addAttribute("modalidad", modalidadService.listarTodasLasModalidades());
-        // Cargar todos los trabajadores para seleccionar el jefe directo, excluyendo el mismo trabajador
-        List<Trabajador> trabajadores = trabajadorService.listarTodosLosTrabajadores().stream() .filter(t -> t.getIdTrabajador() != id) .collect(Collectors.toList());
-        model.addAttribute("trabajadores", trabajadores);
-        return "trabajadores/formulario";
-    } catch (EntityNotFoundException e) {
-        // Manejar el caso donde no se encuentre el trabajador
-        return "redirect:/trabajadores?error=notfound";
+        try {
+            Trabajador trabajador = trabajadorService.obtenerTrabajadorPorId(id);
+            model.addAttribute("trabajador", trabajador);
+            cargarDatosComunes(model, trabajador, trabajador);
+            return "trabajadores/formulario";
+        } catch (EntityNotFoundException e) {
+            return "redirect:/trabajadores?error=notfound";
+        }
     }
-    }
-    
+
     @GetMapping("/eliminar/{id}")
     public String eliminarTrabajador(@PathVariable int id) {
         trabajadorService.eliminarTrabajador(id);
         return "redirect:/trabajadores";
+    }
+
+    /** Cargar datos comunes */
+
+    private void cargarDatosComunes(Model model, Trabajador trabajador, Trabajador referencia) {
+        model.addAttribute("tipoDocumento", tipoDocumentoService.listarTodosLosDocumentos());
+        model.addAttribute("condiciones", condicionService.listarTodasLasCondiciones());
+        model.addAttribute("genero", generoService.listarTodosLosGeneros());
+        model.addAttribute("departamentos", departamentoService.listarTodosLosDepartamentos());
+        model.addAttribute("centro", centroService.listarTodosLosCentros());
+        model.addAttribute("jornada", jornadaService.listarTodasLasJornadas());
+        model.addAttribute("modalidad", modalidadService.listarTodasLasModalidades());
+
+        // Ordenar campañas
+        List<Campana> campanas = campanaService.listarTodasLasCampanas();
+        campanas.sort(Comparator.comparing(Campana::getNombreCampana));
+        model.addAttribute("campanas", campanas);
+
+        // Ordenar cargos
+        List<Cargo> cargos = cargoService.listarTodosLosCargos();
+        cargos.sort(Comparator.comparing(Cargo::getNombreCargo));
+        model.addAttribute("cargos", cargos);
+
+        // Configurar segmentos y gestiones
+        // Cargar segmentos y gestiones basados en la referencia
+        if (referencia.getSegmento() != null) {
+            model.addAttribute("segmentos",
+                    segmentoService.listarSegmentosPorCampana(referencia.getSegmento().getCampana().getIdCampana()));
+            List<TipoGestion> gestiones = tipoGestionService
+                    .listarGestionesPorSegmento(referencia.getSegmento().getIdSegmento());
+            model.addAttribute("gestiones", gestiones);
+        } else {
+            model.addAttribute("segmentos", Collections.emptyList());
+            model.addAttribute("gestiones", Collections.emptyList());
+        }
+
+        // Configurar provincias y distritos
+        if (referencia.getDistrito() != null && referencia.getDistrito().getProvincia() != null) {
+            model.addAttribute("provincias", provinciaService.listarProvinciasPorDepartamento(
+                    referencia.getDistrito().getProvincia().getDepartamento().getIdDepartamento()));
+            model.addAttribute("distritos", distritoService.listarDistritosPorProvincia(
+                    referencia.getDistrito().getProvincia().getIdProvincia()));
+        } else {
+            model.addAttribute("provincias", Collections.emptyList());
+            model.addAttribute("distritos", Collections.emptyList());
+        }
+
+        // Configurar lista de trabajadores excluyendo subordinados
+        List<Trabajador> trabajadores = trabajadorService.listarTodosLosTrabajadores();
+
+        if (referencia.getIdTrabajador() > 0) {
+            List<Trabajador> subordinados = trabajadorService.obtenerTodosLosSubordinados(referencia);
+
+            if (subordinados == null) {
+                subordinados = new ArrayList<>();
+            }
+
+            // Crear nueva lista de trabajadores filtrados
+            List<Trabajador> trabajadoresFiltrados = new ArrayList<>();
+            for (Trabajador t : trabajadores) {
+                if (t.getIdTrabajador() != referencia.getIdTrabajador() && !subordinados.contains(t)) {
+                    trabajadoresFiltrados.add(t);
+                }
+            }
+
+            // Asignar la lista filtrada
+            trabajadores = trabajadoresFiltrados;
+        }
+
+        // Ordenar la lista final de trabajadores
+        trabajadores.sort(Comparator.comparing(
+                t -> (t.getApellidoPaterno() + " " + t.getApellidoMaterno() + " " + t.getNombreCompleto())));
+        model.addAttribute("trabajadores", trabajadores);
     }
 
     @GetMapping("/exportar")
@@ -185,17 +253,17 @@ public class TrabajadorController {
 
         return ResponseEntity.ok()
                 .headers(headers)
-                .contentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
+                .contentType(
+                        MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
                 .body(bais.readAllBytes());
     }
-
 
     @GetMapping("/exportar-excel")
     public ResponseEntity<byte[]> exportarTrabajadoresAExcel(
             @RequestParam(value = "keyword", required = false) String keyword) throws IOException {
-        
+
         List<Trabajador> trabajadores;
-    
+
         if (keyword != null && !keyword.isEmpty()) {
             // Exportar solo las campañas filtradas por el keyword
             trabajadores = trabajadorService.buscarTrabajadoresPorKeyword(keyword, Pageable.unpaged()).getContent();
@@ -203,15 +271,16 @@ public class TrabajadorController {
             // Exportar todas las campañas
             trabajadores = trabajadorService.listarTodosLosTrabajadores();
         }
-    
+
         ByteArrayInputStream bais = excelExportService.exportarTrabajadoresAExcel(trabajadores);
-    
+
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Disposition", "attachment; filename=Nomina.xlsx");
-    
+
         return ResponseEntity.ok()
                 .headers(headers)
-                .contentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
+                .contentType(
+                        MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
                 .body(bais.readAllBytes());
     }
 

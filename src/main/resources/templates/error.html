@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"></html>
+<html lang="en">
+    <head th:insert="~{fragments/header :: header('Inicio')}"></head>
+
+<body>
+    <div class="alert alert-danger" th:if="${errorMessage != null}">
+        <p th:text="${errorMessage}"></p>
+    </div>
+
+
+    <div th:insert="~{fragments/script :: script}"></div>
+</body>
+
+</html>

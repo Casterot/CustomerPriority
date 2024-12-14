@@ -83,7 +83,7 @@
                           <td th:text="${trabajador.segmento != null ? trabajador.segmento.campana.nombreCampana : 'Sin campaña'}"></td>
                           <td th:text="${trabajador.segmento != null ? trabajador.segmento.nombreSegmento : 'Sin segmento'}"></td>
                           <td th:text="${trabajador.segmento != null ? trabajador.segmento.tipoGestion.nombreGestion : 'Sin gestion'}"></td>
-                          <td th:text="${trabajador.jefeDirecto != null ? trabajador.jefeDirecto.nombreCompleto : 'Sin jefe'}"></td>
+                          <td th:text="${trabajador.jefeDirecto != null ? trabajador.jefeDirecto.apellidoPaterno + ' ' + trabajador.jefeDirecto.apellidoMaterno + ', ' + trabajador.jefeDirecto.nombreCompleto : 'Sin jefe'}"></td>
                           <td th:text="${trabajador.tipoDocumento != null ? trabajador.tipoDocumento.nombreTipoDocumento : 'Sin tipo de documento'}"></td>
                           <td th:text="${trabajador.documento}"></td>
                           <td th:text="${trabajador.apellidoPaterno}"></td>

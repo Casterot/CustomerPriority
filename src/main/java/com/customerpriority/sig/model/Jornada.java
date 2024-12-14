@@ -13,7 +13,6 @@ public class Jornada {
     @Column(name = "nombre_jornada", length = 10, nullable = false)
     private String nombreJornada;
 
-
     public int getIdJornada() {
         return idJornada;
     }
@@ -29,6 +28,4 @@ public class Jornada {
     public void setNombreJornada(String nombreJornada) {
         this.nombreJornada = nombreJornada;
     }
-
-    
 }

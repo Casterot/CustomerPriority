@@ -73,7 +73,7 @@ body {
 
 #sidebar.expand .sidebar-logo,
 #sidebar.expand a.sidebar-link span {
-    animation: fadeIn 1s ease;
+    animation: fadeIn 1.4s ease;
 }
 
 @keyframes fadeIn {

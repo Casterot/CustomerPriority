@@ -15,11 +15,15 @@ public class SegmentoService {
     @Autowired
     private SegmentoRepository segmentoRepository;
 
-    public List<Segmento> listarTodosLosSegmentos(){
+    public List<Segmento> listarTodosLosSegmentos() {
         return segmentoRepository.findAll();
     }
 
-    public Page<Segmento> listarSegmentosPaginados(Pageable pageable){
+    public List<Segmento> listarSegmentosPorCampana(int idCampana) {
+        return segmentoRepository.findByCampanaIdCampana(idCampana);
+    }
+
+    public Page<Segmento> listarSegmentosPaginados(Pageable pageable) {
         return segmentoRepository.findAll(pageable);
     }
 
@@ -28,14 +32,14 @@ public class SegmentoService {
     }
 
     public Segmento obtenerSegmentoPorId(int id) {
-        return segmentoRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Campaña no encontrada"));
+        return segmentoRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Segmento no encontrado"));
     }
 
-    public void guardarSegmento(Segmento segmento){
+    public void guardarSegmento(Segmento segmento) {
         segmentoRepository.save(segmento);
     }
 
-    public void eliminarSegmento(int id){
+    public void eliminarSegmento(int id) {
         segmentoRepository.deleteById(id);
     }
 

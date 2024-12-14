@@ -4,227 +4,276 @@
 <head th:insert="~{fragments/header :: header('Formulario Trabajadores')}"></head>
 
 <body>
-    <div class="wrapper">
-        <aside th:replace="~{fragments/sidebar :: sidebar}"></aside>
-        <div class="main">
-            <nav th:insert="~{fragments/nav :: nav}"></nav>
-            <main class="content px-3 py-4">
-                <div class="container-fluid">
-                    <div class="mb-3">
-                        <div class="row justify-content-center">
-                            <div class="col-10 col-md-8">
-                                <div
-                                    class="d-flex flex-column flex-md-row justify-content-between align-items-center p-4 mb-3 border bg-light rounded">
-                                    <div class="d-flex gap-2 ms-md-auto">
-                                        <a href="/trabajadores" class="btn btn-secondary">Volver</a>
-                                    </div>
-                                </div>
-                                
-                                <!-- Formulario para agregar un trabajador -->
-                                
-                                <form th:action="@{/trabajadores}" th:object="${trabajador}" method="post" class="border p-4 rounded shadow-sm">
-                                    <input type="hidden" th:field="*{idTrabajador}"/>
-                                    
-                                    <div class="row row-cols-sm-auto align-items-center">
-                                        <div class="col-md-5 mb-3">
-                                            <label for="tipoDocumento" class="form-label">Tipo de Documento</label>
-                                            <select th:field="*{tipoDocumento}" id="tipoDocumento" class="form-select">
-                                                <option value="" disabled selected>Seleccione un tipo de documento</option>
-                                                <option th:each="tipoDocumento : ${tipoDocumento}" 
-                                                        th:value="${tipoDocumento.idTipoDocumento}" 
-                                                        th:text="${tipoDocumento.nombreTipoDocumento}">
-                                                </option>
-                                            </select>
-                                        </div>
-                                        
-                                        <div class="col-md-7 mb-3">
-                                            <label for="documento" class="form-label">Documento</label>
-                                            <input type="text" class="form-control" id="documento" th:field="*{documento}" placeholder="Documento" required />
-                                        </div>
-
-                                    </div>
-
-                                    <div class="row row-cols-sm-auto align-items-center">
-                                        <div class="col-md-6 mb-3">
-                                            <label for="apellidoPaterno" class="form-label">Apellido Paterno</label>
-                                            <input type="text" class="form-control" id="apellidoPaterno" th:field="*{apellidoPaterno}" placeholder="Apellido paterno" required />
-                                        </div>
-                                        <div class="col-md-6 mb-3">
-                                            <label for="apellidoMaterno" class="form-label">Apellido Materno</label>
-                                            <input type="text" class="form-control" id="apellidoMaterno" th:field="*{apellidoMaterno}" placeholder="Apellido materno" required />
-                                        </div>
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <label for="nombreCompleto" class="form-label">Nombres</label>
-                                        <input type="text" class="form-control" id="nombreCompleto" th:field="*{nombreCompleto}" placeholder="Nombre completo" required />
-                                    </div>
-                                    
-                                    <div class="row row-cols-sm-auto align-items-center">
-                                        <div class="col-md-6 mb-3">
-                                            <label for="fechaNacimiento" class="form-label">Fecha de Nacimiento</label>
-                                            <input type="date" class="form-control" id="fechaNacimiento" th:field="*{fechaNacimiento}" required />
-                                        </div>
-                                        
-                                        <div class="col-md-6 mb-3">
-                                            <label for="genero" class="form-label">Género</label>
-                                            <select th:field="*{genero}" id="genero" class="form-select">
-                                                <option value="" disabled selected>Seleccione un tipo de documento</option>
-                                                <option th:each="genero : ${genero}" 
-                                                        th:value="${genero.idGenero}" 
-                                                        th:text="${genero.nombreGenero}">
-                                                </option>
-                                            </select>
-                                        </div>
-                                    </div>
-
-                                    <div class="row row-cols-sm-auto align-items-center">
-                                        <div class="col-md-6 mb-3">
-                                            <label for="telefono" class="form-label">Teléfono</label>
-                                            <input type="text" class="form-control" id="telefono" th:field="*{telefono}" placeholder="Teléfono" required />
-                                        </div>
-                                        <div class="col-md-6 mb-3">
-                                            <label for="correo" class="form-label">Correo</label>
-                                            <input type="email" class="form-control" id="correo" th:field="*{correo}" placeholder="Correo electónico" required />
-                                        </div>
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <label for="direccion" class="form-label">Dirección</label>
-                                        <input type="text" class="form-control" id="direccion" th:field="*{direccion}" placeholder="Dirección" required />
-                                    </div>
-
-                                    <div class="row row-cols-sm-auto align-items-center">
-                                        
-                                        <!--Lista de departamentos-->
-                                        <div class="col-md-3 mb-3">
-                                            <label for="departamento" class="form-label">Departamento:</label>
-                                            <select id="departamento" name="departamento" class="form-control" th:value="${trabajador.distrito?.provincia?.departamento?.idDepartamento}">
-                                                <option value="">Selecciona un departamento</option>
-                                                <th:block th:each="departamento : ${departamentos}">
-                                                    <option th:value="${departamento.idDepartamento}" th:text="${departamento.departamento}" th:selected="${departamento.idDepartamento} == ${trabajador.distrito?.provincia?.departamento?.idDepartamento}">
-
-                                                    </option>
-                                                </th:block>
-                                            </select>
-                                        </div>
-                                        
-                                        <!--Lista de provincias-->
-                                        <div class="col-md-3 mb-3">
-                                            <label for="provincia" class="form-label">Provincia:</label>
-                                            <select id="provincia" name="provincia" class="form-control" th:value="${trabajador.distrito?.provincia?.idProvincia}">
-                                                <option value="">Selecciona una provincia</option>
-                                                <th:block th:if="${provincias != null}">
-                                                    <th:block th:each="provincia : ${provincias}">
-                                                        <option th:value="${provincia.idProvincia}" th:text="${provincia.provincia}" th:selected="${provincia.idProvincia} == ${trabajador.distrito?.provincia?.idProvincia}">
-
-                                                        </option>
-                                                    </th:block>
-                                                </th:block>
-                                            </select>
-                                        </div>
-                                        
-                                        <!--Lista de distritos-->
-                                        <div class="col-md-6 mb-3">
-                                            <label for="distrito" class="form-label">Distrito:</label>
-                                            <select id="distrito" name="distrito" class="form-control" th:value="${trabajador.distrito?.idDistrito}">
-                                                <option value="">Selecciona un distrito</option>
-                                                <th:block th:if="${distritos != null}">
-                                                    <th:block th:each="distrito : ${distritos}">
-                                                        <option th:value="${distrito.idDistrito}" th:text="${distrito.distrito}" th:selected="${distrito.idDistrito} == ${trabajador.distrito?.idDistrito}">
-
-                                                        </option>
-                                                    </th:block>
-                                                </th:block>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="col-md-5 mb-3">
-                                        <label for="segmento" class="form-label">Elegir Segmento</label>
-                                        <select th:field="*{segmento}" id="segmento" class="form-select">
-                                            <option value="" disabled selected>Seleccione una Campaña</option>
-                                            <option th:each="segmento : ${segmento}" 
-                                                    th:value="${segmento.idSegmento}" 
-                                                    th:text="${segmento.nombreSegmento}">
-                                            </option>
-                                        </select>
-                                    </div>
-
-                                    <div class="col-md-6 mb-3">
-                                        <label for="centro" class="form-label">Centro</label>
-                                        <select th:field="*{centro}" id="centro" class="form-select">
-                                            <option value="" disabled selected>Seleccione un centro</option>
-                                            <option th:each="centro : ${centro}" 
-                                                    th:value="${centro.idCentro}" 
-                                                    th:text="${centro.nombreCentro}">
-                                            </option>
-                                        </select>
-                                    </div>
-
-                                    <div class="col-md-6 mb-3">
-                                        <label for="cargo" class="form-label">Cargo</label>
-                                        <select th:field="*{cargo}" id="cargo" class="form-select">
-                                            <option value="" disabled selected>Seleccione un cargo</option>
-                                            <option th:each="cargo : ${cargos}" 
-                                                    th:value="${cargo.idcargo}" 
-                                                    th:text="${cargo.nombreCargo}">
-                                            </option>
-                                        </select>
-                                    </div>
-
-                                    <div class="col-md-6 mb-3">
-                                        <label for="jornada" class="form-label">Jornada</label>
-                                        <select th:field="*{jornada}" id="jornada" class="form-select">
-                                            <option value="" disabled selected>Seleccione una jornada</option>
-                                            <option th:each="jornada : ${jornada}" 
-                                                    th:value="${jornada.idJornada}" 
-                                                    th:text="${jornada.nombreJornada}">
-                                            </option>
-                                        </select>
-                                    </div>
-
-                                    <div class="col-md-6 mb-3">
-                                        <label for="modalidad" class="form-label">Modalidad</label>
-                                        <select th:field="*{modalidad}" id="modalidad" class="form-select">
-                                            <option value="" disabled selected>Seleccione una modalidad</option>
-                                            <option th:each="modalidad : ${modalidad}" 
-                                                    th:value="${modalidad.idModalidad}" 
-                                                    th:text="${modalidad.nombreModalidad}">
-                                            </option>
-                                        </select>
-                                    </div>
-
-                                    <div class="col-md-5 mb-3">
-                                        <label for="jefeDirecto" class="form-label">Jefe Directo:</label>
-                                        <select th:field="*{jefeDirecto}" id="jefeDirecto" class="form-select">
-                                            <option value="" th:text="'Sin jefe directo'" th:if="${trabajador.jefeDirecto == null}"></option>
-                                            <option value="" th:text="'Sin jefe directo'" th:if="${trabajador.jefeDirecto != null}"></option>
-                                            <option th:each="t : ${trabajadores}"
-                                                    th:value="${t.idTrabajador}"
-                                                    th:text="${t.apellidoPaterno} + ' ' + ${t.apellidoMaterno} + ', ' + ${t.nombreCompleto}"
-                                                    th:selected="${t.idTrabajador} == ${trabajador.jefeDirecto?.idTrabajador}">
-                                            </option>
-                                        </select>
-                                    </div>
-
-
-                                    <!-- Botones de enviar y cancelar -->
-                                    <div class="d-flex justify-content-between">
-                                        <button type="submit" class="btn btn-primary">Guardar</button>
-                                        <a href="/trabajadores" class="btn btn-secondary">Cancelar</a>
-                                    </div>
-                                </form>
-
-                            </div>
-                        </div>
-                    </div>
+  <div class="wrapper">
+    <aside th:replace="~{fragments/sidebar :: sidebar}"></aside>
+    <div class="main">
+      <nav th:insert="~{fragments/nav :: nav}"></nav>
+      <main class="content px-3 py-4">
+        <div class="container-fluid">
+          <div class="mb-3">
+            <div class="row justify-content-center">
+              <div class="col-10 col-md-8">
+                <div
+                  class="d-flex flex-column flex-md-row justify-content-between align-items-center p-4 mb-3 border bg-light rounded">
+                  <div class="d-flex gap-2 ms-md-auto">
+                    <a href="/trabajadores" class="btn btn-secondary">Volver</a>
+                  </div>
                 </div>
-            </main>
-            <footer th:insert="~{fragments/footer :: footer}"></footer>
+
+                <!-- Formulario para agregar un trabajador -->
+
+                <form th:action="@{/trabajadores}" th:object="${trabajador}" method="post"
+                  class="border p-4 rounded shadow-sm">
+                  <input type="hidden" th:field="*{idTrabajador}" />
+
+                  <div class="row row-cols-sm-auto align-items-center">
+                    <div class="col-md-6 mb-3">
+                      <label for="tipoDocumento" class="form-label">Tipo de Documento</label>
+                      <select th:field="*{tipoDocumento}" id="tipoDocumento" name="tipoDocumento" class="form-select"
+                        required>
+                        <option value="">
+                          Seleccione un tipo de documento
+                        </option>
+                        <option th:each="tipoDocumento : ${tipoDocumento}" th:value="${tipoDocumento.idTipoDocumento}"
+                          th:text="${tipoDocumento.nombreTipoDocumento}"></option>
+                      </select>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                      <label for="documento" class="form-label">Documento</label>
+                      <input type="text" class="form-control" id="documento" name="documento" th:field="*{documento}"
+                        placeholder="Documento" required />
+                    </div>
+                  </div>
+
+                  <div class="row row-cols-sm-auto align-items-center">
+                    <div class="col-md-6 mb-3">
+                      <label for="apellidoPaterno" class="form-label">Apellido Paterno</label>
+                      <input type="text" class="form-control" id="apellidoPaterno" th:field="*{apellidoPaterno}"
+                        placeholder="Apellido paterno" required />
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <label for="apellidoMaterno" class="form-label">Apellido Materno</label>
+                      <input type="text" class="form-control" id="apellidoMaterno" th:field="*{apellidoMaterno}"
+                        placeholder="Apellido materno" required />
+                    </div>
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="nombreCompleto" class="form-label">Nombres</label>
+                    <input type="text" class="form-control" id="nombreCompleto" th:field="*{nombreCompleto}"
+                      placeholder="Nombre completo" required />
+                  </div>
+
+                  <div class="row row-cols-sm-auto align-items-center">
+                    <div class="col-md-6 mb-3">
+                      <label for="fechaNacimiento" class="form-label">Fecha de Nacimiento</label>
+                      <input type="date" class="form-control" id="fechaNacimiento" th:field="*{fechaNacimiento}"
+                        required />
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                      <label for="genero" class="form-label">Género</label>
+                      <select th:field="*{genero}" id="genero" class="form-select">
+                        <option value="">
+                          Seleccione el género del trabajador
+                        </option>
+                        <option th:each="genero : ${genero}" th:value="${genero.idGenero}"
+                          th:text="${genero.nombreGenero}"></option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="row row-cols-sm-auto align-items-center">
+                    <div class="col-md-6 mb-3">
+                      <label for="telefono" class="form-label">Teléfono</label>
+                      <input type="text" class="form-control" id="telefono" name="telefono" th:field="*{telefono}"
+                        placeholder="Teléfono" required />
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <label for="correo" class="form-label">Correo Electrónico</label>
+                      <input type="email" class="form-control" id="correo" name="correo" th:field="*{correo}"
+                        placeholder="Correo Electrónico" pattern="[a-zA-Z0-9._]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+                        title="Debe ser un correo electrónico válido (por ejemplo, usuario@dominio.com)" required />
+                      <div th:if="${#fields.hasErrors('correo')}" class="text-danger col-md-6 mb-3">
+                        <small th:errors="*{correo}"></small>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="direccion" class="form-label">Dirección</label>
+                    <input type="text" class="form-control" id="direccion" th:field="*{direccion}"
+                      placeholder="Dirección" required />
+                  </div>
+
+                  <div class="row row-cols-sm-auto align-items-center">
+                    <!--Lista de departamentos-->
+                    <div class="col-md-3 mb-3">
+                      <label for="departamento" class="form-label">Departamento:</label>
+                      <select id="departamento" name="departamento" class="form-select"
+                        th:value="${trabajador.distrito?.provincia?.departamento?.idDepartamento}">
+                        <option value="">Selecciona un departamento</option>
+                        <th:block th:each="departamento : ${departamentos}">
+                          <option th:value="${departamento.idDepartamento}" th:text="${departamento.departamento}"
+                            th:selected="${departamento.idDepartamento} == ${trabajador.distrito?.provincia?.departamento?.idDepartamento}">
+                          </option>
+                        </th:block>
+                      </select>
+                    </div>
+
+                    <!--Lista de provincias-->
+                    <div class="col-md-3 mb-3">
+                      <label for="provincia" class="form-label">Provincia:</label>
+                      <select id="provincia" name="provincia" class="form-select"
+                        th:value="${trabajador.distrito?.provincia?.idProvincia}">
+                        <option value="">Selecciona una provincia</option>
+                        <th:block th:if="${provincias != null}">
+                          <th:block th:each="provincia : ${provincias}">
+                            <option th:value="${provincia.idProvincia}" th:text="${provincia.provincia}"
+                              th:selected="${provincia.idProvincia} == ${trabajador.distrito?.provincia?.idProvincia}">
+                            </option>
+                          </th:block>
+                        </th:block>
+                      </select>
+                    </div>
+
+                    <!--Lista de distritos-->
+                    <div class="col-md-6 mb-3">
+                      <label for="distrito" class="form-label">Distrito:</label>
+                      <select id="distrito" name="distrito" class="form-select"
+                        th:value="${trabajador.distrito?.idDistrito}">
+                        <option value="">Selecciona un distrito</option>
+                        <th:block th:if="${distritos != null}">
+                          <th:block th:each="distrito : ${distritos}">
+                            <option th:value="${distrito.idDistrito}" th:text="${distrito.distrito}"
+                              th:selected="${distrito.idDistrito} == ${trabajador.distrito?.idDistrito}"></option>
+                          </th:block>
+                        </th:block>
+                      </select>
+                    </div>
+                  </div>
+
+
+
+                  <div class="row row-cols-sm-auto align-items-center">
+                    <!-- Lista de Campañas -->
+                    <div class="col-md-3 mb-3">
+                      <label for="campana" class="form-label">Campaña:</label>
+                      <select id="campana" name="campana.idCampana" class="form-select"
+                        th:value="${trabajador.segmento?.campana?.idCampana}">
+                        <option value="">Selecciona una campaña</option>
+                        <th:block th:each="campana : ${campanas}">
+                          <option th:value="${campana.idCampana}" th:text="${campana.nombreCampana}"
+                            th:selected="${campana.idCampana} == ${trabajador.segmento?.campana?.idCampana}"></option>
+                        </th:block>
+                      </select>
+                    </div>
+
+                    <!-- Lista de Segmentos -->
+                    <div class="col-md-3 mb-3">
+                      <label for="segmento" class="form-label">Segmentos:</label>
+                      <select id="segmento" name="segmento.idSegmento" class="form-select"
+                        th:value="${trabajador.segmento?.idSegmento}">
+                        <option value="">Selecciona un segmento</option>
+                        <th:block th:if="${segmentos != null}">
+                          <th:block th:each="segmento : ${segmentos}">
+                            <option th:value="${segmento.idSegmento}" th:text="${segmento.nombreSegmento}"
+                              th:selected="${segmento.idSegmento} == ${trabajador.segmento?.idSegmento}"></option>
+                          </th:block>
+                        </th:block>
+                      </select>
+                    </div>
+
+                    <!-- Lista de Gestiones -->
+                    <div class="col-md-3 mb-3">
+                      <label for="gestion" class="form-label">Tipo Gestión:</label>
+                      <select id="gestion" name="segmento.tipoGestion.idGestion" class="form-select"
+                        th:value="${trabajador.segmento?.tipoGestion?.idGestion}">
+                        <option value="">Selecciona el tipo de gestión</option>
+                        <th:block th:if="${gestiones != null}">
+                          <th:block th:each="gestion : ${gestiones}">
+                            <option th:value="${gestion.idGestion}" th:text="${gestion.nombreGestion}"
+                              th:selected="${gestion.idGestion} == ${trabajador.segmento?.tipoGestion?.idGestion}">
+                            </option>
+                          </th:block>
+                        </th:block>
+                      </select>
+                    </div>
+
+
+                  </div>
+
+                  <div class="col-md-6 mb-3">
+                    <label for="centro" class="form-label">Centro</label>
+                    <select th:field="*{centro}" id="centro" class="form-select">
+                      <option value="" disabled selected>
+                        Seleccione un centro
+                      </option>
+                      <option th:each="centro : ${centro}" th:value="${centro.idCentro}"
+                        th:text="${centro.nombreCentro}"></option>
+                    </select>
+                  </div>
+
+                  <div class="col-md-6 mb-3">
+                    <label for="cargo" class="form-label">Cargo</label>
+                    <select th:field="*{cargo}" id="cargo" class="form-select">
+                      <option value="">Seleccione un cargo</option>
+                      <option th:each="cargo : ${cargos}" th:value="${cargo.idcargo}" th:text="${cargo.nombreCargo}"
+                        th:selected="${cargo.nombreCargo} == 'ASESOR TELEFÓNICO'"></option>
+                    </select>
+                  </div>
+
+                  <div class="col-md-6 mb-3">
+                    <label for="jornada" class="form-label">Jornada</label>
+                    <select th:field="*{jornada}" id="jornada" class="form-select">
+                      <option value="" disabled selected>
+                        Seleccione una jornada
+                      </option>
+                      <option th:each="jornada : ${jornada}" th:value="${jornada.idJornada}"
+                        th:text="${jornada.nombreJornada}"></option>
+                    </select>
+                  </div>
+
+                  <div class="col-md-6 mb-3">
+                    <label for="modalidad" class="form-label">Modalidad</label>
+                    <select th:field="*{modalidad}" id="modalidad" class="form-select">
+                      <option value="" disabled selected>
+                        Seleccione una modalidad
+                      </option>
+                      <option th:each="modalidad : ${modalidad}" th:value="${modalidad.idModalidad}"
+                        th:text="${modalidad.nombreModalidad}"></option>
+                    </select>
+                  </div>
+
+                  <div class="col-md-5 mb-3">
+                    <label for="jefeDirecto" class="form-label">Jefe Directo:</label>
+                    <select th:field="*{jefeDirecto}" id="jefeDirecto" class="form-select">
+                      <option value="" th:text="'Sin jefe directo'" th:if="${trabajador.jefeDirecto == null}"></option>
+                      <option value="" th:text="'Sin jefe directo'" th:if="${trabajador.jefeDirecto != null}"></option>
+                      <option th:each="t : ${trabajadores}" th:value="${t.idTrabajador}"
+                        th:text="${t.apellidoPaterno} + ' ' + ${t.apellidoMaterno} + ', ' + ${t.nombreCompleto}"
+                        th:selected="${t.idTrabajador} == ${trabajador.jefeDirecto?.idTrabajador}"></option>
+                    </select>
+                  </div>
+
+                  <!-- Botones de enviar y cancelar -->
+                  <div class="d-flex justify-content-between">
+                    <button type="submit" class="btn btn-primary">
+                      Guardar
+                    </button>
+                    <a href="/trabajadores" class="btn btn-secondary">Cancelar</a>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
         </div>
+      </main>
+      <footer th:insert="~{fragments/footer :: footer}"></footer>
     </div>
-    <div th:insert="~{fragments/script :: script}"></div>
+  </div>
+  <div th:insert="~{fragments/script :: script}"></div>
 </body>
 
 </html>
