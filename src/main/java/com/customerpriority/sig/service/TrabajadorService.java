@@ -5,9 +5,15 @@ import org.springframework.data.domain.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
 import com.customerpriority.sig.model.Trabajador;
+import com.customerpriority.sig.model.Usuario;
 import com.customerpriority.sig.repository.TrabajadorRepository;
+import com.customerpriority.sig.repository.UsuarioRepository;
+
 import jakarta.persistence.EntityNotFoundException;
 
 @Service
@@ -15,6 +21,12 @@ public class TrabajadorService {
 
     @Autowired
     private TrabajadorRepository trabajadorRepository;
+
+    @Autowired
+    private UsuarioRepository usuarioRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public List<Trabajador> listarTodosLosTrabajadores() {
         return trabajadorRepository.findAll();
@@ -33,20 +45,24 @@ public class TrabajadorService {
                 .orElseThrow(() -> new EntityNotFoundException("Trabajador no encontrado"));
     }
 
+    @Transactional
     public void guardarTrabajador(Trabajador trabajador) {
-        if (trabajador.getCorreo() != null && !validarCorreo(trabajador.getCorreo())) {
-            throw new IllegalArgumentException("Correo electrónico inválido");
-        }
-
-        if (trabajador.getJefeDirecto() != null
-                && trabajador.getJefeDirecto().getIdTrabajador() == trabajador.getIdTrabajador()) {
-            throw new IllegalArgumentException("Un trabajador no puede ser su propio jefe directo");
-        }
+        boolean esNuevoTrabajador = (trabajador.getIdTrabajador() == 0); // Verificar si es nuevo trabajador
+        // Guardar el trabajador primero
         trabajadorRepository.save(trabajador);
+        // Crear y guardar el usuario sólo si es un nuevo trabajador
+        if (esNuevoTrabajador) {
+            Usuario usuario = new Usuario();
+            usuario.setUsername(trabajador.getDocumento()); // Usar el DNI como username
+            usuario.setPassword(passwordEncoder.encode(trabajador.getDocumento())); // Encriptar el DNI para el password
+            usuario.setTrabajador(trabajador); // Asignar el Trabajador
+            usuario.setEstado(1); // Establecer el estado (puedes ajustarlo según sea necesario)
+            // Guardar el usuario
+            usuarioRepository.save(usuario);
+        }
     }
 
-    // Método para obtener todos los subordinados (directos e indirectos) de un
-    // trabajador
+    // Método para obtener todos los subordinados (directos e indirectos) de un trabajador
     public List<Trabajador> obtenerTodosLosSubordinados(Trabajador trabajador) {
         List<Trabajador> subordinados = new ArrayList<>();
         obtenerSubordinadosRecursivamente(trabajador, subordinados);

@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 
 import com.customerpriority.sig.model.Rol;
 import com.customerpriority.sig.model.Usuario;
-import com.customerpriority.sig.repository.RolRepository;
 import com.customerpriority.sig.repository.UsuarioRepository;
 
 @Service
