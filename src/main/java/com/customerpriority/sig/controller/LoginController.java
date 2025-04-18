@@ -15,4 +15,9 @@ public class LoginController {
     public String index() {
         return "index"; // Página después del inicio de sesión
     }
+
+    @GetMapping("/dashboard")
+    public String Dashboard() {
+        return "dashboard"; // Retorna el template dashboard.html
+    }
 }

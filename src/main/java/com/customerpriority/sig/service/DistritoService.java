@@ -17,7 +17,10 @@ public class DistritoService {
     }
 
     public List<Distrito> listarDistritosPorProvincia(int idProvincia) {
-        return distritoRepository.findByProvinciaIdProvincia(idProvincia);
+        List<Distrito> distritos = distritoRepository.findByProvinciaIdProvincia(idProvincia);
+        // Ordenar los distritos alfabéticamente por el campo 'distrito'
+        distritos.sort(Comparator.comparing(Distrito::getDistrito));
+        return distritos;
     }
 
 }

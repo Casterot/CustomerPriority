@@ -22,10 +22,27 @@
                                 
                                 <form th:action="@{/cargos}" th:object="${cargo}" method="post" class="border p-4 rounded shadow-sm">
                                     <input type="hidden" th:field="*{idcargo}"/>
-            
-                                    <div class="mb-3">
-                                        <label for="nombreCargo" class="form-label">Cargo</label>
-                                        <input type="text" class="form-control" id="nombreCargo" th:field="*{nombreCargo}" placeholder="Nombre del cargo" required />
+
+                                    <div class="row row-cols-sm-auto align-items-center">
+
+                                        <div class="col-md-7 mb-3">
+                                            <label for="nombreCargo" class="form-label">Cargo</label>
+                                            <input type="text" class="form-control" id="nombreCargo" th:field="*{nombreCargo}" placeholder="Nombre del cargo" required />
+                                        </div>
+
+                                        <div class="col-md-5 mb-3">
+                                            <label for="personalCargo" class="form-label">¿Tiene personal a cargo?</label>
+                                            <select th:field="*{personalCargo}" id="personalCargo" name="personalCargo" class="form-select"
+                                              required>
+                                              <option value="Si">
+                                                Si
+                                              </option>
+                                              <option value="No">
+                                                No
+                                              </option>
+                                            </select>
+                                        </div>
+
                                     </div>
             
                                     <div class="d-grid">

@@ -74,7 +74,7 @@ public class CentroController {
     }
 
     @PostMapping
-    public String guardarCentro(@ModelAttribute("centro") @Valid Centro centro, BindingResult result, Model model) {
+    public String guardarCentro(@ModelAttribute @Valid Centro centro, BindingResult result, Model model) {
         if (result.hasErrors()) {
             // Si hay errores, volvemos al formulario
             return "centros/formulario";
@@ -108,7 +108,7 @@ public class CentroController {
 
     @GetMapping("/exportar-excel")
     public ResponseEntity<byte[]> exportarCentrosAExcel(
-            @RequestParam(value = "keyword", required = false) String keyword) throws IOException {
+            @RequestParam(required = false) String keyword) throws IOException {
         
         List<Centro> centros;
     

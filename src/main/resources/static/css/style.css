@@ -1,5 +1,24 @@
+/* Importación de fuentes */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
 
+/* Variables globales */
+:root {
+    --sidebar-width: 70px;
+    --sidebar-width-expanded: 260px;
+    --navbar-height: 60px;
+    --primary-color: #0c223a;
+    --secondary-color: #efefef;
+    --third-color: #000000;
+    --accent-color: #293b5f;
+    --transition-standard: 0.25s ease-in-out;
+    --box-shadow-standard: 0 0 2rem 0 rgba(33, 37, 41, .1);
+    --success-color: #28a745;
+    --danger-color: #dc3545;
+    --warning-color: #ffc107;
+    --info-color: #17a2b8;
+}
+
+/* Reset básico */
 ::after,
 ::before {
     box-sizing: border-box;
@@ -7,6 +26,7 @@
     padding: 0;
 }
 
+/* Estilos base */
 a {
     text-decoration: none;
 }
@@ -17,8 +37,26 @@ li {
 
 body {
     font-family: 'Poppins', sans-serif;
+    padding-top: var(--navbar-height);
+    overflow-x: hidden;
 }
 
+html, body {
+    width: 100%;
+    overflow-x: hidden;
+}
+
+/* Estilos de tabla */
+.table td, .table th {
+    white-space: nowrap;
+}
+
+.table-responsive {
+    overflow-x: auto;
+    white-space: nowrap;
+}
+
+/* Layout principal */
 .wrapper {
     display: flex;
 }
@@ -29,26 +67,57 @@ body {
     min-height: 100vh;
     width: 100%;
     overflow: hidden;
-    transition: all 0.35s ease-in-out;
     background-color: #fff;
     min-width: 0;
+    margin-left: var(--sidebar-width);
+    padding-top: var(--navbar-height);
+    transition: margin-left var(--transition-standard);
 }
 
+.main-content {
+    margin-left: var(--sidebar-width);
+    transition: margin-left var(--transition-standard);
+}
+
+/* Estados del sidebar y main content */
+.main.expanded {
+    margin-left: var(--sidebar-width-expanded);
+}
+
+.sidebar.expand ~ .main-content {
+    margin-left: var(--sidebar-width-expanded);
+}
+
+/* Sidebar */
 #sidebar {
-    width: 70px;
-    min-width: 70px;
-    z-index: 1000;
-    transition: all .25s ease-in-out;
-    background-color: #0c223a; /*#0c223a*/
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: var(--sidebar-width);
+    min-width: var(--sidebar-width);
+    z-index: 100;
+    transition: width var(--transition-standard), min-width var(--transition-standard);
+    background-color: var(--primary-color);
     display: flex;
     flex-direction: column;
 }
 
+/* Estados expandidos */
 #sidebar.expand {
-    width: 260px;
-    min-width: 260px;
+    width: var(--sidebar-width-expanded);
+    min-width: var(--sidebar-width-expanded);
 }
 
+#sidebar.expand ~ .main {
+    margin-left: var(--sidebar-width-expanded);
+}
+
+#sidebar.expand ~ .main-content {
+    margin-left: var(--sidebar-width-expanded);
+}
+
+/* Botón de toggle */
 #toggle-btn {
     background-color: transparent;
     cursor: pointer;
@@ -56,41 +125,41 @@ body {
     padding: 0.73rem 0 1rem 1rem;
 }
 
+/* Logo y título del sidebar */
 .sidebar-logo {
     margin: auto 0;
     padding: 0 0 0 0.3rem;
 }
 
-.sidebar-tittle{
+.sidebar-tittle {
     padding: 1.5rem 0 1rem 0;
     border-bottom: 1px solid #b8b8b8;
 }
 
+/* Elementos ocultos cuando el sidebar está contraído */
 #sidebar:not(.expand) .sidebar-logo,
 #sidebar:not(.expand) a.sidebar-link span {
     display: none;
 }
 
+/* Animación de aparición */
 #sidebar.expand .sidebar-logo,
 #sidebar.expand a.sidebar-link span {
     animation: fadeIn 1.4s ease;
 }
 
 @keyframes fadeIn {
-    0% {
-        opacity: 0;
-    }
-
-    100% {
-        opacity: 1;
-    }
+    0% { opacity: 0; }
+    100% { opacity: 1; }
 }
 
+/* Navegación del sidebar */
 .sidebar-nav {
     padding: 2rem 0;
     flex: 1 1 auto;
 }
 
+/* Enlaces del sidebar */
 a.sidebar-link {
     padding: .625rem 1.625rem;
     color: #FFF;
@@ -98,6 +167,7 @@ a.sidebar-link {
     font-size: 0.9rem;
     white-space: nowrap;
     border-left: 3px solid transparent;
+    transition: background-color 0.2s ease, border-left 0.2s ease;
 }
 
 .sidebar-link i,
@@ -111,6 +181,7 @@ a.sidebar-link:hover {
     border-left: 3px solid #3b7ddd;
 }
 
+/* Dropdown del sidebar */
 .sidebar-item {
     position: relative;
 }
@@ -118,7 +189,7 @@ a.sidebar-link:hover {
 #sidebar:not(.expand) .sidebar-item .sidebar-dropdown {
     position: absolute;
     top: 0;
-    left: 70px;
+    left: var(--sidebar-width);
     background-color: #0e2238;
     padding: 0;
     min-width: 15rem;
@@ -131,6 +202,7 @@ a.sidebar-link:hover {
     opacity: 1;
 }
 
+/* Íconos de colapso */
 #sidebar.expand .sidebar-link[data-bs-toggle="collapse"]::after {
     border: solid;
     border-width: 0 .075rem .075rem 0;
@@ -141,98 +213,358 @@ a.sidebar-link:hover {
     right: 1.5rem;
     top: 1.4rem;
     transform: rotate(-135deg);
-    transition: all .2s ease-out;
+    transition: transform 0.2s ease-out;
 }
 
 #sidebar.expand .sidebar-link[data-bs-toggle="collapse"].collapsed::after {
     transform: rotate(45deg);
-    transition: all .2s ease-out;
 }
 
+/* Navbar */
 .navbar {
-    background-color: #f5f5f5;
-    box-shadow: 0 0 2rem 0 rgba(33, 37, 41, .1);
+    background-color: var(--secondary-color);
+    box-shadow: var(--box-shadow-standard);
+    position: fixed;
+    top: 0;
+    left: var(--sidebar-width);
+    width: calc(100% - var(--sidebar-width));
+    height: var(--navbar-height);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 15px;
+    z-index: 101;
+    transition: left var(--transition-standard), width var(--transition-standard);
+}
+
+.navbar.expanded {
+    left: var(--sidebar-width-expanded);
+    width: calc(100% - var(--sidebar-width-expanded));
+}
+
+/* Mejorada la especificidad para eliminar !important */
+.navbar .nav-link,
+.navbar .navbar-text,
+.navbar .navbar-btn {
+    color: #000;
 }
 
 .navbar-expand .navbar-collapse {
     min-width: 200px;
 }
 
+/* Avatar */
 .avatar {
     height: 40px;
     width: 40px;
 }
 
-.card{
-    background-color: #f5f5f5;
-    transition: .4s;
+/* Tarjetas */
+.card {
+    background-color: var(--secondary-color);
+    transition: transform 0.4s, background-color 0.4s, color 0.4s;
     cursor: pointer;
-    color: #000; /*Color de tarjetas*/
+    color: #000;
     margin-bottom: 1rem;
 }
 
-.card:hover{
-    background-color: #293b5f;
+/* Excluir efectos hover para tarjetas dentro de formularios */
+form .card {
+    background-color: #fff;
+    cursor: default;
+    transition: none;
+}
+
+form .card:hover {
+    background-color: #fff;
+    color: #000;
+    transform: none;
+}
+
+/* Aplicar efectos hover solo a tarjetas que no están en formularios */
+.card:not(form .card):hover {
+    background-color: var(--accent-color);
     color: #fff;
     transform: translateY(-10.5px);
 }
 
-.text-succes{
+/* Estados y badges */
+.text-success {
     background-color: #71c664;
     padding: 0.25rem 0.35rem;
     font-size: 0.715rem;
-    color: #fff !important;
+    color: #fff;
     border-radius: 5px;
 }
 
-.table>thead tr{
+/* Estilos de tabla */
+.table>thead tr {
     color: #FFF;
     text-align: left;
 }
 
-tr.highlight th{
-    background-color: #293b5f; /*Encabezado de tabla*/
+tr.highlight th {
+    background-color: var(--accent-color);
     color: #FFF;
 }
 
-.content{
+/* Layout adicional */
+.content {
     flex: 1 1 auto;
 }
 
-footer{
-    background-color: #f5f5f5;
-    padding: .6rem .6rem;
+/* Footer */
+footer {
+    background-color: var(--secondary-color);
+    padding: .4rem;
+    width: 100%;
+
 }
 
-@media (min-width: 768px) {
+/* Estilos para el icono de notificaciones */
+.nav-icon {
+    color: #666;
+    text-decoration: none;
+    position: relative;
+    display: flex;
+    align-items: center;
+}
 
+.nav-icon:hover {
+    color: #333;
+}
+
+/* Estilos para el dropdown de notificaciones */
+.dropdown-header {
+    font-weight: 600;
+    padding: 0.5rem 1rem;
+    background-color: #f8f9fa;
+}
+
+.dropdown-menu .dropdown-item i {
+    margin-right: 0.5rem;
+    font-size: 0.9rem;
+}
+
+/* Ajuste del badge de notificaciones */
+.badge {
+    font-size: 0.65rem;
+    padding: 0.25em 0.6em;
+}
+
+/* Media queries */
+@media (min-width: 768px) {
     .navbar form {
         max-width: 320px;
     }
 
-    input-group-navbar .form-control:focus{
-        outline: none;
-        box-shadow: 0 0 0 0 rgba(255, 255, 255);
-        border: none;
+    .input-group-navbar .form-control {
+        color: #3e4455;
     }
 
-    .input-group-navbar .form-control{
-        color: #3e4455;
+    .input-group-navbar .form-control:focus {
+        outline: none;
+        box-shadow: none;
+        border: none;
     }
 
     .form-control::placeholder {
         background-color: #fff;
     }
 
-    .input-group-navbar .btn{
+    .input-group-navbar .btn {
         background-color: #727cf5;
         color: #fff;
         font-family: 'Poppins', sans-serif;
         cursor: pointer;
-        z-index: 10000;
+        z-index: 102;
     }
 
-    .navbar-expand .navbar-nav .dropdown-menu{
+    .navbar-expand .navbar-nav .dropdown-menu {
         box-shadow: 0 .1rem .2rem rgba(0, 0, 0, .05);
     }
+}
+
+/* Estilos para el formulario */
+form {
+    background-color: #f5f5f5;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+form .card-header {
+    background-color: var(--accent-color) !important;
+    color: white;
+    border-bottom: none;
+}
+
+form .card-header h5 {
+    font-size: 1rem;
+    margin-bottom: 0;
+}
+
+form .card {
+    background-color: white;
+    border: none;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+}
+
+/* Estilos para formularios de usuario */
+.user-form-container {
+    background-color: var(--secondary-color);
+    border-radius: 8px;
+    padding: 2rem;
+    box-shadow: var(--box-shadow-standard);
+}
+
+.user-form-header {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 1.5rem;
+    border-radius: 8px 8px 0 0;
+    margin: -2rem -2rem 2rem -2rem;
+}
+
+.user-form-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+.user-form-section {
+    background-color: white;
+    padding: 1.5rem;
+    border-radius: 6px;
+    margin-bottom: 1.5rem;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+/* Estilos para asignación de roles */
+.roles-container {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: var(--box-shadow-standard);
+}
+
+.roles-header {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 1.5rem;
+    border-radius: 8px 8px 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.roles-content {
+    padding: 2rem;
+}
+
+.roles-section {
+    background-color: var(--secondary-color);
+    padding: 1.5rem;
+    border-radius: 6px;
+    margin-bottom: 1.5rem;
+}
+
+.roles-list {
+    margin-top: 1.5rem;
+}
+
+.role-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background-color: white;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    margin-bottom: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.role-item:hover {
+    transform: translateX(5px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.role-item .btn-eliminar-rol {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.role-item:hover .btn-eliminar-rol {
+    opacity: 1;
+}
+
+/* Estilos para botones en formularios */
+.form-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+    margin-top: 2rem;
+}
+
+.btn-form-primary {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 0.5rem 1.5rem;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+.btn-form-primary:hover {
+    background-color: var(--accent-color);
+    transform: translateY(-2px);
+}
+
+.btn-form-secondary {
+    background-color: var(--secondary-color);
+    color: var(--primary-color);
+    border: 1px solid var(--primary-color);
+    padding: 0.5rem 1.5rem;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+.btn-form-secondary:hover {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+/* Estilos para select y inputs en formularios */
+.form-select, .form-control {
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    padding: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.form-select:focus, .form-control:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.2rem rgba(12, 34, 58, 0.25);
+}
+
+.form-label {
+    color: var(--primary-color);
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+/* Animaciones */
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.role-item {
+    animation: slideIn 0.3s ease-out forwards;
 }

@@ -27,7 +27,7 @@
                     <form th:action="@{/usuarios}" method="get">
                       <div class="input-group">
                         <input type="text" name="search" th:value="${search}" class="form-control"
-                          placeholder="Buscar por usuario o nombre" aria-label="Buscar">
+                          placeholder="Buscar por usuario, nombre o apellidos" aria-label="Buscar">
                         <button class="btn btn-secondary" type="submit">
                           <i class="bi bi-search"></i> Buscar
                         </button>
@@ -48,6 +48,7 @@
                           <th scope="col">Id</th>
                           <th scope="col">Usuario</th>
                           <th scope="col">Nombre</th>
+                          <th scope="col">Roles</th>
                           <th scope="col">Estado</th>
                           <th scope="col">Acciones</th>
                         </tr>
@@ -56,16 +57,31 @@
                         <tr th:each="usuario : ${usuarioPage.content}">
                           <td th:text="${usuario.idUsuario}"></td>
                           <td th:text="${usuario.username}"></td>
-                          <td th:text="${usuario.trabajador}"></td>
-                          <td th:text="${usuario.estado}"></td>
+                          <td th:text="${usuario.trabajador != null ? usuario.trabajador.apellidoPaterno + ' ' + usuario.trabajador.apellidoMaterno + ', ' + usuario.trabajador.nombreCompleto : 'Sin trabajador asignado'}"></td>
                           <td>
-                            <a th:href="@{/usuarios/editar/{id}(id=${usuario.idUsuario})}" class="btn btn-warning">
+                            <div th:if="${usuario.roles != null and !usuario.roles.empty}">
+                              <span th:each="rol, stat : ${usuario.roles}" class="badge bg-primary me-1">
+                                <span th:text="${rol.nombreRol}"></span>
+                              </span>
+                            </div>
+                            <span th:if="${usuario.roles == null or usuario.roles.empty}" class="text-muted">Sin roles asignados</span>
+                          </td>
+                          <td>
+                            <span th:if="${usuario.estado == 1}" class="badge bg-success">Activo</span>
+                            <span th:if="${usuario.estado == 0}" class="badge bg-danger">Inactivo</span>
+                          </td>
+                          <td>
+                            <a th:href="@{/usuarios/{id}/roles(id=${usuario.idUsuario})}" class="btn btn-primary btn-sm" title="Asignar roles">
+                              <i class="bi bi-person-gear"></i>
+                            </a>
+                            <a th:href="@{/usuarios/editar/{id}(id=${usuario.idUsuario})}" class="btn btn-warning btn-sm" title="Editar estado">
                               <i class="bi bi-pencil-square"></i>
                             </a>
-                            <a th:href="@{/usuarios/eliminar/{id}(id=${usuario.idUsuario})}" class="btn btn-danger"
-                                onclick="return confirm('¿Estás seguro de que deseas eliminar este usuario?');">
-                              <i class="bi bi-trash"></i>
-                            </a>
+                            <form th:action="@{/usuarios/restablecer-contrasena/{id}(id=${usuario.idUsuario})}" method="post" class="d-inline p-0 m-0">
+                              <button type="submit" class="btn btn-info btn-sm" title="Restablecer contraseña a DNI">
+                                <i class="bi bi-key"></i>
+                              </button>
+                            </form>
                           </td>
                         </tr>
                       </tbody>

@@ -74,7 +74,7 @@ public class RolController {
     }
 
     @PostMapping
-    public String guardarRol(@ModelAttribute("rol") @Valid Rol rol, BindingResult result, Model model) {
+    public String guardarRol(@ModelAttribute @Valid Rol rol, BindingResult result, Model model) {
         if (result.hasErrors()) {
             // Si hay errores, volvemos al formulario
             return "roles/formulario";
@@ -108,7 +108,7 @@ public class RolController {
 
     @GetMapping("/exportar-excel")
     public ResponseEntity<byte[]> exportarRolesAExcel(
-            @RequestParam(value = "keyword", required = false) String keyword) throws IOException {
+            @RequestParam(required = false) String keyword) throws IOException {
         
         List<Rol> roles;
     

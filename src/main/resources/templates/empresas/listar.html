@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
-<head th:insert="~{fragments/header :: header('Cargos')}"></head>
+<head th:insert="~{fragments/header :: header('Empresas')}"></head>
 
 <body>
   <div class="wrapper">
@@ -14,12 +14,12 @@
             <div class="row justify-content-center">
               <div class="col-12 col-md-11">
                 <div class="d-flex flex-column flex-md-row justify-content-between align-items-center p-4 mb-3 border bg-light rounded">
-                  <h4 class="fw-bold fs-4 mb-3 mb-md-0 text-center">Listado de cargos</h4>
+                  <h4 class="fw-bold fs-4 mb-3 mb-md-0 text-center">Razon social</h4>
                   <div class="d-flex gap-2 ms-md-auto">
-                    <a href="/cargos/nuevo" class="btn btn-primary">
+                    <a href="/empresas/nuevo" class="btn btn-primary">
                       <i class="bi bi-plus-circle me-2"></i>Agregar
                     </a>
-                    <a th:href="@{/cargos/exportar-excel(keyword=${search})}" class="btn btn-success">
+                    <a th:href="@{/empresas/exportar-excel(keyword=${search})}" class="btn btn-success">
                       <i class="bi bi-file-earmark-spreadsheet me-2"></i>Exportar
                     </a>
                   </div>
@@ -27,10 +27,10 @@
                 
                 <div class="d-flex flex-column flex-md-row justify-content-between align-items-center p-4 mb-3 border bg-light rounded">
                   <div class="col-12 col-md-8">
-                    <form th:action="@{/cargos}" method="get">
+                    <form th:action="@{/empresas}" method="get">
                       <div class="input-group">
                         <input type="text" name="search" th:value="${search}" class="form-control"
-                          placeholder="Buscar cargo" aria-label="Buscar">
+                          placeholder="Buscar empresa" aria-label="Buscar">
                         <button class="btn btn-secondary" type="submit">
                           <i class="bi bi-search"></i> Buscar
                         </button>
@@ -38,32 +38,30 @@
                     </form>
                   </div>
                 </div>
-                <div th:if="${cargoPage.totalElements == 0}" class="alert alert-info mt-3">
-                  No se encontraron cargos con el nombre "<span th:text="${search}"></span>".
+                <div th:if="${empresaPage.totalElements == 0}" class="alert alert-info mt-3">
+                  No se encontraron empresas con el nombre "<span th:text="${search}"></span>".
                 </div>
                 
-                <div th:if="${cargoPage.totalElements > 0}">
+                <div th:if="${empresaPage.totalElements > 0}">
                   <div class="table-responsive">
                     <table class="table table-striped">
                       <thead>
                         <tr class="highlight">
                           <th scope="col">Id</th>
-                          <th scope="col">Cargo</th>
-                          <th scope="col">¿Tiene personal a cargo?></th>
+                          <th scope="col">Empresa</th>
                           <th scope="col">Acciones</th>
                         </tr>
                       </thead>
                       <tbody>
-                        <tr th:each="cargo : ${cargoPage.content}">
-                          <td th:text="${cargo.idcargo}"></td>
-                          <td th:text="${cargo.nombreCargo}"></td>
-                          <td th:text="${cargo.personalCargo}"></td>
+                        <tr th:each="empresa : ${empresaPage.content}">
+                          <td th:text="${empresa.idEmpresa}"></td>
+                          <td th:text="${empresa.nombreEmpresa}"></td>
                           <td>
-                            <a th:href="@{/cargos/editar/{id}(id=${cargo.idcargo})}" class="btn btn-warning">
+                            <a th:href="@{/empresas/editar/{id}(id=${empresa.idEmpresa})}" class="btn btn-warning">
                               <i class="bi bi-pencil-square"></i>
                             </a>
-                            <a th:href="@{/cargos/eliminar/{id}(id=${cargo.idcargo})}" class="btn btn-danger"
-                                onclick="return confirm('¿Estás seguro de que deseas eliminar este cargo?');">
+                            <a th:href="@{/empresas/eliminar/{id}(id=${empresa.idEmpresa})}" class="btn btn-danger"
+                                onclick="return confirm('¿Estás seguro de que deseas eliminar esta empresa?');">
                               <i class="bi bi-trash"></i>
                             </a>
                           </td>
@@ -76,17 +74,17 @@
                   <nav aria-label="Page navigation example" class="mt-3">
                     <ul class="pagination justify-content-end">
                       <!-- Botón de página anterior -->
-                      <li class="page-item" th:classappend="${cargoPage.hasPrevious()} ? '' : 'disabled'">
-                        <a class="page-link" th:href="@{/cargos(page=${cargoPage.number - 1})}">Anterior</a>
+                      <li class="page-item" th:classappend="${empresaPage.hasPrevious()} ? '' : 'disabled'">
+                        <a class="page-link" th:href="@{/empresas(page=${empresaPage.number - 1})}">Anterior</a>
                       </li>
                       <!-- Páginas intermedias -->
-                      <li class="page-item" th:each="i : ${#numbers.sequence(0, cargoPage.totalPages - 1)}"
-                        th:classappend="${i == cargoPage.number} ? 'active' : ''">
-                        <a class="page-link" th:href="@{/cargos(page=${i})}" th:text="${i + 1}"></a>
+                      <li class="page-item" th:each="i : ${#numbers.sequence(0, empresaPage.totalPages - 1)}"
+                        th:classappend="${i == empresaPage.number} ? 'active' : ''">
+                        <a class="page-link" th:href="@{/empresas(page=${i})}" th:text="${i + 1}"></a>
                       </li>
                       <!-- Botón de página siguiente -->
-                      <li class="page-item" th:classappend="${cargoPage.hasNext()} ? '' : 'disabled'">
-                        <a class="page-link" th:href="@{/cargos(page=${cargoPage.number + 1})}">Siguiente</a>
+                      <li class="page-item" th:classappend="${empresaPage.hasNext()} ? '' : 'disabled'">
+                        <a class="page-link" th:href="@{/empresas(page=${empresaPage.number + 1})}">Siguiente</a>
                       </li>
                     </ul>
                   </nav>

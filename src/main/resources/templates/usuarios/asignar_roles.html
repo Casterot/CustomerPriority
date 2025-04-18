@@ -1,30 +1,77 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <title>Asignar Roles</title>
-</head>
+
+<head th:insert="~{fragments/header :: header('Asignar Roles')}"></head>
+
 <body>
-<h1>Asignar Roles a [[${usuario.username}]]</h1>
+    <div class="wrapper">
+        <aside th:replace="~{fragments/sidebar :: sidebar}"></aside>
+        <div class="main">
+            <nav th:insert="~{fragments/nav :: nav}"></nav>
+            <main class="content px-3 py-4">
+                <div class="container-fluid">
+                    <div class="mb-3">
+                        <div class="row justify-content-center">
+                            <div class="col-12 col-md-8">
+                                <div class="roles-container">
+                                    <div class="roles-header">
+                                        <h4 class="fw-bold fs-4 mb-0">Asignar Roles a <span th:text="${nombreCompleto}"></span></h4>
+                                        <a th:href="@{/usuarios}" class="btn btn-form-secondary">Volver</a>
+                                    </div>
 
-<form th:action="@{/usuarios/{id}/roles(id=${usuario.idUsuario})}" method="post">
-    <label for="rolId">Seleccionar Rol:</label>
-    <select name="rolId" id="rolId">
-        <option th:each="rol : ${roles}" th:value="${rol.idRol}" th:text="${rol.nombreRol}"></option>
-    </select>
-    <button type="submit">Asignar Rol</button>
-</form>
+                                    <div class="roles-content">
+                                        <input type="hidden" id="usuarioId" th:value="${usuario.idUsuario}" />
+                                        
+                                        <div class="roles-section">
+                                            <form id="asignarRolForm" class="mb-4">
+                                                <div class="mb-3">
+                                                    <label for="rolId" class="form-label">Seleccionar Rol</label>
+                                                    <select name="rolId" id="rolId" class="form-select" required>
+                                                        <option value="">Seleccione un rol</option>
+                                                        <option th:each="rol : ${roles}" 
+                                                                th:value="${rol.idRol}" 
+                                                                th:text="${rol.nombreRol}">
+                                                        </option>
+                                                    </select>
+                                                </div>
+                                                <button type="button" id="btnAgregarRol" class="btn btn-form-primary">
+                                                    <i class="bi bi-plus-circle me-2"></i>Agregar Rol
+                                                </button>
+                                            </form>
 
-<h2>Roles asignados</h2>
-<ul>
-    <li th:each="rol : ${usuario.roles}">
-        <span th:text="${rol.nombreRol}">Nombre del Rol</span>
-        <form th:action="@{/usuarios/{id}/roles/eliminar(id=${usuario.idUsuario})}" method="post" style="display:inline;">
-            <input type="hidden" name="rolId" th:value="${rol.idRol}" />
-            <button type="submit">Eliminar</button>
-        </form>
-    </li>
-</ul>
+                                            <h5 class="mb-3 mt-4">Roles a Asignar</h5>
+                                            <div id="rolesAsignados" class="roles-list">
+                                                <!-- Aquí se agregarán dinámicamente los roles seleccionados -->
+                                                <div th:each="rol : ${usuario.roles}" 
+                                                     class="role-item"
+                                                     th:data-rol-id="${rol.idRol}">
+                                                    <span th:text="${rol.nombreRol}"></span>
+                                                    <button type="button" class="btn btn-danger btn-sm btn-eliminar-rol">
+                                                        <i class="bi bi-trash"></i>
+                                                    </button>
+                                                </div>
+                                                <div id="mensajeSinRoles" th:if="${usuario.roles.empty}" class="text-center text-muted p-3">
+                                                    No hay roles asignados
+                                                </div>
+                                            </div>
+                                        </div>
 
-<a th:href="@{/usuarios}">Volver a la lista de usuarios</a>
+                                        <div class="form-buttons">
+                                            <button type="button" id="btnGuardarCambios" class="btn btn-form-primary">
+                                                <i class="bi bi-check2-circle me-2"></i>Guardar Cambios
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+            <footer th:insert="~{fragments/footer :: footer}"></footer>
+        </div>
+    </div>
+    <div th:insert="~{fragments/script :: script}"></div>
+    <script th:src="@{/js/roles.js}"></script>
 </body>
 </html>

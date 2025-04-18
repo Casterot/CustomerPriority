@@ -10,14 +10,17 @@
     </div>
     <ul class="sidebar-nav">
         <li class="sidebar-item">
-            <a href="#" class="sidebar-link has-dropdown collapsed" data-bs-toggle="collapse" data-bs-target="#mant" 
-                aria-expanded="false" aria-controls="mant">
-                <i class="bi bi-gear"></i>
-                <span>Administrador</span>
+            <a href="#" class="sidebar-link has-dropdown collapsed" data-bs-toggle="collapse" data-bs-target="#bases" 
+                aria-expanded="false" aria-controls="bases">
+                <i class="bi bi-database-fill-gear"></i>
+                <span>Administrar bases</span>
             </a>
-            <ul id="mant" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+            <ul id="bases" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
                 <li class="sidebar-item">
                     <a href="/centros" class="sidebar-link">Centros</a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="/empresas" class="sidebar-link">Razón social</a>
                 </li>
                 <li class="sidebar-item">
                     <a href="/campanas" class="sidebar-link">Campañas</a>
@@ -35,31 +38,70 @@
                     <a href="/roles" class="sidebar-link">Roles</a>
                 </li>
                 <li class="sidebar-item">
-                    <a href="/trabajadores" class="sidebar-link">Nómina</a>
-                </li>
+                    <a href="/trabajadores" class="sidebar-link">Registro de trabajadores</a>
+                </li>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
                 <li class="sidebar-item">
-                    <a href="#" class="sidebar-link">Usuarios</a>
+                    <a href="/usuarios" class="sidebar-link">Usuarios</a>
                 </li>
             </ul>
         </li>
         <li class="sidebar-item">
+            <a href="#" class="sidebar-link has-dropdown collapsed" data-bs-toggle="collapse" data-bs-target="#personal" 
+                aria-expanded="false" aria-controls="personal">
+                <i class="bi bi-person"></i>
+                <span>Administrar personal</span>
+            </a>
+            <ul id="personal" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link">Altas de usuarios</a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link">Bajas de usuarios</a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link">Asignación de horario</a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link">Asignación de personal</a>
+                </li>
+            </ul>
+        </li>
+        <li class="sidebar-item">
+            <a href="/index" class="sidebar-link">
+                <i class="bi bi-newspaper"></i>
+                <span>Comunicados</span>
+            </a>
+        </li>
+        <li class="sidebar-item">
+            <a href="/dashboard" class="sidebar-link">
+                <i class="bi bi-speedometer"></i>
+                <span>Dashboard</span>
+            </a>
+        </li>
+        <li class="sidebar-item">
             <a href="#" class="sidebar-link">
                 <i class="bi bi-person"></i>
-                <span>Profile</span>
+                <span>Perfil</span>
             </a>
         </li>
 
         <li class="sidebar-item">
             <a href="#" class="sidebar-link">
-                <i class="bi bi-list-task"></i>
-                <span>Task</span>
+                <i class="bi bi-folder"></i>
+                <span>Contratos</span>
+            </a>
+        </li>
+        <li class="sidebar-item">
+            <a href="#" class="sidebar-link">
+                <i class="bi bi-receipt-cutoff"></i>
+                <span>Boletas</span>
             </a>
         </li>
         <li class="sidebar-item">
             <a href="#" class="sidebar-link has-dropdown collapsed" data-bs-toggle="collapse" data-bs-target="#auth" 
                 aria-expanded="false" aria-controls="auth">
                 <i class="bi bi-shield-check"></i>
-                <span>Auth</span>
+                <span>Autenticación</span>
             </a>
             <ul id="auth" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
                 <li class="sidebar-item">
@@ -74,13 +116,13 @@
         <li class="sidebar-item">
             <a href="#" class="sidebar-link">
                 <i class="bi bi-bell"></i>
-                <span>Notification</span>
+                <span>Notificaciones</span>
             </a>
         </li>
         <li class="sidebar-item">
             <a href="#" class="sidebar-link">
                 <i class="bi bi-database-fill-gear"></i>
-                <span>Setting</span>
+                <span>Configuracion</span>
             </a>
         </li>
     </ul>

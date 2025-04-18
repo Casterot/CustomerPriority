@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
-<head th:insert="~{fragments/header :: header('Formulario Campañas')}"></head>
+<head th:insert="~{fragments/header :: header('Editar Estado de Usuario')}"></head>
 
 <body>
     <div class="wrapper">
@@ -12,48 +12,45 @@
                 <div class="container-fluid">
                     <div class="mb-3">
                         <div class="row justify-content-center">
-                            <div class="col-7 col-md-6">
-                                <div
-                                    class="d-flex flex-column flex-md-row justify-content-between align-items-center p-4 mb-3 border bg-light rounded">
+                            <div class="col-12 col-md-8">
+                                <div class="d-flex flex-column flex-md-row justify-content-between align-items-center p-4 mb-3 border bg-light rounded">
+                                    <h4 class="fw-bold fs-4 mb-3 mb-md-0">Editar Estado de Usuario</h4>
                                     <div class="d-flex gap-2 ms-md-auto">
-                                        <a href="/campanas" class="btn btn-secondary">Volver</a>
+                                        <a th:href="@{/usuarios}" class="btn btn-secondary">Volver</a>
                                     </div>
                                 </div>
-                                
-                                <form th:action="@{/campanas}" th:object="${campana}" method="post" class="border p-4 rounded shadow-sm">
-                                    <input type="hidden" th:field="*{idCampana}"/>
-            
-                                    <div class="mb-3">
-                                        <label for="segmento" class="form-label">Segmento</label>
-                                        <input type="text" class="form-control" id="segmento" th:field="*{segmento}" placeholder="Segmento" required />
-                                    </div>
-            
-                                    <div class="mb-3">
-                                        <label for="nombreCampana" class="form-label">Nombre</label>
-                                        <input type="text" class="form-control" id="nombreCampana" th:field="*{nombreCampana}" placeholder="Nombre de la Campaña" required />
-                                    </div>
-            
-                                    <div class="mb-3">
-                                        <label for="gestion" class="form-label">Gestión</label>
-                                        <select class="form-select" id="gestion" th:field="*{gestion}" aria-label="Tipo de gestión">
-                                            <option value="Inbound">Inbound</option>
-                                            <option value="Outbound">Outbound</option>
-                                        </select>
-                                    </div>
-            
-                                    <div class="mb-3">
-                                        <label for="estado" class="form-label">Estado</label>
-                                        <select class="form-select" id="estado" th:field="*{estado}" aria-label="Estado">
-                                            <option value="0">0</option>
-                                            <option value="1">1</option>
-                                        </select>
-                                    </div>
-            
-                                    <div class="d-grid">
-                                        <button type="submit" class="btn btn-primary btn-md">Guardar</button>
-                                    </div>
-                                </form>
 
+                                <div class="card">
+                                    <div class="card-body">
+                                        <form th:action="@{/usuarios/actualizar-estado}" method="post">
+                                            <input type="hidden" name="idUsuario" th:value="${usuario.idUsuario}">
+                                            
+                                            <div class="mb-3">
+                                                <label class="form-label">Usuario</label>
+                                                <input type="text" class="form-control" th:value="${usuario.username}" readonly>
+                                            </div>
+
+                                            <div class="mb-3">
+                                                <label class="form-label">Nombre Completo</label>
+                                                <input type="text" class="form-control" 
+                                                    th:value="${usuario.trabajador != null ? usuario.trabajador.apellidoPaterno + ' ' + usuario.trabajador.apellidoMaterno + ', ' + usuario.trabajador.nombreCompleto : 'Sin trabajador asignado'}" 
+                                                    readonly>
+                                            </div>
+
+                                            <div class="mb-3">
+                                                <label for="estado" class="form-label">Estado</label>
+                                                <select name="estado" id="estado" class="form-select" required>
+                                                    <option value="1" th:selected="${usuario.estado == 1}">Activo</option>
+                                                    <option value="0" th:selected="${usuario.estado == 0}">Inactivo</option>
+                                                </select>
+                                            </div>
+
+                                            <div class="d-grid">
+                                                <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

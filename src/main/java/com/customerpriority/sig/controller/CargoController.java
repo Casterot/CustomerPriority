@@ -74,7 +74,7 @@ public class CargoController {
     }
 
     @PostMapping
-    public String guardarCargo(@ModelAttribute("cargo") @Valid Cargo cargo, BindingResult result, Model model) {
+    public String guardarCargo(@ModelAttribute @Valid Cargo cargo, BindingResult result, Model model) {
         if (result.hasErrors()) {
             // Si hay errores, volvemos al formulario
             return "cargos/formulario";
@@ -108,7 +108,7 @@ public class CargoController {
 
     @GetMapping("/exportar-excel")
     public ResponseEntity<byte[]> exportarCargosAExcel(
-            @RequestParam(value = "keyword", required = false) String keyword) throws IOException {
+            @RequestParam(required = false) String keyword) throws IOException {
         
         List<Cargo> cargos;
     

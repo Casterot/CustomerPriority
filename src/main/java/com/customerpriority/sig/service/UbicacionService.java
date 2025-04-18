@@ -15,6 +15,7 @@ import com.customerpriority.sig.repository.ProvinciaRepository;
 import com.customerpriority.sig.repository.SegmentoRepository;
 
 import java.util.List;
+import java.util.Comparator;
 
 @Service
 public class UbicacionService {
@@ -46,7 +47,10 @@ public class UbicacionService {
 
     // Obtener los distritos de una provincia específica
     public List<Distrito> obtenerDistritosPorProvincia(int idProvincia) {
-        return distritoRepository.findByProvinciaIdProvincia(idProvincia);
+        List<Distrito> distritos = distritoRepository.findByProvinciaIdProvincia(idProvincia);
+        // Ordenar los distritos alfabéticamente por el campo 'distrito'
+        distritos.sort(Comparator.comparing(Distrito::getDistrito));
+        return distritos;
     }
 
 

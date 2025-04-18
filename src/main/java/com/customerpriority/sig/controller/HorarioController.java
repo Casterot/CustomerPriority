@@ -84,7 +84,7 @@ public class HorarioController {
     }
 
     @PostMapping
-    public String guardarHorario(@ModelAttribute("horario") @Valid Horario horario, BindingResult result, Model model) {
+    public String guardarHorario(@ModelAttribute @Valid Horario horario, BindingResult result, Model model) {
         if (result.hasErrors()) {
             // Si hay errores, volvemos al formulario
             cargarTurnosYCondiciones(model);
@@ -135,7 +135,7 @@ public class HorarioController {
 
     @GetMapping("/exportar-excel")
     public ResponseEntity<byte[]> exportarHorariosAExcel(
-            @RequestParam(value = "keyword", required = false) String keyword) throws IOException {
+            @RequestParam(required = false) String keyword) throws IOException {
         
         List<Horario> horarios;
     

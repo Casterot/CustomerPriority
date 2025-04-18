@@ -13,8 +13,12 @@ import org.springframework.data.repository.query.Param;
 
 public interface SegmentoRepository extends JpaRepository<Segmento, Integer> {
 
-    @Query("SELECT c FROM Segmento c WHERE " +
-            "LOWER(c.nombreSegmento) LIKE LOWER(CONCAT('%', :keyword, '%'))")
+    @Query("SELECT s FROM Segmento s " +
+       "JOIN s.campana c " +
+       "JOIN s.tipoGestion g " +
+       "WHERE LOWER(s.nombreSegmento) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
+       "OR LOWER(c.nombreCampana) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
+       "OR LOWER(g.nombreGestion) LIKE LOWER(CONCAT('%', :keyword, '%'))")
     Page<Segmento> buscarPorSegmentoNombreOGestion(@Param("keyword") String keyword, Pageable pageable);
 
     List<Segmento> findByCampanaIdCampana(int idCampana);

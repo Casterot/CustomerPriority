@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"></html>
+<html lang="en">
+    <head th:insert="~{fragments/header :: header('Dashboard')}"></head>
+<body>
+    <div class="wrapper">
+        <aside th:replace="~{fragments/sidebar :: sidebar}"></aside>
+        <div class="main">
+            <nav th:insert="~{fragments/nav :: nav}"></nav>
+            <main class="content px-3 py-4">
+                <div class="container-fluid">
+                    <div class="mb-3">
+                        <h3 class="fw-bold fs-4 mb-3">Dashboard</h3>
+                        <div class="row">
+                            <div class="col-12 col-md-4">
+                                <div class="card border-0">
+                                    <div class="card-body py-4">
+                                        <h5 class="mb-2 fw-bold">
+                                            TMO
+                                        </h5>
+                                        <p class="mb-2 fw-bold">
+                                            <i class="bi bi-alarm me-3"></i>354
+                                        </p>
+                                        <div class="mb-0">
+                                            <span class="badge text-success me-2">
+                                                +9.0
+                                            </span>
+                                            <span class="fw-bold">
+                                                Mes anterior
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-md-4">
+                                <div class="card border-0">
+                                    <div class="card-body py-4">
+                                        <h5 class="mb-2 fw-bold">
+                                            Ausentismo
+                                        </h5>
+                                        <p class="mb-2 fw-bold">
+                                            3.05%
+                                        </p>
+                                        <div class="mb-0">
+                                            <span class="badge text-success me-2">
+                                                +9.0
+                                            </span>
+                                            <span class="fw-bold">
+                                                Mes anterior
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-md-4">
+                                <div class="card border-0">
+                                    <div class="card-body py-4">
+                                        <h5 class="mb-2 fw-bold">
+                                            Rotación
+                                        </h5>
+                                        <p class="mb-2 fw-bold">
+                                            32.05%
+                                        </p>
+                                        <div class="mb-0">
+                                            <span class="badge text-success me-2">
+                                                +9.0
+                                            </span>
+                                            <span class="fw-bold">
+                                                Mes anterior
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </main>
+            <footer th:insert="~{fragments/footer :: footer}"></footer>
+
+        </div>
+    </div>
+    <div th:insert="~{fragments/script :: script}"></div>
+</body>
+</html>

@@ -80,7 +80,7 @@ public class SegmentoController {
     }
 
     @PostMapping
-    public String guardarSegmento(@ModelAttribute("segmento") @Valid Segmento segmento, BindingResult result, Model model) {
+    public String guardarSegmento(@ModelAttribute @Valid Segmento segmento, BindingResult result, Model model) {
         if (result.hasErrors()) {
             // Si hay errores, volvemos al formulario
             return "segmentos/formulario";
@@ -130,7 +130,7 @@ public class SegmentoController {
 
     @GetMapping("/exportar-excel")
     public ResponseEntity<byte[]> exportarSegmentosAExcel(
-            @RequestParam(value = "keyword", required = false) String keyword) throws IOException {
+            @RequestParam(required = false) String keyword) throws IOException {
         
         List<Segmento> segmentos;
     

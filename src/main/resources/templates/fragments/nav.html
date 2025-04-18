@@ -1,6 +1,36 @@
 <nav th:fragment="nav" class="navbar navbar-expand px-4 py-3">   
     <div class="navbar-collapse collapse">
         <ul class="navbar-nav ms-auto">
+            
+            <!-- Notificaciones -->
+            <li class="nav-item dropdown me-4 d-flex align-items-center">
+                <a href="#" data-bs-toggle="dropdown" class="nav-icon position-relative">
+                    <i class="bi bi-bell fs-4"></i>
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                        3
+                        <span class="visually-hidden">notificaciones no leídas</span>
+                    </span>
+                </a>
+                <div class="dropdown-menu dropdown-menu-end rounded">
+                    <div class="dropdown-header">Notificaciones</div>
+                    <a href="#" class="dropdown-item">
+                        <i class="bi bi-info-circle"></i>
+                        <span>Nueva actualización disponible</span>
+                    </a>
+                    <a href="#" class="dropdown-item">
+                        <i class="bi bi-envelope"></i>
+                        <span>Nuevo mensaje recibido</span>
+                    </a>
+                </div>
+            </li>
+            
+            
+            <!-- Nombre del usuario autenticado -->
+            <li class="nav-item me-3 d-flex align-items-center">
+                <p class="fs-6 text-dark mb-0" th:text="${#authentication.principal.nombreCompleto}"></p>
+            </li>
+            
+            <!-- Avatar existente -->
             <li class="nav-item dropdown">
                 <a href="#" data-bs-toggle="dropdown" class="nav-icon pe-md-0">
                     <img th:src="@{/images/account.png}" class="avatar img-fluid" alt="">

@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -12,10 +13,12 @@ import org.springframework.stereotype.Service;
 import com.customerpriority.sig.model.Segmento;
 import com.customerpriority.sig.model.Cargo;
 import com.customerpriority.sig.model.Centro;
+import com.customerpriority.sig.model.Empresa;
 import com.customerpriority.sig.model.Horario;
 import com.customerpriority.sig.model.Rol;
 import com.customerpriority.sig.model.Trabajador;
 import com.customerpriority.sig.model.Campana;
+import com.customerpriority.sig.model.Usuario;
 
 @Service
 public class ExcelExportService {
@@ -51,7 +54,7 @@ public class ExcelExportService {
 
 
     public ByteArrayInputStream exportarCargosAExcel(List<Cargo> cargos) throws IOException {
-        String[] columnas = {"ID", "Cargo"};
+        String[] columnas = {"ID", "Cargo", "Personal a cargo"};
 
         // Crear un nuevo workbook y hoja
         try (Workbook workbook = new XSSFWorkbook(); ByteArrayOutputStream out = new ByteArrayOutputStream()) {
@@ -70,6 +73,7 @@ public class ExcelExportService {
                 Row row = sheet.createRow(rowIdx++);
                 row.createCell(0).setCellValue(cargo.getIdcargo());
                 row.createCell(1).setCellValue(cargo.getNombreCargo());
+                row.createCell(1).setCellValue(cargo.getPersonalCargo());
             }
 
             workbook.write(out);
@@ -253,6 +257,81 @@ public class ExcelExportService {
                 Row row = sheet.createRow(rowIdx++);
                 row.createCell(0).setCellValue(centro.getIdCentro());
                 row.createCell(1).setCellValue(centro.getNombreCentro());
+            }
+
+            workbook.write(out);
+            return new ByteArrayInputStream(out.toByteArray());
+        }
+    }
+
+    public ByteArrayInputStream exportarEmpresasAExcel(List<Empresa> empresas) throws IOException {
+        String[] columnas = {"ID", "Empresa"};
+
+        // Crear un nuevo workbook y hoja
+        try (Workbook workbook = new XSSFWorkbook(); ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+            Sheet sheet = workbook.createSheet("Empresas");
+
+            // Crear fila de encabezados
+            Row headerRow = sheet.createRow(0);
+            for (int i = 0; i < columnas.length; i++) {
+                Cell cell = headerRow.createCell(i);
+                cell.setCellValue(columnas[i]);
+            }
+
+            // Poblar las filas con los datos de las campañas
+            int rowIdx = 1;
+            for (Empresa empresa : empresas) {
+                Row row = sheet.createRow(rowIdx++);
+                row.createCell(0).setCellValue(empresa.getIdEmpresa());
+                row.createCell(1).setCellValue(empresa.getNombreEmpresa());
+            }
+
+            workbook.write(out);
+            return new ByteArrayInputStream(out.toByteArray());
+        }
+    }
+
+    public ByteArrayInputStream exportarUsuariosAExcel(List<Usuario> usuarios) throws IOException {
+        String[] columnas = {"ID", "Usuario", "Nombre Completo", "Roles", "Estado"};
+
+        // Crear un nuevo workbook y hoja
+        try (Workbook workbook = new XSSFWorkbook(); ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+            Sheet sheet = workbook.createSheet("Usuarios");
+
+            // Crear fila de encabezados
+            Row headerRow = sheet.createRow(0);
+            for (int i = 0; i < columnas.length; i++) {
+                Cell cell = headerRow.createCell(i);
+                cell.setCellValue(columnas[i]);
+            }
+
+            // Poblar las filas con los datos de los usuarios
+            int rowIdx = 1;
+            for (Usuario usuario : usuarios) {
+                Row row = sheet.createRow(rowIdx++);
+                row.createCell(0).setCellValue(usuario.getIdUsuario());
+                row.createCell(1).setCellValue(usuario.getUsername());
+                
+                String nombreCompleto = usuario.getTrabajador() != null ? 
+                    usuario.getTrabajador().getApellidoPaterno() + " " + 
+                    usuario.getTrabajador().getApellidoMaterno() + ", " + 
+                    usuario.getTrabajador().getNombreCompleto() : 
+                    "Sin trabajador asignado";
+                row.createCell(2).setCellValue(nombreCompleto);
+                
+                String roles = usuario.getRoles() != null && !usuario.getRoles().isEmpty() ?
+                    usuario.getRoles().stream()
+                        .map(Rol::getNombreRol)
+                        .collect(Collectors.joining(", ")) :
+                    "Sin roles asignados";
+                row.createCell(3).setCellValue(roles);
+                
+                row.createCell(4).setCellValue(usuario.getEstado() == 1 ? "Activo" : "Inactivo");
+            }
+
+            // Autoajustar columnas
+            for (int i = 0; i < columnas.length; i++) {
+                sheet.autoSizeColumn(i);
             }
 
             workbook.write(out);

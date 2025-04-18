@@ -1,6 +1,9 @@
 package com.customerpriority.sig.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotEmpty;
+
 import java.sql.Date;
 import java.util.List;
 
@@ -28,14 +31,22 @@ public class Trabajador {
     @Column(name = "fecha_nacimiento", nullable = false)
     private Date fechaNacimiento;
 
-    @Column(name = "telefono", length = 9)
+    @Column(name = "telefono", length = 9, nullable = false)
     private String telefono;
 
-    @Column(name = "correo", length = 255)
+    @Email(message = "El correo debe ser válido")
+    @NotEmpty(message = "El correo es obligatorio")
+    @Column(name = "correo", length = 255, nullable = false)
     private String correo;
 
     @Column(name = "direccion", length = 255)
     private String direccion;
+
+    @Column(name = "estado", length = 20, nullable = false)
+    private String estado;
+
+    @Column(name = "fecha_estado", nullable = false)
+    private Date fechaEstado;
 
     @ManyToOne
     @JoinColumn(name = "id_distrito")
@@ -81,6 +92,30 @@ public class Trabajador {
     @ManyToOne
     @JoinColumn(name = "id_cargo")
     private Cargo cargo;
+
+    @ManyToOne
+    @JoinColumn(name = "id_contrato")
+    private TipoContrato tipoContrato;
+
+    @ManyToOne
+    @JoinColumn(name = "id_empresa")
+    private Empresa empresa;
+
+    public Empresa getEmpresa() {
+        return empresa;
+    }
+
+    public void setEmpresa(Empresa empresa) {
+        this.empresa = empresa;
+    }
+
+    public TipoContrato getTipoContrato() {
+        return tipoContrato;
+    }
+
+    public void setTipoContrato(TipoContrato tipoContrato) {
+        this.tipoContrato = tipoContrato;
+    }
 
     public int getIdTrabajador() {
         return idTrabajador;
@@ -152,6 +187,22 @@ public class Trabajador {
 
     public void setDireccion(String direccion) {
         this.direccion = direccion;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+
+    public Date getFechaEstado() {
+        return fechaEstado;
+    }
+
+    public void setFechaEstado(Date fechaEstado) {
+        this.fechaEstado = fechaEstado;
     }
 
     public Distrito getDistrito() {

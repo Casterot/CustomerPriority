@@ -25,12 +25,14 @@ import com.customerpriority.sig.model.TipoGestion;
 import com.customerpriority.sig.model.Trabajador;
 import com.customerpriority.sig.service.TrabajadorService;
 import com.customerpriority.sig.service.SegmentoService;
+import com.customerpriority.sig.service.TipoContratoService;
 import com.customerpriority.sig.service.CampanaService;
 import com.customerpriority.sig.service.CargoService;
 import com.customerpriority.sig.service.CentroService;
 import com.customerpriority.sig.service.CondicionService;
 import com.customerpriority.sig.service.DepartamentoService;
 import com.customerpriority.sig.service.DistritoService;
+import com.customerpriority.sig.service.EmpresaService;
 import com.customerpriority.sig.service.ExcelExportService;
 import com.customerpriority.sig.service.GeneroService;
 import com.customerpriority.sig.service.JornadaService;
@@ -97,6 +99,12 @@ public class TrabajadorController {
     @Autowired
     private TipoGestionService tipoGestionService;
 
+    @Autowired
+    private TipoContratoService tipoContratoService;
+
+    @Autowired
+    private EmpresaService empresaService;
+
     @GetMapping
     public String listarTrabajadores(Model model,
             @RequestParam(defaultValue = "0") int page,
@@ -125,14 +133,14 @@ public class TrabajadorController {
         Trabajador trabajador = new Trabajador();
         Jornada jornadaPorDefecto = jornadaService.obtenerJornadaPorId(2);
         trabajador.setJornada(jornadaPorDefecto);
-
+        trabajador.setEstado("Activo"); // Establece el valor por defecto
         model.addAttribute("trabajador", trabajador);
         cargarDatosComunes(model, null, trabajador);
         return "trabajadores/formulario";
     }
 
     @PostMapping
-    public String guardarTrabajador(@ModelAttribute("trabajador") @Valid Trabajador trabajador, BindingResult result,
+    public String guardarTrabajador(@ModelAttribute @Valid Trabajador trabajador, BindingResult result,
             Model model) {
         if (result.hasErrors()) {
             cargarDatosComunes(model, trabajador, trabajador);
@@ -178,6 +186,8 @@ public class TrabajadorController {
         model.addAttribute("centro", centroService.listarTodosLosCentros());
         model.addAttribute("jornada", jornadaService.listarTodasLasJornadas());
         model.addAttribute("modalidad", modalidadService.listarTodasLasModalidades());
+        model.addAttribute("tipoContrato", tipoContratoService.listarTodosLosContratos());
+        model.addAttribute("empresa", empresaService.listarTodasLasEmpresas());
 
         // Ordenar campañas
         List<Campana> campanas = campanaService.listarTodasLasCampanas();
@@ -214,7 +224,11 @@ public class TrabajadorController {
         }
 
         // Configurar lista de trabajadores excluyendo subordinados
+        // Obtener todos los trabajadores registrados
         List<Trabajador> trabajadores = trabajadorService.listarTodosLosTrabajadores();
+
+        // Crear nueva lista de trabajadores filtrados
+        List<Trabajador> trabajadoresFiltrados = new ArrayList<>();
 
         if (referencia.getIdTrabajador() > 0) {
             List<Trabajador> subordinados = trabajadorService.obtenerTodosLosSubordinados(referencia);
@@ -223,22 +237,32 @@ public class TrabajadorController {
                 subordinados = new ArrayList<>();
             }
 
-            // Crear nueva lista de trabajadores filtrados
-            List<Trabajador> trabajadoresFiltrados = new ArrayList<>();
+
             for (Trabajador t : trabajadores) {
-                if (t.getIdTrabajador() != referencia.getIdTrabajador() && !subordinados.contains(t)) {
+                // Verificar si el trabajador no es el mismo de referencia, no es subordinado y su cargo tiene "Si" en personalCargo    
+                if (t.getIdTrabajador() != referencia.getIdTrabajador()
+                    && !subordinados.contains(t)
+                    && t.getCargo() != null
+                    && "Si".equalsIgnoreCase(t.getCargo().getPersonalCargo())) {
                     trabajadoresFiltrados.add(t);
                 }
             }
 
-            // Asignar la lista filtrada
-            trabajadores = trabajadoresFiltrados;
+            
+        } else{
+            // Si es un nuevo trabajador, filtrar solo los que tienen "Si" en personalCargo
+            for (Trabajador t : trabajadores) {
+                if (t.getCargo() != null && "Si".equalsIgnoreCase(t.getCargo().getPersonalCargo())) {
+                    trabajadoresFiltrados.add(t);
+                }
+            }
         }
 
         // Ordenar la lista final de trabajadores
-        trabajadores.sort(Comparator.comparing(
+        trabajadoresFiltrados.sort(Comparator.comparing(
                 t -> (t.getApellidoPaterno() + " " + t.getApellidoMaterno() + " " + t.getNombreCompleto())));
-        model.addAttribute("trabajadores", trabajadores);
+        model.addAttribute("trabajadores", trabajadoresFiltrados);
+
     }
 
     @GetMapping("/exportar")
@@ -258,7 +282,7 @@ public class TrabajadorController {
 
     @GetMapping("/exportar-excel")
     public ResponseEntity<byte[]> exportarTrabajadoresAExcel(
-            @RequestParam(value = "keyword", required = false) String keyword) throws IOException {
+            @RequestParam(required = false) String keyword) throws IOException {
 
         List<Trabajador> trabajadores;
 
