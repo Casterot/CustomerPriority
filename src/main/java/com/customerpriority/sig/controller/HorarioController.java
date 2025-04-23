@@ -32,9 +32,11 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 
-
-
-
+/**
+ * Controlador para la gestión de horarios.
+ * 
+ * @author [Tu nombre]
+ */
 @Controller
 @RequestMapping("/horarios")
 public class HorarioController {
@@ -51,6 +53,14 @@ public class HorarioController {
     @Autowired
     private ExcelExportService excelExportService;
 
+    /**
+     * Muestra la lista de horarios.
+     * 
+     * @param model Modelo de la vista.
+     * @param page  Número de página.
+     * @param keyword Palabra clave para búsqueda.
+     * @return Vista de la lista de horarios.
+     */
     @GetMapping
     public String listarHorarios(Model model,
                                 @RequestParam(defaultValue = "0") int page,
@@ -74,6 +84,12 @@ public class HorarioController {
         return "horarios/listar";
     }
 
+    /**
+     * Muestra el formulario de registro de un nuevo horario.
+     * 
+     * @param model Modelo de la vista.
+     * @return Vista del formulario de registro.
+     */
     @GetMapping("/nuevo")
     public String mostrarFormularioDeRegistro(Model model) {
         Horario horario = new Horario();
@@ -83,6 +99,14 @@ public class HorarioController {
         return "horarios/formulario";
     }
 
+    /**
+     * Guarda un nuevo horario.
+     * 
+     * @param horario Horario a guardar.
+     * @param result  Resultado de la validación.
+     * @param model   Modelo de la vista.
+     * @return Redirección a la lista de horarios.
+     */
     @PostMapping
     public String guardarHorario(@ModelAttribute @Valid Horario horario, BindingResult result, Model model) {
         if (result.hasErrors()) {
@@ -96,8 +120,13 @@ public class HorarioController {
         return "redirect:/horarios";
     }
 
-    
-    
+    /**
+     * Muestra el formulario de edición de un horario existente.
+     * 
+     * @param id   Identificador del horario.
+     * @param model Modelo de la vista.
+     * @return Vista del formulario de edición.
+     */
     @GetMapping("/editar/{id}")
     public String mostrarFormularioDeEdicion(@PathVariable int id, Model model) {
     try {
@@ -112,27 +141,25 @@ public class HorarioController {
     }
     }
     
+    /**
+     * Elimina un horario.
+     * 
+     * @param id Identificador del horario.
+     * @return Redirección a la lista de horarios.
+     */
     @GetMapping("/eliminar/{id}")
     public String eliminarHorario(@PathVariable int id) {
         horarioService.eliminarHorario(id);
         return "redirect:/horarios";
     }
 
-    @GetMapping("/exportar")
-    public ResponseEntity<byte[]> exportarCampanasAExcel() throws IOException {
-        List<Horario> horarios = horarioService.listarTodosLoshorarios();
-        ByteArrayInputStream bais = excelExportService.exportarHorariosAExcel(horarios);
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Disposition", "attachment; filename=campanas.xlsx");
-
-        return ResponseEntity.ok()
-                .headers(headers)
-                .contentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
-                .body(bais.readAllBytes());
-    }
-
-
+    /**
+     * Exporta los horarios a un archivo Excel.
+     * 
+     * @param keyword Palabra clave para búsqueda.
+     * @return Archivo Excel con los horarios.
+     * @throws IOException Excepción de entrada/salida.
+     */
     @GetMapping("/exportar-excel")
     public ResponseEntity<byte[]> exportarHorariosAExcel(
             @RequestParam(required = false) String keyword) throws IOException {
@@ -144,7 +171,7 @@ public class HorarioController {
             horarios = horarioService.buscarHorariosPorKeyword(keyword, Pageable.unpaged()).getContent();
         } else {
             // Exportar todas las campañas
-            horarios = horarioService.listarTodosLoshorarios();
+            horarios = horarioService.listarTodosLosHorarios();
         }
     
         ByteArrayInputStream bais = excelExportService.exportarHorariosAExcel(horarios);

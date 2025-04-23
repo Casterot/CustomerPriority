@@ -39,7 +39,7 @@ document.addEventListener("DOMContentLoaded", function () {
     campos.forEach(campo => {
       if (campo) {
         campo.readOnly = bloquear;
-        campo.disabled = bloquear;
+        campo.disabled = false;
         if (bloquear) {
           campo.classList.add('bg-light');
           campo.style.backgroundColor = '#e9ecef';

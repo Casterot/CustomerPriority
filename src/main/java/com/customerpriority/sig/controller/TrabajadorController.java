@@ -35,6 +35,7 @@ import com.customerpriority.sig.service.DistritoService;
 import com.customerpriority.sig.service.EmpresaService;
 import com.customerpriority.sig.service.ExcelExportService;
 import com.customerpriority.sig.service.GeneroService;
+import com.customerpriority.sig.service.HorarioService;
 import com.customerpriority.sig.service.JornadaService;
 import com.customerpriority.sig.service.ModalidadService;
 import com.customerpriority.sig.service.ProvinciaService;
@@ -105,6 +106,9 @@ public class TrabajadorController {
     @Autowired
     private EmpresaService empresaService;
 
+    @Autowired
+    private HorarioService horarioService;
+
     @GetMapping
     public String listarTrabajadores(Model model,
             @RequestParam(defaultValue = "0") int page,
@@ -147,6 +151,7 @@ public class TrabajadorController {
             return "trabajadores/formulario";
         }
 
+        System.out.println("DEBUG apellidoMaterno recibido: '" + trabajador.getApellidoMaterno() + "'");
         try {
             trabajadorService.guardarTrabajador(trabajador);
         } catch (IllegalArgumentException e) {
@@ -188,6 +193,7 @@ public class TrabajadorController {
         model.addAttribute("modalidad", modalidadService.listarTodasLasModalidades());
         model.addAttribute("tipoContrato", tipoContratoService.listarTodosLosContratos());
         model.addAttribute("empresa", empresaService.listarTodasLasEmpresas());
+        model.addAttribute("horarios", horarioService.listarTodosLosHorarios());
 
         // Ordenar campañas
         List<Campana> campanas = campanaService.listarTodasLasCampanas();

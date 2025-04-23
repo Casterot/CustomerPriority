@@ -15,7 +15,7 @@ public class HorarioService {
     @Autowired
     private HorarioRepository horarioRepository;
 
-    public List<Horario> listarTodosLoshorarios(){
+    public List<Horario> listarTodosLosHorarios(){
         return horarioRepository.findAll();
     }
 

@@ -290,7 +290,16 @@
                               </select>
                             </div>
                           </div>
-                          
+                          <!-- NUEVA FILA HORARIO -->
+                          <div class="row">
+                            <div class="col-md-4 mb-3">
+                              <label for="horario" class="form-label">Horario</label>
+                              <select th:field="*{horario}" id="horario" class="form-select" required>
+                                <option value="" disabled selected>Seleccione un horario</option>
+                                <option th:each="horario : ${horarios}" th:value="${horario.idHorario}" th:text="${horario.nombreHorario}"></option>
+                              </select>
+                            </div>
+                          </div>
                           <div class="row">
                             <div class="col-md-6 mb-3">
                               <label for="jefeDirecto" class="form-label">Jefe Directo</label>
