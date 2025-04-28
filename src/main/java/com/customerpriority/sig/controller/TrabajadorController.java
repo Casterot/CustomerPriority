@@ -138,6 +138,16 @@ public class TrabajadorController {
         Jornada jornadaPorDefecto = jornadaService.obtenerJornadaPorId(2);
         trabajador.setJornada(jornadaPorDefecto);
         trabajador.setEstado("Activo"); // Establece el valor por defecto
+
+        // Selecciona por defecto el cargo "ASESOR TELEFÓNICO"
+        List<Cargo> cargos = cargoService.listarTodosLosCargos();
+        for (Cargo cargo : cargos) {
+            if ("ASESOR TELEFÓNICO".equalsIgnoreCase(cargo.getNombreCargo())) {
+                trabajador.setCargo(cargo);
+                break;
+            }
+        }
+
         model.addAttribute("trabajador", trabajador);
         cargarDatosComunes(model, null, trabajador);
         return "trabajadores/formulario";
@@ -207,14 +217,15 @@ public class TrabajadorController {
 
         // Configurar segmentos y gestiones
         // Cargar segmentos y gestiones basados en la referencia
-        if (referencia.getSegmento() != null) {
+        if (referencia != null && referencia.getSegmento() != null) {
             model.addAttribute("segmentos",
                     segmentoService.listarSegmentosPorCampana(referencia.getSegmento().getCampana().getIdCampana()));
             List<TipoGestion> gestiones = tipoGestionService
                     .listarGestionesPorSegmento(referencia.getSegmento().getIdSegmento());
             model.addAttribute("gestiones", gestiones);
         } else {
-            model.addAttribute("segmentos", Collections.emptyList());
+            // Mostrar solo segmentos activos si es un nuevo trabajador
+            model.addAttribute("segmentos", segmentoService.listarSegmentosActivos());
             model.addAttribute("gestiones", Collections.emptyList());
         }
 
@@ -236,7 +247,7 @@ public class TrabajadorController {
         // Crear nueva lista de trabajadores filtrados
         List<Trabajador> trabajadoresFiltrados = new ArrayList<>();
 
-        if (referencia.getIdTrabajador() > 0) {
+        if (referencia != null && referencia.getIdTrabajador() > 0) {
             List<Trabajador> subordinados = trabajadorService.obtenerTodosLosSubordinados(referencia);
 
             if (subordinados == null) {

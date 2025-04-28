@@ -26,4 +26,10 @@ public interface SegmentoRepository extends JpaRepository<Segmento, Integer> {
     @Query("SELECT s.tipoGestion FROM Segmento s WHERE s.idSegmento = :idSegmento")
     List<TipoGestion> findTipoGestionBySegmentoId(@Param("idSegmento") int idSegmento);
 
+    // Nuevo método para filtrar segmentos activos (estado = 1)
+    List<Segmento> findByEstado(int estado);
+    
+    // Nuevo método para filtrar segmentos activos por campaña
+    List<Segmento> findByCampanaIdCampanaAndEstado(int idCampana, int estado);
+
 }

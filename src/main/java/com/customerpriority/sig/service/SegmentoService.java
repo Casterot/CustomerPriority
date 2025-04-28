@@ -20,7 +20,7 @@ public class SegmentoService {
     }
 
     public List<Segmento> listarSegmentosPorCampana(int idCampana) {
-        return segmentoRepository.findByCampanaIdCampana(idCampana);
+        return segmentoRepository.findByCampanaIdCampanaAndEstado(idCampana, 1);
     }
 
     public Page<Segmento> listarSegmentosPaginados(Pageable pageable) {
@@ -41,6 +41,11 @@ public class SegmentoService {
 
     public void eliminarSegmento(int id) {
         segmentoRepository.deleteById(id);
+    }
+
+    // Nuevo método para listar solo segmentos activos
+    public List<Segmento> listarSegmentosActivos() {
+        return segmentoRepository.findByEstado(1);
     }
 
 }
