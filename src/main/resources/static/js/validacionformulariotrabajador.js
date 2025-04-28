@@ -275,7 +275,8 @@ document.addEventListener("DOMContentLoaded", function () {
     apellidoMaterno.readOnly = false;
     nombreCompleto.readOnly = false;
     fechaNacimiento.readOnly = false;
-    genero.disabled = false;
+    genero.style.pointerEvents = '';
+    genero.style.backgroundColor = '';
     
     // Eliminar indicadores visuales de validación
     [apellidoPaterno, apellidoMaterno, nombreCompleto, fechaNacimiento, genero, documento].forEach(campo => {
@@ -379,10 +380,8 @@ document.addEventListener("DOMContentLoaded", function () {
         fechaNacimiento.style.userSelect = '';
         fechaNacimiento.style.pointerEvents = '';
         
-        genero.disabled = false;
-        genero.style.backgroundColor = '';
-        genero.style.userSelect = '';
         genero.style.pointerEvents = '';
+        genero.style.backgroundColor = '';
         
         // Bloquear solo los campos que se autocompletaron
         apellidoPaterno.readOnly = true;
@@ -474,7 +473,8 @@ document.addEventListener("DOMContentLoaded", function () {
         apellidoMaterno.readOnly = true;
         nombreCompleto.readOnly = true;
         fechaNacimiento.readOnly = true;
-        genero.disabled = true;
+        genero.style.pointerEvents = 'none';
+        genero.style.backgroundColor = '#e8e8e8';
         
         // Cambiar el fondo de los campos a gris específico y deshabilitar la selección
         [apellidoPaterno, apellidoMaterno, nombreCompleto, fechaNacimiento, genero].forEach(campo => {
