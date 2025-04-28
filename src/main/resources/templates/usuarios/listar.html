@@ -77,7 +77,7 @@
                             <a th:href="@{/usuarios/editar/{id}(id=${usuario.idUsuario})}" class="btn btn-warning btn-sm" title="Editar estado">
                               <i class="bi bi-pencil-square"></i>
                             </a>
-                            <form th:action="@{/usuarios/restablecer-contrasena/{id}(id=${usuario.idUsuario})}" method="post" class="d-inline p-0 m-0">
+                            <form th:action="@{/usuarios/restablecer-contrasena/{id}(id=${usuario.idUsuario})}" method="post" class="d-inline p-0 m-0 restablecer-form">
                               <button type="submit" class="btn btn-info btn-sm" title="Restablecer contraseña a DNI">
                                 <i class="bi bi-key"></i>
                               </button>
@@ -115,6 +115,7 @@
       <footer th:insert="~{fragments/footer :: footer}"></footer>
     </div>
   </div>
+  <script src="/js/usuarios_listar.js"></script>
   <div th:insert="~{fragments/script :: script}"></div>
 </body>
 
