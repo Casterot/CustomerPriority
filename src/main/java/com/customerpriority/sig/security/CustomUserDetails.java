@@ -12,6 +12,7 @@ import com.customerpriority.sig.model.Trabajador;
 
 public class CustomUserDetails implements UserDetails {
 
+    private Trabajador trabajador;
     private String username;
     private String password;
     private String nombreCompleto; // Nombre que se mostrará en el navbar
@@ -34,6 +35,8 @@ public class CustomUserDetails implements UserDetails {
                 .collect(Collectors.toList());
 
         this.usuario = usuario;
+
+        this.trabajador = trabajador;
     }
 
     public String getNombreCompleto() {
@@ -73,5 +76,16 @@ public class CustomUserDetails implements UserDetails {
     @Override
     public boolean isEnabled() {
         return usuario.getEstado() == 1;
+    }
+
+    public Trabajador getTrabajador() {
+        return trabajador;
+    }
+
+    public String getCargoNombre() {
+        if (trabajador != null && trabajador.getCargo() != null) {
+            return trabajador.getCargo().getNombreCargo();
+        }
+        return null;
     }
 }

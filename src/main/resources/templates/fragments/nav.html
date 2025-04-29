@@ -27,7 +27,11 @@
             
             <!-- Nombre del usuario autenticado -->
             <li class="nav-item me-3 d-flex align-items-center">
-                <p class="fs-6 text-dark mb-0" th:text="${#authentication.principal.nombreCompleto}"></p>
+                <div class="nav-user-info d-flex flex-column align-items-start">
+                    <p class="fs-6 text-dark mb-0 nombre-trabajador-nav" th:text="${#authentication.principal.nombreCompleto}"></p>
+                    <span class="cargo-trabajador-nav mt-1 mb-2"
+      th:text="${#authentication.principal.cargoNombre != null ? #authentication.principal.cargoNombre : 'Sin cargo'}"></span>
+                </div>
             </li>
             
             <!-- Avatar existente -->
@@ -39,6 +43,10 @@
                     <a href="#" class="dropdown-item">
                         <i class="bi bi-person"></i>
                         <span>Mi perfil</span>
+                    </a>
+                    <a th:href="@{/cambiar-password}" class="dropdown-item">
+                        <i class="bi bi-key"></i>
+                        <span>Cambiar contraseña</span>
                     </a>
                     <hr class="dropdown-divider">
                     <a href="#" class="dropdown-item" onclick="document.getElementById('logout-form').submit();">

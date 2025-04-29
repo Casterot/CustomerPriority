@@ -352,6 +352,40 @@ footer {
     padding: 0.25em 0.6em;
 }
 
+/* Tamaño reducido para el nombre del trabajador en el nav */
+.nombre-trabajador-nav {
+    font-size: 0.90rem !important;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+}
+
+/* Cargo del trabajador en el nav */
+.cargo-trabajador-nav {
+    font-size: 0.88rem;
+    color: #6c757d;
+    margin-top: -2px;
+    font-weight: 400;
+    line-height: 1.1;
+    text-align: right;
+}
+
+/* Ajuste específico para el nav-user-info */
+.nav-item.me-3.d-flex.align-items-center.flex-column.align-items-end {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+}
+
+.nav-item.me-3.d-flex.align-items-center.flex-column.align-items-end p,
+.nav-item.me-3.d-flex.align-items-center.flex-column.align-items-end span {
+    display: block;
+    text-align: left;
+}
+
+.nav-item.me-3.d-flex.align-items-center.flex-column.align-items-end span {
+    margin-left: 0;
+    margin-top: 0.5rem;
+}
+
 /* Media queries */
 @media (min-width: 768px) {
     .navbar form {
@@ -380,7 +414,7 @@ footer {
         z-index: 102;
     }
 
-    .navbar-expand .navbar-nav .dropdown-menu {
+    .navbar-expand .navbar-collapse {
         box-shadow: 0 .1rem .2rem rgba(0, 0, 0, .05);
     }
 }
@@ -567,4 +601,21 @@ form .card {
 
 .role-item {
     animation: slideIn 0.3s ease-out forwards;
+}
+
+/* --- Botón especial para cambiar contraseña (ahora con colores del sistema) --- */
+.btn-cambiar-password {
+    background: linear-gradient(90deg, var(--primary-color) 60%, var(--accent-color) 100%);
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(12,34,58,0.10);
+    transition: background 0.2s, box-shadow 0.2s;
+}
+.btn-cambiar-password:hover, .btn-cambiar-password:focus {
+    background: linear-gradient(90deg, var(--primary-color) 60%, #122e4d 100%);
+    color: #fff;
+    box-shadow: 0 2px 8px rgba(41,59,95,0.13);
+    filter: brightness(0.98);
 }

@@ -230,7 +230,7 @@ public class TrabajadorController {
         }
 
         // Configurar provincias y distritos
-        if (referencia.getDistrito() != null && referencia.getDistrito().getProvincia() != null) {
+        if (referencia != null && referencia.getDistrito() != null && referencia.getDistrito().getProvincia() != null) {
             model.addAttribute("provincias", provinciaService.listarProvinciasPorDepartamento(
                     referencia.getDistrito().getProvincia().getDepartamento().getIdDepartamento()));
             model.addAttribute("distritos", distritoService.listarDistritosPorProvincia(

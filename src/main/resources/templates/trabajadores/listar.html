@@ -75,6 +75,7 @@
                           <th scope="col">Jornada</th>
                           <th scope="col">Razón social</th>
                           <th scope="col">Modalidad de contrato</th>
+                          <th scope="col">Estado</th>
                           <th scope="col">Acciones</th>
                         </tr>
                       </thead>
@@ -107,6 +108,7 @@
                           <td th:text="${trabajador.jornada != null ? trabajador.jornada.nombreJornada : 'Sin jornada'}"></td>
                           <td th:text="${trabajador.empresa != null ? trabajador.empresa.nombreEmpresa : 'No definido'}"></td>
                           <td th:text="${trabajador.tipoContrato != null ? trabajador.tipoContrato.nombreContrato : 'Sin contrato'}"></td>
+                          <td th:text="${trabajador.estado != null ? trabajador.estado : 'Sin estado'}"></td>
                           <td>
                             <a th:href="@{/trabajadores/editar/{id}(id=${trabajador.idTrabajador})}" class="btn btn-warning">
                               <i class="bi bi-pencil-square"></i>
