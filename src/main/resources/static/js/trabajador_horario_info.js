@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', function () {
   } else if (horarioSelect) {
     // Si no hay variable global, intentar obtener de data-attributes de las opciones
     Array.from(horarioSelect.options).forEach(opt => {
-      if (opt.dataset.turno && opt.dataset.condicion) {
+      if (opt.dataset.turno !== undefined && opt.dataset.condicion !== undefined) {
         horariosData[opt.value] = {
           turno: opt.dataset.turno,
           condicion: opt.dataset.condicion
@@ -23,12 +23,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
   function actualizarCamposInfo() {
     const selectedId = horarioSelect.value;
-    if (horariosData[selectedId]) {
-      turnoInput.value = horariosData[selectedId].turno;
-      condicionInput.value = horariosData[selectedId].condicion;
+    if (selectedId && horariosData[selectedId]) {
+      turnoInput.value = horariosData[selectedId].turno || '-';
+      condicionInput.value = horariosData[selectedId].condicion || '-';
     } else {
-      turnoInput.value = '';
-      condicionInput.value = '';
+      turnoInput.value = '-';
+      condicionInput.value = '-';
     }
   }
 

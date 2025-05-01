@@ -352,38 +352,18 @@ footer {
     padding: 0.25em 0.6em;
 }
 
-/* Tamaño reducido para el nombre del trabajador en el nav */
+/* Navbar trabajador: nombre y cargo */
 .nombre-trabajador-nav {
-    font-size: 0.90rem !important;
+    font-size: 0.89rem !important; /* Aún más pequeño */
     font-weight: 500;
-    letter-spacing: 0.01em;
-}
-
-/* Cargo del trabajador en el nav */
-.cargo-trabajador-nav {
-    font-size: 0.88rem;
-    color: #6c757d;
-    margin-top: -2px;
-    font-weight: 400;
+    color: #222 !important;
     line-height: 1.1;
-    text-align: right;
 }
-
-/* Ajuste específico para el nav-user-info */
-.nav-item.me-3.d-flex.align-items-center.flex-column.align-items-end {
-    flex-direction: column !important;
-    align-items: flex-start !important;
-}
-
-.nav-item.me-3.d-flex.align-items-center.flex-column.align-items-end p,
-.nav-item.me-3.d-flex.align-items-center.flex-column.align-items-end span {
-    display: block;
-    text-align: left;
-}
-
-.nav-item.me-3.d-flex.align-items-center.flex-column.align-items-end span {
-    margin-left: 0;
-    margin-top: 0.5rem;
+.cargo-trabajador-nav {
+    font-size: 0.77rem;
+    color: #8a99b5 !important; /* Tono más claro */
+    font-weight: 400;
+    letter-spacing: 0.02em;
 }
 
 /* Media queries */
