@@ -101,6 +101,10 @@ public class Trabajador {
     @JoinColumn(name = "id_empresa")
     private Empresa empresa;
 
+    @ManyToOne
+    @JoinColumn(name = "id_escuela")
+    private Escuela escuela;
+
     public Empresa getEmpresa() {
         return empresa;
     }
@@ -293,4 +297,11 @@ public class Trabajador {
         this.cargo = cargo;
     }
 
+    public Escuela getEscuela() {
+        return escuela;
+    }
+
+    public void setEscuela(Escuela escuela) {
+        this.escuela = escuela;
+    }
 }

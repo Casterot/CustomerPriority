@@ -7,7 +7,9 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import com.customerpriority.sig.model.Trabajador;
 
-
+/**
+ * 
+ */
 public interface TrabajadorRepository extends JpaRepository<Trabajador, Integer> {
 
     @Query("SELECT c FROM Trabajador c WHERE " +
@@ -16,4 +18,7 @@ public interface TrabajadorRepository extends JpaRepository<Trabajador, Integer>
            "LOWER(c.apellidoMaterno) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
            "LOWER(c.nombreCompleto) LIKE LOWER(CONCAT('%', :keyword, '%'))")
     Page<Trabajador> buscarPorTrabajadorDniNombre(@Param("keyword") String keyword, Pageable pageable);
+
+    @Query("SELECT t FROM Trabajador t WHERE LOWER(t.cargo.nombreCargo) LIKE LOWER(CONCAT('%', :keyword, '%'))")
+    java.util.List<Trabajador> findByCargoNombreContainingIgnoreCase(@Param("keyword") String keyword);
 }

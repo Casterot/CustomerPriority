@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:insert="~{fragments/header :: header('Escuelas')}"></head>
+<body>
+<div class="wrapper">
+    <aside th:replace="~{fragments/sidebar :: sidebar}"></aside>
+    <div class="main">
+        <nav th:insert="~{fragments/nav :: nav}"></nav>
+        <main class="content px-3 py-4">
+            <div class="container-fluid">
+                <div class="mb-3">
+                    <div class="row justify-content-center">
+                        <div class="col-12 col-md-11">
+                            <div class="d-flex flex-column flex-md-row justify-content-between align-items-center p-4 mb-3 border bg-light rounded">
+                                <h4 class="fw-bold fs-4 mb-3 mb-md-0 text-center">Escuelas</h4>
+                                <div class="d-flex gap-2 ms-md-auto">
+                                    <a href="/escuelas/nuevo" class="btn btn-primary">
+                                        <i class="bi bi-plus-circle me-2"></i>Agregar
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="d-flex flex-column flex-md-row justify-content-between align-items-center p-4 mb-3 border bg-light rounded">
+                                <div class="col-12 col-md-8">
+                                    <form th:action="@{/escuelas}" method="get">
+                                        <div class="input-group">
+                                            <input type="text" name="search" th:value="${search}" class="form-control"
+                                                placeholder="Buscar escuela" aria-label="Buscar">
+                                            <button class="btn btn-secondary" type="submit">
+                                                <i class="bi bi-search"></i> Buscar
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <div th:if="${escuelas.size() == 0}" class="alert alert-info mt-3">
+                                No se encontraron escuelas con ese nombre.
+                            </div>
+                            <div th:if="${escuelas.size() > 0}">
+                                <div class="table-responsive">
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr class="highlight">
+                                                <th scope="col">#</th>
+                                                <th scope="col">Nombre</th>
+                                                <th scope="col">Fecha Inicio</th>
+                                                <th scope="col">Fecha Fin</th>
+                                                <th scope="col">Capacitador</th>
+                                                <th scope="col">Acciones</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr th:each="escuela, stat : ${escuelas}">
+                                                <td th:text="${stat.count}"></td>
+                                                <td th:text="${escuela.nombreEscuela}"></td>
+                                                <td th:text="${escuela.fechaInicio}"></td>
+                                                <td th:text="${escuela.fechaFin}"></td>
+                                                <td th:text="${escuela.capacitador != null ? escuela.capacitador.apellidoPaterno + ' ' + escuela.capacitador.apellidoMaterno + ', ' + escuela.capacitador.nombreCompleto : 'Sin capacitador'}"></td>
+                                                <td>
+                                                    <a th:href="@{'/escuelas/editar/' + ${escuela.idEscuela}}" class="btn btn-warning btn-sm"><i class="bi bi-pencil-square"></i></a>
+                                                    <a th:href="@{'/escuelas/eliminar/' + ${escuela.idEscuela}}" class="btn btn-danger btn-sm" onclick="return confirm('¿Está seguro de eliminar esta escuela?');"><i class="bi bi-trash"></i></a>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <footer th:insert="~{fragments/footer :: footer}"></footer>
+    </div>
+</div>
+<div th:insert="~{fragments/script :: script}"></div>
+<link rel="stylesheet" th:href="@{/css/style.css}" />
+</body>
+</html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:insert="~{fragments/header :: header('Formulario Escuelas')}"></head>
+<body>
+    <div class="wrapper">
+        <aside th:replace="~{fragments/sidebar :: sidebar}"></aside>
+        <div class="main">
+            <nav th:insert="~{fragments/nav :: nav}"></nav>
+            <main class="content px-3 py-4">
+                <div class="container-fluid">
+                    <div class="mb-3">
+                        <div class="row justify-content-center">
+                            <div class="col-7 col-md-6">
+                                <div class="d-flex flex-column flex-md-row justify-content-between align-items-center p-4 mb-3 border bg-light rounded">
+                                    <div class="d-flex gap-2 ms-md-auto">
+                                        <a href="/escuelas" class="btn btn-secondary">Volver</a>
+                                    </div>
+                                </div>
+                                <form th:action="@{/escuelas/guardar}" th:object="${escuela}" method="post" class="border p-4 rounded shadow-sm">
+                                    <input type="hidden" th:field="*{idEscuela}"/>
+                                    <div class="mb-3">
+                                        <label for="nombreEscuela" class="form-label">Nombre de la escuela</label>
+                                        <input type="text" class="form-control" id="nombreEscuela" th:field="*{nombreEscuela}" placeholder="Nombre de la escuela" required maxlength="100" />
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="fechaInicio" class="form-label">Fecha de inicio</label>
+                                        <input type="date" th:field="*{fechaInicio}" class="form-control" id="fechaInicio" />
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="fechaFin" class="form-label">Fecha de fin</label>
+                                        <input type="date" th:field="*{fechaFin}" class="form-control" id="fechaFin" />
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="capacitador" class="form-label">Capacitador</label>
+                                        <select class="form-select" th:field="*{capacitador}" id="capacitador" required>
+                                            <option value="" th:if="${escuela.capacitador == null}" selected>Seleccione un capacitador</option>
+                                            <option th:each="trabajador : ${capacitadores}"
+                                                    th:value="${trabajador.idTrabajador}"
+                                                    th:text="${trabajador.apellidoPaterno} + ' ' + ${trabajador.apellidoMaterno} + ', ' + ${trabajador.nombreCompleto}"
+                                                    th:selected="${escuela.capacitador != null and trabajador.idTrabajador == escuela.capacitador.idTrabajador}">
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div class="d-grid">
+                                        <button type="submit" class="btn btn-primary btn-md">Guardar</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+            <footer th:insert="~{fragments/footer :: footer}"></footer>
+        </div>
+    </div>
+    <div th:insert="~{fragments/script :: script}"></div>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+</body>
+</html>
