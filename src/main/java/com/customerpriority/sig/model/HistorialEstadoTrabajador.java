@@ -18,13 +18,44 @@ public class HistorialEstadoTrabajador {
     @JoinColumn(name = "id_trabajador")
     private Trabajador trabajador;
 
-    @Column(name = "fecha_estado", nullable = false)
-    private Date fechaEstado;
+    @Column(name = "fecha_alta", nullable = false)
+    private Date fechaAlta;
 
-    @Column(name = "estado", length = 100, nullable = false)
-    private String estado;
+    @Column(name = "fecha_baja")
+    private Date fechaBaja;
 
-    @Column(name = "observacion", length = 255)
-    private String observacion;
+    public int getIdHistorial() {
+        return idHistorial;
+    }
+
+    public void setIdHistorial(int idHistorial) {
+        this.idHistorial = idHistorial;
+    }
+
+    public Trabajador getTrabajador() {
+        return trabajador;
+    }
+
+    public void setTrabajador(Trabajador trabajador) {
+        this.trabajador = trabajador;
+    }
+
+    public Date getFechaAlta() {
+        return fechaAlta;
+    }
+
+    public void setFechaAlta(Date fechaAlta) {
+        this.fechaAlta = fechaAlta;
+    }
+
+    public Date getFechaBaja() {
+        return fechaBaja;
+    }
+
+    public void setFechaBaja(Date fechaBaja) {
+        this.fechaBaja = fechaBaja;
+    }
     
+    
+
 }

@@ -45,9 +45,6 @@ public class Trabajador {
     @Column(name = "estado", length = 20, nullable = false)
     private String estado;
 
-    @Column(name = "fecha_estado", nullable = false)
-    private Date fechaEstado;
-
     @ManyToOne
     @JoinColumn(name = "id_distrito")
     private Distrito distrito;
@@ -199,14 +196,6 @@ public class Trabajador {
 
     public void setEstado(String estado) {
         this.estado = estado;
-    }
-
-    public Date getFechaEstado() {
-        return fechaEstado;
-    }
-
-    public void setFechaEstado(Date fechaEstado) {
-        this.fechaEstado = fechaEstado;
     }
 
     public Distrito getDistrito() {
