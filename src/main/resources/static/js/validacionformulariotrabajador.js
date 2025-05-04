@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const correo = document.getElementById("correo");
   const telefono = document.getElementById("telefono");
   const fechaNacimiento = document.getElementById("fechaNacimiento");
-  const fechaEstado = document.getElementById("fechaEstado");
+
   const apellidoPaterno = document.getElementById("apellidoPaterno");
   const apellidoMaterno = document.getElementById("apellidoMaterno");
   const nombreCompleto = document.getElementById("nombreCompleto");
@@ -122,12 +122,6 @@ document.addEventListener("DOMContentLoaded", function () {
       tipoContrato.style.backgroundColor = '';
     }
     
-    if (fechaEstado) {
-      fechaEstado.readOnly = false;
-      fechaEstado.disabled = false;
-      fechaEstado.classList.remove('bg-light');
-      fechaEstado.style.backgroundColor = '';
-    }
   }
   
   // Bloquear campos inicialmente
@@ -537,7 +531,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
   
-  if (tipoDocumento && documento && correo && telefono && fechaNacimiento && fechaEstado) {
+  if (tipoDocumento && documento && correo && telefono && fechaNacimiento) {
     // Configurar el botón de validación inicialmente
     if (validarDNIBtn) {
       validarDNIBtn.style.display = 'none';
@@ -778,35 +772,6 @@ document.addEventListener("DOMContentLoaded", function () {
       this.classList.remove('is-invalid');
     });
     
-    // Validación en tiempo real para fecha de alta
-    fechaEstado.addEventListener('change', function() {
-      if (!this.value) {
-        mostrarError(this, 'La fecha de alta es obligatoria');
-        return;
-      }
-      
-      const fechaAlta = new Date(this.value);
-      const hoy = new Date();
-      
-      // Verificar que la fecha de alta no sea en el futuro
-      if (fechaAlta > hoy) {
-        mostrarError(this, 'La fecha de alta no puede ser en el futuro');
-        return;
-      }
-      
-      // Verificar que la fecha de alta sea posterior a la fecha de nacimiento
-      if (fechaNacimiento.value) {
-        const fechaNac = new Date(fechaNacimiento.value);
-        if (fechaAlta < fechaNac) {
-          mostrarError(this, 'La fecha de alta debe ser posterior a la fecha de nacimiento');
-          return;
-        }
-      }
-      
-      // No mostrar check de validación, solo eliminar el error
-      this.classList.remove('is-invalid');
-    });
-    
     // Validar al enviar el formulario
     document.querySelector("form").addEventListener("submit", function (event) {
       let formularioValido = true;
@@ -841,10 +806,6 @@ document.addEventListener("DOMContentLoaded", function () {
         
         // Validar campos laborales
         if (tipoContrato && !tipoContrato.disabled && !validarCampoRequerido(tipoContrato)) {
-          formularioValido = false;
-        }
-        
-        if (fechaEstado && !fechaEstado.readOnly && !validarCampoRequerido(fechaEstado)) {
           formularioValido = false;
         }
         
@@ -921,31 +882,6 @@ document.addEventListener("DOMContentLoaded", function () {
         formularioValido = false;
       }
       
-      // Validación de fecha de alta
-      if (fechaEstado.value) {
-        const fechaAlta = new Date(fechaEstado.value);
-        const hoy = new Date();
-        
-        // Verificar que la fecha de alta no sea en el futuro
-        if (fechaAlta > hoy) {
-          event.preventDefault();
-          mostrarError(fechaEstado, 'La fecha de alta no puede ser en el futuro');
-          formularioValido = false;
-        }
-        
-        // Verificar que la fecha de alta sea posterior a la fecha de nacimiento
-        if (fechaNacimiento.value) {
-          const fechaNac = new Date(fechaNacimiento.value);
-          if (fechaAlta < fechaNac) {
-            event.preventDefault();
-            mostrarError(fechaEstado, 'La fecha de alta debe ser posterior a la fecha de nacimiento');
-            formularioValido = false;
-          }
-        }
-      } else {
-        mostrarError(fechaEstado, 'La fecha de alta es obligatoria');
-        formularioValido = false;
-        }
       }
       
       if (!formularioValido) {
