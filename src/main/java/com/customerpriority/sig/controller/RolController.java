@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.customerpriority.sig.model.Rol;
 import com.customerpriority.sig.service.RolService;
 import com.customerpriority.sig.service.ExcelExportService;
+import com.customerpriority.sig.service.PermisoService;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
@@ -40,6 +41,9 @@ public class RolController {
 
     @Autowired
     private ExcelExportService excelExportService;
+
+    @Autowired
+    private PermisoService permisoService;
 
     @GetMapping
     public String listarRoles(Model model,
@@ -70,6 +74,7 @@ public class RolController {
     public String mostrarFormularioDeRegistro(Model model) {
         Rol rol = new Rol();
         model.addAttribute("rol", rol);
+        model.addAttribute("permisos", permisoService.listarTodos());
         return "roles/formulario";
     }
 
@@ -92,6 +97,7 @@ public class RolController {
     try {
         Rol rol = rolService.obtenerRolPorId(id);
         model.addAttribute("rol", rol);
+        model.addAttribute("permisos", permisoService.listarTodos());
         return "roles/formulario";
     } catch (EntityNotFoundException e) {
         // Manejar el caso donde no se encuentre la campaña

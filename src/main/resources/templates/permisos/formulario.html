@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:insert="~{fragments/header :: header('Formulario Permisos')}"></head>
+
+<body>
+    <div class="wrapper">
+        <aside th:replace="~{fragments/sidebar :: sidebar}"></aside>
+        <div class="main">
+            <nav th:insert="~{fragments/nav :: nav}"></nav>
+            <main class="content px-3 py-4">
+                <div class="container-fluid">
+                    <div class="mb-3">
+                        <div class="row justify-content-center">
+                            <div class="col-7 col-md-6">
+                                <div class="d-flex flex-column flex-md-row justify-content-between align-items-center p-4 mb-3 border bg-light rounded">
+                                    <div class="d-flex gap-2 ms-md-auto">
+                                        <a href="/permisos" class="btn btn-secondary">Volver</a>
+                                    </div>
+                                </div>
+
+                                <form th:action="@{/permisos}" th:object="${permiso}" method="post" class="border p-4 rounded shadow-sm">
+                                    <input type="hidden" th:field="*{id}" />
+                                    
+                                    <div class="mb-3">
+                                        <label for="nombre" class="form-label">Nombre del Permiso</label>
+                                        <input type="text" class="form-control" id="nombre" th:field="*{nombre}" required>
+                                        <small class="form-text text-muted">Ejemplo: VIEW_USERS, EDIT_ROLES, etc.</small>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="descripcion" class="form-label">Descripción</label>
+                                        <textarea class="form-control" id="descripcion" th:field="*{descripcion}" rows="3"></textarea>
+                                    </div>
+
+                                    <div class="d-grid">
+                                        <button type="submit" class="btn btn-primary btn-md">Guardar</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+            <footer th:insert="~{fragments/footer :: footer}"></footer>
+        </div>
+    </div>
+    <div th:insert="~{fragments/script :: script}"></div>
+</body>
+</html>

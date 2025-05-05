@@ -1,7 +1,7 @@
 package com.customerpriority.sig.security;
 
 import java.util.Collection;
-import java.util.stream.Collectors;
+import java.util.HashSet;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -30,12 +30,21 @@ public class CustomUserDetails implements UserDetails {
             this.nombreCompleto = "Sin datos";
         }
 
-        this.authorities = usuario.getRoles().stream()
-                .map(rol -> new SimpleGrantedAuthority(rol.getNombreRol()))
-                .collect(Collectors.toList());
+        // Combinar roles y permisos en las authorities
+        HashSet<GrantedAuthority> auths = new HashSet<>();
+        
+        // Agregar roles
+        usuario.getRoles().forEach(rol -> {
+            auths.add(new SimpleGrantedAuthority("ROLE_" + rol.getNombreRol()));
+            
+            // Agregar permisos de cada rol
+            rol.getPermisos().forEach(permiso -> 
+                auths.add(new SimpleGrantedAuthority(permiso.getNombre()))
+            );
+        });
 
+        this.authorities = auths;
         this.usuario = usuario;
-
         this.trabajador = trabajador;
     }
 

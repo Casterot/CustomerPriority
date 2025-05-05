@@ -6,7 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Pageable;
 import com.customerpriority.sig.model.Rol;
+import com.customerpriority.sig.model.Permiso;
 import com.customerpriority.sig.repository.RolRepository;
+import com.customerpriority.sig.repository.PermisoRepository;
 import jakarta.persistence.EntityNotFoundException;
 
 @Service
@@ -15,11 +17,14 @@ public class RolService {
     @Autowired
     private RolRepository rolRepository;
 
-    public List<Rol> listarTodosLosRoles(){
+    @Autowired
+    private PermisoRepository permisoRepository;
+
+    public List<Rol> listarTodosLosRoles() {
         return rolRepository.findAll();
     }
 
-    public Page<Rol> listarRolesPaginados(Pageable pageable){
+    public Page<Rol> listarRolesPaginados(Pageable pageable) {
         return rolRepository.findAll(pageable);
     }
 
@@ -31,12 +36,33 @@ public class RolService {
         return rolRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Rol no encontrado"));
     }
 
-    public void guardarRol(Rol rol){
+    public void guardarRol(Rol rol) {
         rolRepository.save(rol);
     }
 
-    public void eliminarRol(int id){
+    public void eliminarRol(int id) {
         rolRepository.deleteById(id);
     }
 
+    // Métodos para gestión de permisos
+    public void asignarPermiso(int rolId, Long permisoId) {
+        Rol rol = obtenerRolPorId(rolId);
+        Permiso permiso = permisoRepository.findById(permisoId)
+                .orElseThrow(() -> new EntityNotFoundException("Permiso no encontrado"));
+        rol.agregarPermiso(permiso);
+        rolRepository.save(rol);
+    }
+
+    public void removerPermiso(int rolId, Long permisoId) {
+        Rol rol = obtenerRolPorId(rolId);
+        Permiso permiso = permisoRepository.findById(permisoId)
+                .orElseThrow(() -> new EntityNotFoundException("Permiso no encontrado"));
+        rol.removerPermiso(permiso);
+        rolRepository.save(rol);
+    }
+
+    public Set<Permiso> obtenerPermisos(int rolId) {
+        Rol rol = obtenerRolPorId(rolId);
+        return rol.getPermisos();
+    }
 }

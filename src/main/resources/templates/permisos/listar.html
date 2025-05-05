@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:insert="~{fragments/header :: header('Permisos')}"></head>
+
+<body>
+  <div class="wrapper">
+    <aside th:replace="~{fragments/sidebar :: sidebar}"></aside>
+    <div class="main">
+      <nav th:insert="~{fragments/nav :: nav}"></nav>
+      <main class="content px-3 py-4">
+        <div class="container-fluid">
+          <div class="mb-3">
+            <div class="row justify-content-center">
+              <div class="col-12 col-md-11">
+                <div class="d-flex flex-column flex-md-row justify-content-between align-items-center p-4 mb-3 border bg-light rounded">
+                  <h4 class="fw-bold fs-4 mb-3 mb-md-0 text-center">Listado de permisos</h4>
+                  <div class="d-flex gap-2 ms-md-auto">
+                    <a href="/permisos/nuevo" class="btn btn-primary">
+                      <i class="bi bi-plus-circle me-2"></i>Agregar
+                    </a>
+                    <a th:href="@{/permisos/exportar-excel(keyword=${search})}" class="btn btn-success">
+                      <i class="bi bi-file-earmark-spreadsheet me-2"></i>Exportar
+                    </a>
+                  </div>
+                </div>
+                
+                <div class="d-flex flex-column flex-md-row justify-content-between align-items-center p-4 mb-3 border bg-light rounded">
+                  <div class="col-12 col-md-8">
+                    <form th:action="@{/permisos}" method="get">
+                      <div class="input-group">
+                        <input type="text" name="search" th:value="${search}" class="form-control"
+                          placeholder="Buscar permiso" aria-label="Buscar">
+                        <button class="btn btn-secondary" type="submit">
+                          <i class="bi bi-search"></i> Buscar
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+
+                <div th:if="${permisoPage.totalElements == 0}" class="alert alert-info mt-3">
+                  No se encontraron permisos con el nombre "<span th:text="${search}"></span>".
+                </div>
+                
+                <div th:if="${permisoPage.totalElements > 0}">
+                  <div class="table-responsive">
+                    <table class="table table-striped">
+                      <thead>
+                        <tr class="highlight">
+                          <th scope="col">ID</th>
+                          <th scope="col">Nombre</th>
+                          <th scope="col">Descripción</th>
+                          <th scope="col">Acciones</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr th:each="permiso : ${permisoPage.content}">
+                          <td th:text="${permiso.id}"></td>
+                          <td th:text="${permiso.nombre}"></td>
+                          <td th:text="${permiso.descripcion}"></td>
+                          <td>
+                            <a th:href="@{/permisos/editar/{id}(id=${permiso.id})}" class="btn btn-warning">
+                              <i class="bi bi-pencil-square"></i>
+                            </a>
+                            <a th:href="@{/permisos/eliminar/{id}(id=${permiso.id})}" class="btn btn-danger"
+                                onclick="return confirm('¿Estás seguro de que deseas eliminar este permiso?');">
+                              <i class="bi bi-trash"></i>
+                            </a>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+
+                  <!-- Paginación -->
+                  <nav aria-label="Page navigation example" class="mt-3">
+                    <ul class="pagination justify-content-end">
+                      <!-- Botón de página anterior -->
+                      <li class="page-item" th:classappend="${permisoPage.hasPrevious()} ? '' : 'disabled'">
+                        <a class="page-link" th:href="@{/permisos(page=${permisoPage.number - 1}, search=${search})}">Anterior</a>
+                      </li>
+                      <!-- Páginas intermedias -->
+                      <li class="page-item" th:each="i : ${#numbers.sequence(0, permisoPage.totalPages - 1)}"
+                        th:classappend="${i == permisoPage.number} ? 'active' : ''">
+                        <a class="page-link" th:href="@{/permisos(page=${i}, search=${search})}" th:text="${i + 1}"></a>
+                      </li>
+                      <!-- Botón de página siguiente -->
+                      <li class="page-item" th:classappend="${permisoPage.hasNext()} ? '' : 'disabled'">
+                        <a class="page-link" th:href="@{/permisos(page=${permisoPage.number + 1}, search=${search})}">Siguiente</a>
+                      </li>
+                    </ul>
+                  </nav>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+      <footer th:insert="~{fragments/footer :: footer}"></footer>
+    </div>
+  </div>
+  <div th:insert="~{fragments/script :: script}"></div>
+</body>
+</html>

@@ -1,6 +1,8 @@
 package com.customerpriority.sig.model;
 
 import jakarta.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "roles")
@@ -13,7 +15,15 @@ public class Rol {
     @Column(name = "nombre_rol", length = 50, nullable = false)
     private String nombreRol;
 
-    // Getters y setters
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+        name = "roles_permisos",
+        joinColumns = @JoinColumn(name = "rol_id"),
+        inverseJoinColumns = @JoinColumn(name = "permiso_id")
+    )
+    private Set<Permiso> permisos = new HashSet<>();
+
+    // Getters y setters originales
     public int getIdRol() {
         return idRol;
     }
@@ -28,5 +38,23 @@ public class Rol {
 
     public void setNombreRol(String nombreRol) {
         this.nombreRol = nombreRol;
+    }
+
+    // Nuevos getters y setters para permisos
+    public Set<Permiso> getPermisos() {
+        return permisos;
+    }
+
+    public void setPermisos(Set<Permiso> permisos) {
+        this.permisos = permisos;
+    }
+
+    // Métodos de utilidad
+    public void agregarPermiso(Permiso permiso) {
+        this.permisos.add(permiso);
+    }
+
+    public void removerPermiso(Permiso permiso) {
+        this.permisos.remove(permiso);
     }
 }
