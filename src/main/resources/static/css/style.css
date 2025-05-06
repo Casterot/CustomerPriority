@@ -175,6 +175,45 @@ a.sidebar-link {
     margin-right: .75rem;
 }
 
+/* Añadir marcador a los enlaces dentro del dropdown - Eliminado */
+.sidebar-dropdown .sidebar-link::before {
+    content: none; /* Eliminamos el guion */
+}
+
+/* Indentar los enlaces dentro del dropdown y añadir línea vertical a la lista */
+.sidebar-dropdown .sidebar-link {
+   padding-left: 2rem; /* Ajustar padding izquierdo para alinear con línea vertical */
+   /* position: relative; ya no es necesario */
+}
+
+/* Estilo para la lista desplegable (contenedor línea vertical) */
+ul.sidebar-dropdown {
+    position: relative;
+    padding-left: 1.5rem; /* Espacio para la línea vertical */
+    margin-left: 0; /* Asegurar que no haya margen extra */
+    list-style: none; /* Asegurar que no haya bullets por defecto */
+}
+
+/* Línea vertical */
+ul.sidebar-dropdown::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0.8rem; /* Posición de la línea vertical (ajustar) */
+    bottom: 0;
+    width: 1px;
+    background-color: rgba(255, 255, 255, 0.4);
+    z-index: 1;
+}
+
+/* Ocultar línea vertical en sidebar colapsado */
+#sidebar:not(.expand) ul.sidebar-dropdown::before {
+    display: none;
+}
+
+/* Línea horizontal conectora - Eliminada */
+/* .sidebar-dropdown .sidebar-link::after { ... } */
+
 a.sidebar-link:hover {
     background-color: rgba(255, 255, 255, .075);
     border-left: 3px solid #3b7ddd;
