@@ -185,36 +185,6 @@ document.addEventListener("DOMContentLoaded", function () {
     elemento.classList.add('is-valid');
   }
   
-  // Función para mostrar mensaje temporal
-  function mostrarMensajeTemporal(mensaje, tipo = 'success', duracion = 3000) {
-    // Eliminar mensaje anterior si existe
-    const mensajeAnterior = document.querySelector('.mensaje-temporal');
-    if (mensajeAnterior) {
-      mensajeAnterior.remove();
-    }
-    
-    // Crear el mensaje
-    const mensajeElement = document.createElement('div');
-    mensajeElement.className = `alert alert-${tipo} mensaje-temporal`;
-    mensajeElement.style.position = 'fixed';
-    mensajeElement.style.top = '20px';
-    mensajeElement.style.left = '50%';
-    mensajeElement.style.transform = 'translateX(-50%)';
-    mensajeElement.style.zIndex = '9999';
-    mensajeElement.style.minWidth = '300px';
-    mensajeElement.style.textAlign = 'center';
-    mensajeElement.style.boxShadow = '0 4px 8px rgba(0,0,0,0.1)';
-    mensajeElement.textContent = mensaje;
-    
-    // Insertar el mensaje en el body
-    document.body.appendChild(mensajeElement);
-    
-    // Eliminar el mensaje después de la duración especificada
-    setTimeout(() => {
-      mensajeElement.remove();
-    }, duracion);
-  }
-  
   // Función para actualizar el estado del botón de validación
   function actualizarEstadoBotonValidacion(estado) {
     if (!validarDNIBtn) return;

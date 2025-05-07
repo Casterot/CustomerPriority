@@ -1,63 +1,83 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf">
+<html xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="fragments/header :: head"></head>
+<head th:insert="~{fragments/header :: header(${rol.idRol == 0 ? 'Nuevo Rol' : 'Editar Rol'})}"></head>
 
-<body class="sb-nav-fixed">
-    <nav th:replace="fragments/nav :: nav"></nav>
-    <div id="layoutSidenav">
-        <div th:replace="fragments/sidebar :: sidebar"></div>
-        <div id="layoutSidenav_content">
-            <main>
-                <div class="container-fluid px-4">
-                    <h1 class="mt-4" th:text="${rol.idRol == 0 ? 'Nuevo Rol' : 'Editar Rol'}"></h1>
-                    <ol class="breadcrumb mb-4">
-                        <li class="breadcrumb-item"><a th:href="@{/index}">Dashboard</a></li>
-                        <li class="breadcrumb-item"><a th:href="@{/roles}">Roles</a></li>
-                        <li class="breadcrumb-item active" th:text="${rol.idRol == 0 ? 'Nuevo Rol' : 'Editar Rol'}"></li>
-                    </ol>
+<body>
+    <div class="wrapper">
+        <aside th:replace="~{fragments/sidebar :: sidebar}"></aside>
+        <div class="main">
+            <nav th:insert="~{fragments/nav :: nav}"></nav>
+            <main class="content px-3 py-4">
+                <div class="container-fluid">
+                    <!-- Breadcrumb and Title -->
+                    <div class="mb-3">
+                         <h1 class="fw-bold fs-4 mb-3" th:text="${rol.idRol == 0 ? 'Nuevo Rol' : 'Editar Rol'}"></h1>
+                         
+                    </div>
 
-                    <div class="card mb-4">
-                        <div class="card-header">
-                            <i class="fas fa-edit me-1"></i>
-                            Formulario de Rol
-                        </div>
+                    <!-- Form Card -->
+                    <div class="card border-0" style="background-color: var(--primary-color);">
+                        
                         <div class="card-body">
-                            <form th:action="@{/roles}" th:object="${rol}" method="post">
+                           <form th:action="@{/roles}" th:object="${rol}" method="post">
                                 <input type="hidden" th:field="*{idRol}" />
                                 
                                 <div class="mb-3">
                                     <label for="nombreRol" class="form-label">Nombre del Rol</label>
                                     <input type="text" class="form-control" id="nombreRol" th:field="*{nombreRol}" required>
+                                    <!-- Display validation errors for nombreRol if any -->
+                                    <!-- Mensaje de error estándar (comentado para usar SweetAlert) -->
+                                    <!-- 
+                                    <div class="text-danger" th:if="${#fields.hasErrors('nombreRol')}" th:errors="*{nombreRol}"></div>
+                                    -->
                                 </div>
 
                                 <div class="mb-3">
                                     <label class="form-label">Permisos</label>
-                                    <div class="form-check" th:each="permiso : ${permisos}">
-                                        <input class="form-check-input" type="checkbox" 
+                                    <!-- Display general error for permisos if any -->
+                                     <div class="text-danger mb-2" th:if="${#fields.hasErrors('permisos')}" th:errors="*{permisos}"></div>
+                                     
+                                    <!-- Campo de búsqueda para permisos -->
+                                    <div class="mb-3">
+                                        <input type="text" id="filtroPermisos" class="form-control" placeholder="Buscar permisos...">
+                                    </div>
+                                    <!-- Fin Campo de búsqueda -->
+
+                                    <div class="permissions-container border rounded p-3" style="max-height: 300px; overflow-y: auto;"> <!-- Contenedor con scroll -->
+                                     <div class="form-check mb-2" th:each="permiso : ${permisos}">
+                                        <input class="form-check-input" 
+                                               type="checkbox" 
                                                th:field="*{permisos}" 
                                                th:value="${permiso.id}"
-                                               th:id="'permiso' + ${permiso.id}">
+                                               th:id="'permiso-' + ${permiso.id}">
                                         <label class="form-check-label" 
-                                               th:for="'permiso' + ${permiso.id}"
-                                               th:text="${permiso.nombre + ' - ' + permiso.descripcion}">
+                                               th:for="'permiso-' + ${permiso.id}">
+                                            <strong th:text="${permiso.nombre}"></strong>
+                                            <small class="text-muted d-block" th:text="${permiso.descripcion}"></small> <!-- Descripcion opcional -->
                                         </label>
+                                      </div>
+                                       <div th:if="${permisos.empty}" class="text-center text-muted p-2">
+                                            No hay permisos disponibles.
+                                       </div>
                                     </div>
                                 </div>
 
-                                <div class="d-flex justify-content-between">
-                                    <a th:href="@{/roles}" class="btn btn-secondary">Cancelar</a>
-                                    <button type="submit" class="btn btn-primary">Guardar</button>
+                                <div class="d-flex justify-content-end gap-2">
+                                    <a th:href="@{/roles}" class="btn btn-form-secondary">Cancelar</a>
+                                    <button type="submit" class="btn btn-form-primary">Guardar</button>
                                 </div>
                             </form>
                         </div>
                     </div>
                 </div>
             </main>
-            <footer th:replace="fragments/footer :: footer"></footer>
+            <footer th:insert="~{fragments/footer :: footer}"></footer>
         </div>
     </div>
-    <div th:replace="fragments/script :: script"></div>
+    <div th:insert="~{fragments/script :: script}"></div>
+
+
 </body>
+
 </html>

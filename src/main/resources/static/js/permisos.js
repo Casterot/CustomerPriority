@@ -1,4 +1,37 @@
 // Función para manejar la asignación de permisos
+
+document.addEventListener('DOMContentLoaded', function() {
+    const filtroInput = document.getElementById('filtroPermisos');
+    const container = document.querySelector('.permissions-container');
+
+    // Asegurarse de que ambos elementos existen antes de añadir el listener
+    if (filtroInput && container) {
+        const permisos = container.querySelectorAll('.form-check'); // Selecciona todos los checkboxes
+
+        filtroInput.addEventListener('input', function() {
+            const textoBusqueda = this.value.toLowerCase().trim();
+
+            permisos.forEach(function(permisoDiv) {
+                const label = permisoDiv.querySelector('.form-check-label');
+                // Busca en el texto del nombre (strong) y la descripción (small)
+                const textoLabel = label ? label.textContent.toLowerCase() : '';
+
+                if (textoLabel.includes(textoBusqueda)) {
+                    permisoDiv.style.display = ''; // Muestra el elemento si coincide
+                } else {
+                    permisoDiv.style.display = 'none'; // Oculta el elemento si no coincide
+                }
+            });
+        });
+    } else {
+         // Opcional: Mensaje en consola si no se encuentran los elementos esperados
+         // Descomentar las siguientes líneas para depuración si es necesario
+         // if (!filtroInput) console.log("Elemento #filtroPermisos no encontrado.");
+         // if (!container) console.log("Elemento .permissions-container no encontrado.");
+    }
+});
+
+// --- Fin del código para filtrar permisos ---
 function actualizarPermisosRol(rolId) {
     const permisosSeleccionados = [];
     document.querySelectorAll('input[name="permisos"]:checked').forEach(checkbox => {

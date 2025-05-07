@@ -80,15 +80,28 @@ public class RolController {
 
     @PostMapping
     public String guardarRol(@ModelAttribute @Valid Rol rol, BindingResult result, Model model) {
+        // 1. Verificar si ya existe un rol con el mismo nombre
+        if (!result.hasFieldErrors("nombreRol")) {
+             if (rolService.existeRolConNombre(rol.getNombreRol(), rol.getIdRol())) {
+                 result.rejectValue("nombreRol", "error.rol.duplicado", "Ya existe un rol con este nombre.");
+                 // Directamente añadir flag al modelo sin variable intermedia
+                 model.addAttribute("nombreDuplicadoError", true); 
+             }
+        }
+
+        // 2. Verificar errores generales de validación
         if (result.hasErrors()) {
-            // Si hay errores, volvemos al formulario
+            // Si hay errores, volver al formulario
+            model.addAttribute("permisos", permisoService.listarTodos());
+            // La bandera 'nombreDuplicadoError' se añade arriba si es necesario
             return "roles/formulario";
         }
-        
-        // Si no hay errores, guardamos la campaña
+
+        // 3. Si no hay errores, guardar el rol
         rolService.guardarRol(rol);
+        // Considerar usar RedirectAttributes para un mensaje de éxito
         return "redirect:/roles";
-    }    
+    }
 
     
     

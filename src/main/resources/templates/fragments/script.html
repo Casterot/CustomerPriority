@@ -1,8 +1,20 @@
 <div th:fragment="script">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- Scripts personalizados -->
     <script th:src="@{/js/script.js}"></script>
     <script th:src="@{/js/ubicaciones.js}"></script>
     <script th:src="@{/js/validacionformulariotrabajador.js}"></script>
     <script th:src="@{/js/permisos.js}"></script>
 
+    <!-- Scripts específicos para el formulario de roles (si es aplicable) -->
+    <th:block th:if="${nombreDuplicadoError != null}">
+        <script th:inline="javascript">
+            /*<![CDATA[*/
+            var nombreDuplicadoErrorGlobal = /*[[${nombreDuplicadoError} ?: false]]*/ false;
+            /*]]>*/
+        </script>
+        <script th:src="@{/js/rolesFormulario.js}"></script>
+    </th:block>
 </div>

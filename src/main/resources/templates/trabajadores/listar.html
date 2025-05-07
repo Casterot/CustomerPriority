@@ -25,7 +25,7 @@
                   </div>
                 </div>
                 
-                <div class="d-flex flex-column flex-md-row justify-content-between align-items-center p-4 mb-3 border bg-light rounded">
+                <div class="d-flex flex-column flex-md-row justify-content-between align-items-center p-2 mb-3 border bg-light rounded">
                   <div class="col-12 col-md-8">
                     <form th:action="@{/trabajadores}" method="get">
                       <div class="input-group">
@@ -40,7 +40,7 @@
                 </div>
 
                 <div th:if="${trabajadorPage.totalElements == 0}" class="alert alert-info mt-3">
-                  No se encontraron trabajadores con el nombre "<span th:text="${search}"></span>".
+                  No se encontraron trabajadores con los datos "<span th:text="${search}"></span>".
                 </div>
                 
                 <div th:if="${trabajadorPage.totalElements > 0}">

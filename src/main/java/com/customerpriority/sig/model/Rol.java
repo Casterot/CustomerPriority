@@ -21,6 +21,7 @@ public class Rol {
         joinColumns = @JoinColumn(name = "rol_id"),
         inverseJoinColumns = @JoinColumn(name = "permiso_id")
     )
+    @OrderBy("nombre ASC")
     private Set<Permiso> permisos = new HashSet<>();
 
     // Getters y setters originales

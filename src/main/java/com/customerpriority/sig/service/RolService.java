@@ -44,6 +44,24 @@ public class RolService {
         rolRepository.deleteById(id);
     }
 
+    /**
+     * Verifica si ya existe un rol con el nombre dado, opcionalmente excluyendo un ID específico.
+     * @param nombreRol El nombre del rol a verificar.
+     * @param idExcluir El ID del rol a excluir de la búsqueda (usado al editar). Puede ser null o 0 si es un rol nuevo.
+     * @return true si ya existe otro rol con ese nombre, false en caso contrario.
+     */
+    public boolean existeRolConNombre(String nombreRol, Integer idExcluir) {
+        Optional<Rol> rolExistente;
+        if (idExcluir == null || idExcluir == 0) {
+            // Nuevo rol: buscar cualquier rol con ese nombre
+            rolExistente = rolRepository.findByNombreRolIgnoreCase(nombreRol);
+        } else {
+            // Editando rol: buscar cualquier otro rol con ese nombre
+            rolExistente = rolRepository.findByNombreRolIgnoreCaseAndIdRolNot(nombreRol, idExcluir);
+        }
+        return rolExistente.isPresent();
+    }
+
     // Métodos para gestión de permisos
     public void asignarPermiso(int rolId, Long permisoId) {
         Rol rol = obtenerRolPorId(rolId);

@@ -299,9 +299,9 @@ a.sidebar-link:hover {
 
 /* Tarjetas */
 .card {
-    background-color: var(--secondary-color);
-    transition: transform 0.4s, background-color 0.4s, color 0.4s;
-    cursor: pointer;
+    background-color: var(--secondary-color); /* Mantenemos el color de fondo */
+    /* transition: transform 0.4s, background-color 0.4s, color 0.4s; <-- Eliminada */
+    /* cursor: pointer; <-- Eliminada */
     color: #000;
     margin-bottom: 1rem;
 }
@@ -311,19 +311,6 @@ form .card {
     background-color: #fff;
     cursor: default;
     transition: none;
-}
-
-form .card:hover {
-    background-color: #fff;
-    color: #000;
-    transform: none;
-}
-
-/* Aplicar efectos hover solo a tarjetas que no están en formularios */
-.card:not(form .card):hover {
-    background-color: var(--accent-color);
-    color: #fff;
-    transform: translateY(-10.5px);
 }
 
 /* Estados y badges */
@@ -460,6 +447,12 @@ form .card {
     border: none;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     margin-bottom: 20px;
+}
+
+.permission-item:hover {
+    background-color: #f8f9fa; /* Color de fondo suave al pasar el ratón */
+    cursor: pointer; /* Cambiar cursor a mano */
+    transition: background-color 0.2s ease-in-out;
 }
 
 /* Estilos para formularios de usuario */
@@ -636,4 +629,43 @@ form .card {
     color: #fff;
     box-shadow: 0 2px 8px rgba(41,59,95,0.13);
     filter: brightness(0.98);
+}
+
+/* Reducir padding y tamaño de fuente en celdas de tabla */
+.table th,
+.table td {
+    padding: 0.5rem 0.5rem; /* Padding reducido */
+    font-size: 0.9rem; /* Ajusta este valor (ej. 0.9rem, 0.875rem, 14px) */
+}
+
+/* Reducir tamaño de botones dentro de las tablas */
+.table td .btn {
+    padding: 0.2rem 0.4rem; /* Padding aún más reducido para botones */
+    font-size: 0.9rem;  /* Fuente más pequeña para botones */
+}
+
+/* === Estilos para Botones de Formularios Personalizados === */
+.btn-form-primary {
+    background-color: var(--primary-color); /* Azul oscuro principal */
+    border-color: var(--primary-color);
+    color: #ffffff;
+    transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out;
+}
+
+.btn-form-primary:hover {
+    background-color: var(--accent-color); /* Azul acento al pasar el ratón */
+    border-color: var(--accent-color);
+    color: #ffffff;
+}
+.btn-form-secondary {
+    background-color: #6c757d; /* Gris estándar de Bootstrap */
+    border-color: #6c757d;
+    color: #ffffff;
+    transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out;
+}
+
+.btn-form-secondary:hover {
+    background-color: #5a6268; /* Gris más oscuro al pasar el ratón */
+    border-color: #545b62;
+    color: #ffffff;
 }

@@ -49,6 +49,7 @@
                         <tr class="highlight">
                           <th scope="col">Id</th>
                           <th scope="col">Rol</th>
+                          <th scope="col">Permisos</th>
                           <th scope="col">Acciones</th>
                         </tr>
                       </thead>
@@ -56,6 +57,12 @@
                         <tr th:each="rol : ${rolPage.content}">
                           <td th:text="${rol.idRol}"></td>
                           <td th:text="${rol.nombreRol}"></td>
+                                                    <td data-bs-toggle="tooltip" data-bs-placement="top" th:title="${#strings.listJoin(rol.permisos.![nombre], ', ')}">
+                            <th:block th:each="permiso, iterStat : ${rol.permisos}">
+                              <span th:if="${iterStat.index < 3}" th:text="${permiso.nombre}" class="badge bg-info me-1"></span>
+                            </th:block>
+                            <span th:if="${#lists.size(rol.permisos) > 3}" th:text="'+' + (${#lists.size(rol.permisos)} - 3) + ' más'" class="badge bg-secondary"></span>
+                          </td>
                           <td>
                             <a th:href="@{/roles/editar/{id}(id=${rol.idRol})}" class="btn btn-warning">
                               <i class="bi bi-pencil-square"></i>
