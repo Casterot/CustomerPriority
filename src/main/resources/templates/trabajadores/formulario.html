@@ -103,6 +103,23 @@
                             </div>
                           </div>
                           
+                          <!-- CAMPOS RUC Y ESTADO ADICIONALES -->
+                          <div class="row">
+                            <div class="col-md-6 mb-3">
+                              <label for="rucTrabajador" class="form-label">RUC</label>
+                              <div class="input-group">
+                                <input type="text" class="form-control" id="rucTrabajador" placeholder="RUC (auto-completado o manual)" readonly maxlength="11" />
+                                <button type="button" class="btn btn-info btn-sm" id="validarRUC" style="display: none;">Validar RUC</button>
+                              </div>
+                              <div id="rucErrorMensaje" class="form-text text-danger" style="font-size: 0.875em; margin-top: 0.25rem; margin-left: 0.5rem;"></div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                              <label for="estadoTrabajador" class="form-label">Estado RUC</label>
+                              <input type="text" class="form-control" id="estadoTrabajador" placeholder="Estado (auto-completado)" readonly />
+                            </div>
+                          </div>
+                          <!-- FIN CAMPOS RUC Y ESTADO -->
+                          
                           <!-- Botones de navegación -->
                           <div class="d-flex justify-content-end mt-3">
                             <button type="button" class="btn btn-primary" id="siguiente-contacto">Siguiente</button>
@@ -353,8 +370,8 @@
   
   <!-- Incluir archivos CSS y JavaScript externos -->
   <link rel="stylesheet" th:href="@{/css/style.css}" />
-  <script th:src="@{/js/validacionformulariotrabajador.js}"></script>
   <script th:src="@{/js/trabajador_horario_info.js}"></script>
+
 </body>
 
 </html>
